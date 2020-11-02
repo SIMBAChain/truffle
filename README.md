@@ -17,7 +17,7 @@ You should have a SIMBA Enterprise Platform Instance to communicate with. Additi
 
 To install the truffle plugin follow these steps.
 
-Install the plugin from NPM.
+Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle).
 
 `$ npm install --save-dev @simmbachain/truffle`
 
