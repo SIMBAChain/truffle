@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SIMBAChain Sign In</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		.message-container {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 30px;
+		}
+
+		.message {
+			font-weight: 300;
+			font-size: 1.3rem;
+		}
+
+		body.error .message {
+			display: none;
+		}
+
+		body.error .error-message {
+			display: block;
+		}
+
+		.error-message {
+			display: none;
+			font-weight: 300;
+			font-size: 1.3rem;
+		}
+
+		.error-text {
+			color: red;
+			font-size: 1rem;
+		}
+	</style>
+</head>
+<body>
+<a class="branding" href="https://www.simbachain.com/">
+    SIMBAChain
+</a>
+<div class="message-container">
+    <div class="message">
+        You are signed in now and can close this page.
+    </div>
+    <div class="error-message">
+        An error occurred while signing in:
+        <div class="error-text"></div>
+    </div>
+</div>
+<script>
+    const search = window.location.search;
+    const error = (/[?&^]error=([^&]+)/.exec(search) || [])[1];
+    if (error) {
+        document.querySelector('.error-text').textContent = atob(decodeURIComponent(error));
+        document.querySelector('body').classList.add('error');
+    }
+</script>
+</body>
+</html>
