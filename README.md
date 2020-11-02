@@ -54,7 +54,7 @@ Options:
 
 ## Project Settings
 
-In order to let the plugin know where your SIMBA Enterprise Platform is, create a `simba.json` file at the root of your project. Add the URL to the file in this form:
+In order to let the plugin know where your SIMBA Enterprise Platform is, create a `simba.json` file at the root of your project. Add the URL to the file in this form (See [here](https://github.com/SIMBAChain/truffle/blob/main/docs/AzureAD.md) if you use Azure AD):
 
 ```json
 {
