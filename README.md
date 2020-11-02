@@ -19,7 +19,7 @@ To install the truffle plugin follow these steps.
 
 Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle).
 
-`$ npm install --save-dev @simmbachain/truffle`
+`$ npm install --save-dev @simbachain/truffle`
 
 Add the SIMBA plugin to the truffle plugins section in your truffle config.
 
@@ -27,7 +27,7 @@ Add the SIMBA plugin to the truffle plugins section in your truffle config.
 { 
     ... rest of truffle-config
     plugins: [
-        "@simmbachain/truffle"
+        "@simbachain/truffle"
     ]
 }
 ```
