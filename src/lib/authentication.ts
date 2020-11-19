@@ -2,9 +2,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as http from 'http';
 import Configstore from 'configstore';
-import { default as cryptoRandomString } from 'crypto-random-string';
+import {default as cryptoRandomString} from 'crypto-random-string';
 import * as request from 'request-promise';
-import { Request, default as polka } from 'polka';
+import {Request, default as polka} from 'polka';
 import * as CryptoJS from 'crypto-js';
 import chalk from 'chalk';
 
@@ -23,10 +23,8 @@ export class LoginServer {
     private projectConfig: Configstore;
     private logger: Console;
     private redirectUri: string | undefined;
-    private _authorizeUrl: string;
     private tokenUrl: string;
     private baseUrl: string;
-    private _configBase!: string;
     private pkceVerifier: string | undefined;
     private pkceChallenge: string | undefined;
 
@@ -42,6 +40,26 @@ export class LoginServer {
         this._authorizeUrl = this.setConfig('authorizeUrl', this.projectConfig.get('authorizeUrl'));
     }
 
+    private _authorizeUrl: string;
+
+    public get authorizeUrl(): string {
+        this.generatePKCE();
+        return `${this._authorizeUrl}?client_id=${this.clientID}&redirect_uri=${this.redirectUri}&response_type=code&state=${this.state}&scope=${this.scope}&code_challenge=${this.pkceChallenge}&code_challenge_method=S256`;
+    }
+
+    public get isLoggedIn(): boolean {
+        return this.hasConfig(AUTHKEY);
+    }
+
+    private _configBase!: string;
+
+    protected get configBase(): string {
+        if (!this._configBase) {
+            this._configBase = this.baseUrl.split('.').join('_');
+        }
+        return this._configBase;
+    }
+
     public dispose(): void {
         if (this.server) {
             this.server.unref();
@@ -49,19 +67,10 @@ export class LoginServer {
         }
     }
 
-    public get isLoggedIn(): boolean {
-        return this.hasConfig(AUTHKEY);
-    }
-
     public async performLogin(): Promise<any> {
-        this.state = cryptoRandomString({ length: 24, type: 'url-safe' });
+        this.state = cryptoRandomString({length: 24, type: 'url-safe'});
 
         return this.performLoginViaIntegratedWebserver();
-    }
-
-    public get authorizeUrl(): string {
-        this.generatePKCE();
-        return `${this._authorizeUrl}?client_id=${this.clientID}&redirect_uri=${this.redirectUri}&response_type=code&state=${this.state}&scope=${this.scope}&code_challenge=${this.pkceChallenge}&code_challenge_method=S256`;
     }
 
     public closeServer(): void {
@@ -90,7 +99,7 @@ export class LoginServer {
                 resolve();
             });
 
-            polka({ server: this.server })
+            polka({server: this.server})
                 .get('/auth-callback', (req: Request, res: http.ServerResponse) => {
                     const code: string = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
                     const state: string = Array.isArray(req.query.state) ? req.query.state[0] : req.query.state;
@@ -102,11 +111,11 @@ export class LoginServer {
 
                     this.receiveCode(code, state, error)
                         .then(() => {
-                            res.writeHead(302, { Location: '/' });
+                            res.writeHead(302, {Location: '/'});
                             res.end();
                         })
                         .catch((err: Error) => {
-                            res.writeHead(302, { Location: `/?error=${Buffer.from(err).toString('base64')}` });
+                            res.writeHead(302, {Location: `/?error=${Buffer.from(err).toString('base64')}`});
                             res.end();
                         });
                 })
@@ -266,13 +275,6 @@ export class LoginServer {
         this.deleteConfig(AUTHKEY);
     }
 
-    protected get configBase(): string {
-        if (!this._configBase) {
-            this._configBase = this.baseUrl.split('.').join('_');
-        }
-        return this._configBase;
-    }
-
     protected hasConfig(key: string): boolean {
         if (!this.config.has(this.configBase)) {
             return false;
@@ -336,7 +338,7 @@ export class LoginServer {
     }
 
     protected generatePKCE(): void {
-        this.pkceVerifier = cryptoRandomString({ length: 24, type: 'url-safe' });
+        this.pkceVerifier = cryptoRandomString({length: 24, type: 'url-safe'});
         const hash = CryptoJS.SHA256(this.pkceVerifier);
         const b64 = this.base64URL(hash.toString(CryptoJS.enc.Base64));
         this.pkceChallenge = b64;

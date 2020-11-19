@@ -1,5 +1,5 @@
 import yargs from 'yargs';
-import { SimbaConfig, chooseOrganisation, chooseApplication } from '../lib';
+import {SimbaConfig, chooseOrganisation, chooseApplication} from '../lib';
 
 export const command = 'login';
 export const describe = 'log in to SIMBAChain SCaaS';

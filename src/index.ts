@@ -1,7 +1,7 @@
-import { argv } from 'process';
+import {argv} from 'process';
 import yargs from 'yargs';
-import { SimbaConfig } from './lib';
-import { Login, Logout, Export, Deploy, Contract } from './commands';
+import {SimbaConfig} from './lib';
+import {Login, Logout, Export, Deploy, Contract} from './commands';
 
 const parseArgs = (config: any): Promise<any> =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,7 +32,7 @@ const parseArgs = (config: any): Promise<any> =>
             .onFinishCommand(async (ret) => {
                 resolve(ret);
             })
-            .parse(argv.slice(3), { config });
+            .parse(argv.slice(3), {config});
     });
 module.exports = async (truffleConfig: any, done: (err: Error | null) => void): Promise<void> => {
     const config = SimbaConfig.createInstance(truffleConfig);

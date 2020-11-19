@@ -2,9 +2,9 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-import { SimbaConfig } from '../lib';
-import { default as chalk } from 'chalk';
-import { default as prompt } from 'prompts';
+import {SimbaConfig} from '../lib';
+import {default as chalk} from 'chalk';
+import {default as prompt} from 'prompts';
 import yargs from 'yargs';
 
 export const command = 'export';
@@ -24,7 +24,7 @@ export const builder = {
 
 const walkDirForContracts = (dir: string, extension: string): Promise<string[]> =>
     new Promise((resolve, reject) => {
-        fs.readdir(dir, { withFileTypes: true }, async (err, entries) => {
+        fs.readdir(dir, {withFileTypes: true}, async (err, entries) => {
             if (err) {
                 return reject(err);
             }
@@ -111,11 +111,11 @@ export const handler = async (argv: yargs.Arguments): Promise<any> => {
             continue;
         }
         config.logger.info(`${chalk.green('simba export: ')}- ${file}`);
-        const buf = await promisifiedReadFile(file, { flag: 'r' });
+        const buf = await promisifiedReadFile(file, {flag: 'r'});
         const parsed = JSON.parse(buf.toString());
         const name = parsed.contractName;
         import_data[name] = JSON.parse(buf.toString());
-        choices.push({ title: name, value: name });
+        choices.push({title: name, value: name});
     }
 
     if (argv.primary) {

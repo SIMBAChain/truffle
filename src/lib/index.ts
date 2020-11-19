@@ -1,2 +1,8 @@
-export { SimbaConfig } from './config';
-export { chooseApplication, chooseOrganisation, getApp, getBlockchains, getStorages } from './api';
+export {SimbaConfig} from './config';
+export {
+    chooseApplication,
+    chooseOrganisation,
+    getApp,
+    getBlockchains,
+    getStorages
+} from './api';

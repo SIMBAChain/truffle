@@ -1,5 +1,5 @@
-import { default as prompt } from 'prompts';
-import { SimbaConfig } from '../lib';
+import {default as prompt} from 'prompts';
+import {SimbaConfig} from '../lib';
 
 interface Dictionary<T> {
     [Key: string]: T;
@@ -54,7 +54,7 @@ export const chooseOrganisation = async (config: SimbaConfig, url?: string): Pro
         next: orgResponse.next,
         prev: orgResponse.prev,
         data: orgResponse.results.reduce((map: Dictionary<object>, obj: any) => {
-            const data = { ...obj, id: obj.id };
+            const data = {...obj, id: obj.id};
             map[data.name] = data;
             return map;
         }, {}),
@@ -62,15 +62,19 @@ export const chooseOrganisation = async (config: SimbaConfig, url?: string): Pro
 
     const choices = [];
     if (orgs.prev) {
-        choices.push({ title: '<-', description: 'Previous choices', value: 'prev' });
+        choices.push({
+            title: '<-',
+            description: 'Previous choices',
+            value: 'prev'
+        });
     }
 
     if (orgs.next) {
-        choices.push({ title: '->', description: 'Next choices', value: 'next' });
+        choices.push({title: '->', description: 'Next choices', value: 'next'});
     }
 
     for (const [key, val] of Object.entries(orgs.data)) {
-        choices.push({ title: key, value: val });
+        choices.push({title: key, value: val});
     }
 
     const response = await prompt({
@@ -113,7 +117,7 @@ export const chooseApplication = async (config: SimbaConfig, url?: string): Prom
         next: appResponse.next,
         prev: appResponse.prev,
         data: appResponse.results.reduce((map: Dictionary<object>, obj: any) => {
-            const data = { ...obj, id: obj.id };
+            const data = {...obj, id: obj.id};
             map[data.display_name] = data;
             return map;
         }, {}),
@@ -121,15 +125,19 @@ export const chooseApplication = async (config: SimbaConfig, url?: string): Prom
 
     const choices = [];
     if (apps.prev) {
-        choices.push({ title: '<-', description: 'Previous choices', value: 'prev' });
+        choices.push({
+            title: '<-',
+            description: 'Previous choices',
+            value: 'prev'
+        });
     }
 
     if (apps.next) {
-        choices.push({ title: '->', description: 'Next choices', value: 'next' });
+        choices.push({title: '->', description: 'Next choices', value: 'next'});
     }
 
     for (const [key, val] of Object.entries(apps.data)) {
-        choices.push({ title: key, value: val });
+        choices.push({title: key, value: val});
     }
 
     const response = await prompt({

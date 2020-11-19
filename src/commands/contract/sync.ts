@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { default as chalk } from 'chalk';
+import {default as chalk} from 'chalk';
 import yargs from 'yargs';
-import { SimbaConfig } from '../../lib';
-import { ContractDesignWithCode } from './';
+import {SimbaConfig} from '../../lib';
+import {ContractDesignWithCode} from './';
 
 export const command = 'sync <id>';
 export const describe = 'Sync / Pull SCaaS contracts to local Truffle project';

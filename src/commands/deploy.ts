@@ -1,7 +1,13 @@
-import { default as chalk } from 'chalk';
-import { default as prompt } from 'prompts';
+import {default as chalk} from 'chalk';
+import {default as prompt} from 'prompts';
 import yargs from 'yargs';
-import { SimbaConfig, chooseApplication, getApp, getBlockchains, getStorages } from '../lib';
+import {
+    SimbaConfig,
+    chooseApplication,
+    getApp,
+    getBlockchains,
+    getStorages
+} from '../lib';
 
 export const command = 'deploy';
 export const describe = 'deploy the project to SIMBAChain SCaaS';

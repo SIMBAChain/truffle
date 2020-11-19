@@ -1,7 +1,7 @@
-import { default as chalk } from 'chalk';
+import {default as chalk} from 'chalk';
 import yargs from 'yargs';
-import { SimbaConfig } from '../../lib';
-import { ContractDesign } from './';
+import {SimbaConfig} from '../../lib';
+import {ContractDesign} from './';
 
 export const command = 'list';
 export const describe = 'List SCaaS contracts';

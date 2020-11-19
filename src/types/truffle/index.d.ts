@@ -16,7 +16,8 @@ declare module 'truffle' {
 
     export const version: string;
 
-    export interface BuildOptions {}
+    export interface BuildOptions {
+    }
 
     export namespace build {
         function build(options: BuildOptions, callback: (error: Error) => void): void;
@@ -68,13 +69,13 @@ declare module 'truffle' {
         function run(options: any, ...args: any[]): any;
 
         function setJSTestGlobals({
-            config,
-            web3,
-            interfaceAdapter,
-            accounts,
-            testResolver,
-            runner,
-            compilation,
-        }: any): any;
+                                      config,
+                                      web3,
+                                      interfaceAdapter,
+                                      accounts,
+                                      testResolver,
+                                      runner,
+                                      compilation,
+                                  }: any): any;
     }
 }

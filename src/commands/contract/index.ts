@@ -1,4 +1,4 @@
-import { Argv } from 'yargs';
+import {Argv} from 'yargs';
 
 export const command = 'contract <command>';
 export const describe = 'Manage contracts';

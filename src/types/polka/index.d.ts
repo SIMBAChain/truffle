@@ -1,7 +1,7 @@
 /* eslint-disable */
 declare module 'polka' {
-    import { IncomingMessage, Server, ServerResponse } from 'http';
-    import { Url } from 'url';
+    import {IncomingMessage, Server, ServerResponse} from 'http';
+    import {Url} from 'url';
     import Trouter = require('trouter');
 
     namespace polka {
