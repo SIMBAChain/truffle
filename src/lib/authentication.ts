@@ -15,7 +15,7 @@ const authHtml = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'html', 
 export class LoginServer {
     private readonly closeTimeout: number = 5 * 1000;
     private port = 22315;
-    private scope = 'read_write';
+    private scope = 'openid offline_access read_write';
     private server: http.Server | null = null;
     private state: string | undefined;
     private clientID: string;
@@ -34,6 +34,7 @@ export class LoginServer {
         this.config = config;
         this.projectConfig = projectConfig;
         this.scope = this.projectConfig.get('authScope');
+        this.scope = encodeURI(this.scope);
         this.clientID = this.projectConfig.get('clientID');
         this.logger = logger;
         this.baseUrl = this.projectConfig.get('baseUrl');
@@ -132,6 +133,10 @@ export class LoginServer {
         return new Promise((resolve, reject) => {
             const auth: any = this.getConfig(AUTHKEY);
             if (auth) {
+                if (!auth.refresh_token) {
+                    this.deleteConfig(AUTHKEY);
+                    reject(new Error('Not authenticated!'));
+                }
                 if ('expires_at' in auth) {
                     const expiresAt = new Date(auth.expires_at);
                     if (expiresAt <= new Date()) {

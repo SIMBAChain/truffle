@@ -16,6 +16,12 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     try {
         if (!config.authStore.isLoggedIn) {
             await config.authStore.performLogin();
+        } else {
+            try {
+                await config.authStore.refreshToken();
+            } catch (e) {
+                await config.authStore.performLogin();
+            }
         }
 
         const org = await chooseOrganisation(config);
