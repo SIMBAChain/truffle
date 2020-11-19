@@ -6,6 +6,7 @@ import {SimbaConfig} from '../lib';
 import {default as chalk} from 'chalk';
 import {default as prompt} from 'prompts';
 import yargs from 'yargs';
+import { StatusCodeError } from 'request-promise/errors';
 
 export const command = 'export';
 export const describe = 'export the project to SIMBAChain SCaaS';
@@ -165,6 +166,33 @@ export const handler = async (argv: yargs.Arguments): Promise<any> => {
 
         Promise.resolve(null);
     } catch (e) {
+        if (e instanceof StatusCodeError) {
+            if('errors' in e.error && Array.isArray(e.error.errors)){
+                e.error.errors.forEach((error: any)=>{
+                    config.logger.error(
+                        `${chalk.red('simba export: ')}[STATUS:${
+                            error.status
+                        }|CODE:${
+                            error.code
+                        }] Error Saving contract ${
+                            error.title
+                        } - ${error.detail}`,
+                    );
+                });
+            } else {
+                config.logger.error(
+                    `${chalk.red('simba export: ')}[STATUS:${
+                        e.error.errors[0].status
+                    }|CODE:${
+                        e.error.errors[0].code
+                    }] Error Saving contract ${
+                        e.error.errors[0].title
+                    } - ${e.error.errors[0].detail}`,
+                );
+            }
+
+            return Promise.resolve();
+        }
         if ('errors' in e) {
             if (Array.isArray(e.errors)) {
                 config.logger.error(
@@ -172,7 +200,7 @@ export const handler = async (argv: yargs.Arguments): Promise<any> => {
                         e.errors[0].code
                     }] Error Saving contract ${e.errors[0].detail}`,
                 );
-                Promise.resolve(e);
+                return Promise.resolve();
             }
         }
         throw e;

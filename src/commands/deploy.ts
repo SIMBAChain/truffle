@@ -8,6 +8,7 @@ import {
     getBlockchains,
     getStorages
 } from '../lib';
+import { StatusCodeError } from 'request-promise/errors';
 
 export const command = 'deploy';
 export const describe = 'deploy the project to SIMBAChain SCaaS';
@@ -238,6 +239,33 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
         Promise.resolve(retVal);
     } catch (e) {
+        if (e instanceof StatusCodeError) {
+            if('errors' in e.error && Array.isArray(e.error.errors)){
+                e.error.errors.forEach((error: any)=>{
+                    config.logger.error(
+                        `${chalk.red('simba export: ')}[STATUS:${
+                            error.status
+                        }|CODE:${
+                            error.code
+                        }] Error Saving contract ${
+                            error.title
+                        } - ${error.detail}`,
+                    );
+                });
+            } else {
+                config.logger.error(
+                    `${chalk.red('simba export: ')}[STATUS:${
+                        e.error.errors[0].status
+                    }|CODE:${
+                        e.error.errors[0].code
+                    }] Error Saving contract ${
+                        e.error.errors[0].title
+                    } - ${e.error.errors[0].detail}`,
+                );
+            }
+
+            return Promise.resolve();
+        }
         if ('errors' in e) {
             if (Array.isArray(e.errors)) {
                 config.logger.error(
