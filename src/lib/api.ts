@@ -5,6 +5,30 @@ interface Dictionary<T> {
     [Key: string]: T;
 }
 
+interface Blockchain {
+    id: string;
+    global_id: string;
+    name: string;
+    display_name: string;
+    blockchain_type: string;
+    poa: boolean;
+    faucet?: string;
+    supported_contract_types?: string[];
+    currency_unit?: string;
+}
+
+interface Storage {
+    id: string;
+    name: string;
+    display_name: string;
+    storage_type: string;
+}
+
+interface Choice {
+    title: string;
+    value: string;
+}
+
 interface Response {
     next: string;
     prev: string;
@@ -71,19 +95,6 @@ export const chooseOrganisation = async (config: SimbaConfig, url?: string): Pro
 };
 
 export const getApp = async (config: SimbaConfig, id: string): Promise<any> => {
-    // {
-    //   "id": "51974f7a-6076-46c3-a37b-cb948f3e3642",
-    //   "display_name": "myapi",
-    //   "name": "myapi",
-    //   "created_on": "2019-12-16T10:00:00Z",
-    //   "components": [
-    //     "ff271d8c-760f-4958-87d7-7c66cd626be0",
-    //     "1f271d8c-760f-4958-87d7-7c66cd626be0",
-    //     "ff271d8c-4321-1234-87d7-7c66cd626be0"
-    //   ],
-    //   "organisation": "51974f7a-6076-46c3-a37b-cb948f3e3641",
-    //   "metadata": null
-    // }
     const url = `organisations/${config.organisation.id}/applications/${id}`;
 
     const response = await config.authStore.doGetRequest(url, 'application/json');
@@ -95,20 +106,6 @@ export const chooseApplication = async (config: SimbaConfig, url?: string): Prom
     if (!url) {
         url = `organisations/${config.organisation.id}/applications/`;
     }
-
-    // {
-    //   "id": "51974f7a-6076-46c3-a37b-cb948f3e3642",
-    //   "display_name": "myapi",
-    //   "name": "myapi",
-    //   "created_on": "2019-12-16T10:00:00Z",
-    //   "components": [
-    //     "ff271d8c-760f-4958-87d7-7c66cd626be0",
-    //     "1f271d8c-760f-4958-87d7-7c66cd626be0",
-    //     "ff271d8c-4321-1234-87d7-7c66cd626be0"
-    //   ],
-    //   "organisation": "51974f7a-6076-46c3-a37b-cb948f3e3641",
-    //   "metadata": null
-    // }
 
     const appResponse = await getList(config, url);
 
@@ -156,31 +153,40 @@ export const chooseApplication = async (config: SimbaConfig, url?: string): Prom
     return response.application;
 };
 
-// TODO: Get list of blockchains
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getBlockchains = async (_config: SimbaConfig, _url?: string): Promise<any> =>
-    Promise.resolve([
-        {
-            title: 'Ganache',
-            value: 'ganache',
-        },
-        {
-            title: 'Ganache 2',
-            value: 'ganache2',
-        },
-    ]);
+export const getBlockchains = async (config: SimbaConfig, url?: string): Promise<any> => {
+    if (!url) {
+        url = `organisations/${config.organisation.id}/blockchains/`;
+    }
 
-// TODO: Get list of storages
+    const chains: Blockchain[] = await getList(config, url);
+    const choices: Choice[] = [];
+
+    chains.forEach((chain) => {
+        choices.push({
+            title: chain.display_name,
+            value: chain.name,
+        });
+    });
+
+    return choices;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getStorages = async (_config: SimbaConfig, _url?: string): Promise<any> =>
-    // config; url;
-    Promise.resolve([
-        {
-            title: 'Local Storage (Test)',
-            value: 'local',
-        },
-        {
-            title: 'Another Storage (Test)',
-            value: 'local',
-        },
-    ]);
+export const getStorages = async (config: SimbaConfig, url?: string): Promise<any> => {
+    if (!url) {
+        url = `organisations/${config.organisation.id}/storage/`;
+    }
+
+    const chains: Storage[] = await getList(config, url);
+    const choices: Choice[] = [];
+
+    chains.forEach((chain) => {
+        choices.push({
+            title: chain.display_name,
+            value: chain.name,
+        });
+    });
+
+    return choices;
+};
