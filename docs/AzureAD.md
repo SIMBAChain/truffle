@@ -23,6 +23,6 @@ Navigate to the app registrations Overview page. From this page, grab the "Appli
   "authorizeUrl": "https://login.microsoftonline.com/{Directory (tenant) ID}/oauth2/v2.0/authorize",
   "tokenUrl": "https://login.microsoftonline.com/{Directory (tenant) ID}/oauth2/v2.0/token",
   "clientID": "{Application (client) ID}",
-  "scope": "{scope}"
+  "scope": "openid offline_access {scope}"
 }
 ```
