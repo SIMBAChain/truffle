@@ -1,6 +1,6 @@
 {
     "name": "@simbachain/truffle",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Truffle Plugin for SIMBAChain",
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
@@ -36,7 +36,7 @@
         "version": "standard-version",
         "reset": "git clean -dfx && git reset --hard && npm i",
         "clean": "trash build test",
-        "prepare-release": "run-s reset test cov:check doc:html version doc:publish"
+        "prepare-release": "run-s reset doc:html version doc:publish"
     },
     "scripts-info": {
         "info": "Display information about the package scripts",
