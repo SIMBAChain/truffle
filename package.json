@@ -102,15 +102,16 @@
         "sinon": "^9.0.1",
         "standard-version": "^9.0.0",
         "trash-cli": "^3.0.0",
-        "typescript": "^3.5.3"
+        "ts-node": "^9.0.0",
+        "typescript": "^3.9.7"
     },
     "ava": {
         "failFast": true,
-        "files": [
-            "build/main/**/*.spec.js"
+        "extensions": [
+            "ts"
         ],
-        "sources": [
-            "build/main/**/*.js"
+        "require": [
+            "ts-node/register"
         ]
     },
     "config": {
