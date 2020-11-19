@@ -1,0 +1,348 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@simbachain/truffle</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@simbachain/truffle</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> @simbachain/truffle</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#simba-truffle-integration" id="simba-truffle-integration" style="color: inherit; text-decoration: none;">
+					<h1>SIMBA Truffle Integration</h1>
+				</a>
+				<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+					<h2>Overview</h2>
+				</a>
+				<p>The SIMBA Truffle integration enables interaction with your SIMBA Enterprise Platform Instance from inside your VS Code development environment.</p>
+				<p>The SIMBA Enterprise Platform API supports contract creation and compilation from code or metadata and contract deployment of compiled Solidity contracts. The typical contract creation flow from the SIMBA UI is a low code/no code path in which  contract metadata is graphically created in the Smart Contract Designer UI and then saved and compiled to Solidity. Subsequently the contract is deployed to an available blockchain. Additionally code can be directly edited and compiled in the Smart Contract Designer UI. However, this does not provide the developer with all the tools they are used to such as version control and an IDE.</p>
+				<p>The SIMBA Truffle integration allows Solidity contracts to be developed locally using state of the art blockchain development tools. The flow for the developer fits in with their typical development pipeline. Contracts and applications can be synchronised with an enterprise SIMBA deployment and loaded into VS Code. Once in VS Code, contracts can be developed, compiled and tested using Truffle tooling. Finally they can be deployed directly to a SIMBA enterprise instance. SIMBA receives and handles the Truffle metadata for sets of compiled contracts and deploys them to the blockchains that the enterprise deployment is linked to. </p>
+				<p>The developer can now enjoy all the goodness of SIMBA’s custom auto generated REST API for the contracts, enterprise infrastructure and scalability and advanced search capabilities!
+				Prerequisites</p>
+				<p>You should have a SIMBA Enterprise Platform Instance to communicate with. Additionally you must have a least one contract application created in the instance. To create an application, open your browser, navigate to your instance and log in using your SIMBA user account. Click on your organization -&gt; Applications and then click on the &quot;Add&quot; button on the bottom right corner of the page. Follow the on screen instructions to create your application.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p>To install the truffle plugin follow these steps.</p>
+				<p>Install the plugin from <a href="https://www.npmjs.com/package/@simbachain/truffle">NPM</a>.</p>
+				<p><code>$ npm install --save-dev @simbachain/truffle</code></p>
+				<p>Add the SIMBA plugin to the truffle plugins section in your truffle config.</p>
+				<pre><code>{
+    ... rest of truffle-config
+    plugins: [
+        <span class="hljs-string">"@simbachain/truffle"</span>
+    ]
+}</code></pre><p>Run the following command to ensure the plugin installed correctly.</p>
+				<p><code>$ truffle run simba --help</code></p>
+				<p>You should see a message similar to the below output:</p>
+				<pre><code>Usage on the Simbachain plugin <span class="hljs-keyword">for</span> Truffle
+
+Commands:
+  truffle <span class="hljs-builtin-name">run</span> simba login               log <span class="hljs-keyword">in</span> <span class="hljs-keyword">to</span> SIMBAChain SCaaS
+  truffle <span class="hljs-builtin-name">run</span> simba logout              log out of SIMBAChain SCaaS
+  truffle <span class="hljs-builtin-name">run</span> simba <span class="hljs-builtin-name">export</span>              <span class="hljs-builtin-name">export</span> the project <span class="hljs-keyword">to</span> SIMBAChain SCaaS
+  truffle <span class="hljs-builtin-name">run</span> simba deploy              deploy the project <span class="hljs-keyword">to</span> SIMBAChain SCaaS
+  truffle <span class="hljs-builtin-name">run</span> simba contract &lt;command&gt;  Manage contracts
+
+Options:
+  --help  Show help                                                    [boolean]</code></pre>
+				<a href="#project-settings" id="project-settings" style="color: inherit; text-decoration: none;">
+					<h2>Project Settings</h2>
+				</a>
+				<p>In order to let the plugin know where your SIMBA Enterprise Platform is, create a <code>simba.json</code> file at the root of your project. Add the URL to the file in this form (See <a href="https://github.com/SIMBAChain/truffle/blob/main/docs/AzureAD.md">here</a> if you use Azure AD):</p>
+				<pre><code class="language-json">{
+  <span class="hljs-attr">"baseUrl"</span>: <span class="hljs-string">"https://my-sep.example.com/v2/"</span>,
+  <span class="hljs-attr">"authorizeUrl"</span>: <span class="hljs-string">"https://my-auth.example.com/oauth2/v2.0/authorize"</span>,
+  <span class="hljs-attr">"tokenUrl"</span>: <span class="hljs-string">"https://my-auth.example.com/oauth2/v2.0/token"</span>,
+  <span class="hljs-attr">"clientID"</span>: <span class="hljs-string">"abc123"</span>,
+  <span class="hljs-attr">"scope"</span>: <span class="hljs-string">"api://abc123/scaas.access"</span>
+}</code></pre>
+				<p>Once done, from the command line, at the project root, run <code>truffle run simba login</code> to log into your SIMBA Enterprise Platform.</p>
+				<p>Contract Compilation</p>
+				<p>Most of the work is done by the base truffle CLI. Please see the truffle documentation to get a full explanation on how truffle compiles smart contracts. Briefly, you will need to write your smart contracts and save them in the <code>&lt;project folder&gt;/contracts/</code> folder and then run the following command to compile your smart contract:</p>
+				<p><code>$ truffle compile</code></p>
+				<p>You should see a message similar to the output:</p>
+				<pre><code><span class="hljs-section">Compiling your contracts...
+===========================</span>
+&gt; Compiling ./contracts/FishTracker.sol
+&gt; Artifacts written to /Users/abrinckman/dev/truffle/plugin-test/build/contracts
+&gt; Compiled successfully using:
+<span class="hljs-code">   - solc: 0.5.16+commit.9c3226ce.Emscripten.clang</span></code></pre>
+				<a href="#contract-deployment" id="contract-deployment" style="color: inherit; text-decoration: none;">
+					<h2>Contract Deployment</h2>
+				</a>
+				<p>To deploy your contract to your SIMBA Enterprise Platform instance, create an application if you need to by following the instructions described in the ‘Prerequisites’ section above.</p>
+				<p>Next, in your terminal, use the truffle plugin to log into your SIMBA account:</p>
+				<p><code>$ truffle run simba login</code></p>
+				<p>Click the link to authenticate with the SIMBA platform and to authorize the plugin to make requests to the platform on your behalf. Once logged in, select the organization and the application you just created. You should see a message similar to this:</p>
+				<pre><code><span class="hljs-keyword">Logged</span> <span class="hljs-keyword">In</span>!
+✔ Please pick an organisation › org<span class="hljs-number">-1</span>
+✔ Please pick an application › My Application
+simba <span class="hljs-keyword">login</span>: <span class="hljs-keyword">Logged</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">to</span> org<span class="hljs-number">-1</span></code></pre><p>Now that you have authorized the plugin to make requests to the SIMBA Platform,  you are ready to export and deploy your contract. To export your contract, type the following command:</p>
+				<p><code>$ truffle run simba export</code></p>
+				<p>Follow the onscreen prompts to select the contract you want to export the SIMBA platform. For example:</p>
+				<pre><code>? Please <span class="hljs-keyword">select</span> your <span class="hljs-keyword">primary</span> contract › - <span class="hljs-keyword">Use</span> arrow-<span class="hljs-keyword">keys</span>. <span class="hljs-keyword">Return</span> <span class="hljs-keyword">to</span> submit.
+    Application
+    Car
+    Coffee
+❯   FishTracker</code></pre><p>You should see a message similar to the following if the export was successful:</p>
+				<pre><code>✔ Please select your primary <span class="hljs-built_in">contract</span> › FishTracker
+simba export: Sending to SIMBAChain SCaaS
+simba export: Saved to Contract Design ID e4df3d92-786c-<span class="hljs-number">43b1</span>-<span class="hljs-number">8634</span>-5565a813c92f</code></pre><p>To ensure the contract was uploaded to the SIMBA platform, open the SIMBA platform in a browser, log into the organization you exported the contract to and click on &quot;Contracts&quot;. You should see your newly uploaded contract among the list of contracts.</p>
+				<p>Now that you have successfully exported your contract, you are ready to deploy the contract to the application. Type the following command to deploy your contract to the application:</p>
+				<p><code>$ truffle run simba deploy</code></p>
+				<p>Follow the onscreen prompts to choose an API name and the blockchain to which you want to deploy your contract. If successfully deployed, you should see a message similar to this:</p>
+				<pre><code>✔ Please choose <span class="hljs-keyword">an</span> API name [^[w-]*$] … Fish
+✔ Please choose <span class="hljs-keyword">the</span> blockchain <span class="hljs-built_in">to</span> deploy <span class="hljs-built_in">to</span>. › Ganache
+✔ Please choose <span class="hljs-keyword">the</span> storage <span class="hljs-built_in">to</span> use. › Local Storage (Test)
+✔ Please enter <span class="hljs-keyword">any</span> arguments <span class="hljs-keyword">for</span> <span class="hljs-keyword">the</span> contract <span class="hljs-keyword">as</span> <span class="hljs-keyword">a</span> JSON dictionary. …
+simba deploy: Deploying your app <span class="hljs-built_in">to</span> SIMBAChain SCaaS
+simba deploy: Contract deployment ID <span class="hljs-number">18</span>b00ec3<span class="hljs-number">-3e64</span><span class="hljs-number">-4</span>f16-bebc<span class="hljs-number">-157551</span>dd26cb
+simba deploy: Your contract deployment is executing...
+simba deploy: Your contract was deployed <span class="hljs-built_in">to</span> <span class="hljs-number">0x8ce1560537E3db66AF263b029Ba497559cEc7171</span></code></pre><p>That’s it! You’re done. Now you can open the platform in the browser, navigate to your application and see your deployed contract. From here, you can now take advantage of all the same features provided by the platform. You will see that the contract has its own RESTful API, explorer, and GraphQL interface which can be used to query transactions made to the contract.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class">
+						<a href="classes/loginserver.html" class="tsd-kind-icon">Login<wbr>Server</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/simbaconfig.html" class="tsd-kind-icon">Simba<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/blockchain.html" class="tsd-kind-icon">Blockchain</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/choice.html" class="tsd-kind-icon">Choice</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/contractdesign.html" class="tsd-kind-icon">Contract<wbr>Design</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/contractdesignwithcode.html" class="tsd-kind-icon">Contract<wbr>Design<wbr>With<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/data.html" class="tsd-kind-icon">Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/deploymentarguments.html" class="tsd-kind-icon">Deployment<wbr>Arguments</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/deploymentrequest.html" class="tsd-kind-icon">Deployment<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+						<a href="interfaces/dictionary.html" class="tsd-kind-icon">Dictionary</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/request.html" class="tsd-kind-icon">Request</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/response.html" class="tsd-kind-icon">Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-not-exported">
+						<a href="interfaces/storage.html" class="tsd-kind-icon">Storage</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#authkey" class="tsd-kind-icon">AUTHKEY</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#contract" class="tsd-kind-icon">Contract</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#deploy" class="tsd-kind-icon">Deploy</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#export" class="tsd-kind-icon">Export</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#login" class="tsd-kind-icon">Login</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#logout" class="tsd-kind-icon">Logout</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#truffleconfig" class="tsd-kind-icon">Truffle<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-not-exported">
+						<a href="globals.html#authhtml" class="tsd-kind-icon">auth<wbr>Html</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#command" class="tsd-kind-icon">command</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#describe" class="tsd-kind-icon">describe</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#chooseapplication" class="tsd-kind-icon">choose<wbr>Application</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#chooseorganisation" class="tsd-kind-icon">choose<wbr>Organisation</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#getall" class="tsd-kind-icon">get<wbr>All</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getapp" class="tsd-kind-icon">get<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getblockchains" class="tsd-kind-icon">get<wbr>Blockchains</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#getlist" class="tsd-kind-icon">get<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getstorages" class="tsd-kind-icon">get<wbr>Storages</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#handler" class="tsd-kind-icon">handler</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#parseargs" class="tsd-kind-icon">parse<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#promisifiedreadfile" class="tsd-kind-icon">promisified<wbr>Read<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-not-exported">
+						<a href="globals.html#walkdirforcontracts" class="tsd-kind-icon">walk<wbr>Dir<wbr>For<wbr>Contracts</a>
+					</li>
+					<li class=" tsd-kind-object-literal">
+						<a href="globals.html#builder" class="tsd-kind-icon">builder</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
