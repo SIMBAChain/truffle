@@ -100,7 +100,7 @@ export class LoginServer {
             });
 
             polka({server: this.server})
-                .get('/auth-callback', (req: Request, res: http.ServerResponse) => {
+                .get('/auth-callback/', (req: Request, res: http.ServerResponse) => {
                     const code: string = Array.isArray(req.query.code) ? req.query.code[0] : req.query.code;
                     const state: string = Array.isArray(req.query.state) ? req.query.state[0] : req.query.state;
                     const error: string = Array.isArray(req.query.error) ? req.query.error[0] : req.query.error;
@@ -131,7 +131,7 @@ export class LoginServer {
                         throw err;
                     }
 
-                    this.redirectUri = encodeURIComponent(`http://localhost:${this.port}/auth-callback`);
+                    this.redirectUri = encodeURIComponent(`http://localhost:${this.port}/auth-callback/`);
 
                     this.logger.info('Please navigate to ' + chalk.underline(this.authorizeUrl) + ' to log in.');
                 });
