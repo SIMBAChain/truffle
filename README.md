@@ -62,7 +62,7 @@ In order to let the plugin know where your SIMBA Enterprise Platform is, create 
   "authorizeUrl": "https://my-auth.example.com/oauth2/v2.0/authorize",
   "tokenUrl": "https://my-auth.example.com/oauth2/v2.0/token",
   "clientID": "abc123",
-  "scope": "api://abc123/scaas.access"
+  "scope": "api://abc123/scaas.access offline_access"
 }
 ```
 
