@@ -1,0 +1,4 @@
+export const command = 'contract <command>';
+export const describe = 'Manage contracts';
+export const builder = (yargs) => yargs.commandDir('.').help('help');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvY29tbWFuZHMvY29udHJhY3QvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUEsTUFBTSxDQUFDLE1BQU0sT0FBTyxHQUFHLG9CQUFvQixDQUFDO0FBQzVDLE1BQU0sQ0FBQyxNQUFNLFFBQVEsR0FBRyxrQkFBa0IsQ0FBQztBQUMzQyxNQUFNLENBQUMsTUFBTSxPQUFPLEdBQUcsQ0FBQyxLQUFVLEVBQWEsRUFBRSxDQUFDLEtBQUssQ0FBQyxVQUFVLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDIn0=

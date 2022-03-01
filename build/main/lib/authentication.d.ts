@@ -1,0 +1,44 @@
+/// <reference types="node" />
+import Configstore from 'configstore';
+export declare const AUTHKEY = "SIMBAAUTH";
+export declare class LoginServer {
+    private readonly closeTimeout;
+    private port;
+    private scope;
+    private server;
+    private state;
+    private clientID;
+    private config;
+    private projectConfig;
+    private logger;
+    private redirectUri;
+    private tokenUrl;
+    private baseUrl;
+    private pkceVerifier;
+    private pkceChallenge;
+    constructor(config: Configstore, projectConfig: Configstore, logger: Console);
+    private _authorizeUrl;
+    get authorizeUrl(): string;
+    get isLoggedIn(): boolean;
+    private _configBase;
+    protected get configBase(): string;
+    dispose(): void;
+    performLogin(): Promise<any>;
+    closeServer(): void;
+    performLoginViaIntegratedWebserver(): Promise<any>;
+    refreshToken(): Promise<boolean>;
+    parseExpiry(auth: any): any;
+    receiveCode(code: string, state: string, error: string): Promise<any>;
+    getClientOptions(url: string, contentType?: string, data?: any): Promise<any>;
+    doGetRequest(url: string, contentType?: string): Promise<any>;
+    doPostRequest(url: string, data: any, contentType?: string): Promise<any>;
+    logout(): void;
+    protected hasConfig(key: string): boolean;
+    protected getConfig(key: string): any;
+    protected getOrSetConfig(key: string, value: any): any;
+    protected setConfig(key: string, value: any): any;
+    protected deleteConfig(key: string): void;
+    protected generatePKCE(): void;
+    private retryAfterTokenRefresh;
+    private base64URL;
+}
