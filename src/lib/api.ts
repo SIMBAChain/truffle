@@ -5,25 +5,6 @@ interface Dictionary<T> {
     [Key: string]: T;
 }
 
-interface Blockchain {
-    id: string;
-    global_id: string;
-    name: string;
-    display_name: string;
-    blockchain_type: string;
-    poa: boolean;
-    faucet?: string;
-    supported_contract_types?: string[];
-    currency_unit?: string;
-}
-
-interface Storage {
-    id: string;
-    name: string;
-    display_name: string;
-    storage_type: string;
-}
-
 interface Choice {
     title: string;
     value: string;
@@ -167,10 +148,10 @@ export const getBlockchains = async (config: SimbaConfig, url?: string): Promise
         url = `organisations/${config.organisation.id}/blockchains/`;
     }
 
-    const chains: Blockchain[] = await getList(config, url);
+    const chains: any = await getList(config, url);
     const choices: Choice[] = [];
 
-    chains.forEach((chain) => {
+    chains.results.forEach((chain: any) => {
         choices.push({
             title: chain.display_name,
             value: chain.name,
@@ -186,13 +167,13 @@ export const getStorages = async (config: SimbaConfig, url?: string): Promise<an
         url = `organisations/${config.organisation.id}/storage/`;
     }
 
-    const chains: Storage[] = await getList(config, url);
+    const storages: any = await getList(config, url);
     const choices: Choice[] = [];
 
-    chains.forEach((chain) => {
+    storages.results.forEach((storage: any) => {
         choices.push({
-            title: chain.display_name,
-            value: chain.name,
+            title: storage.display_name,
+            value: storage.name,
         });
     });
 
