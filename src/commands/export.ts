@@ -39,9 +39,10 @@ interface Data {
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    const YES = "yes";
+    let primary = args.primary;
     const NO = "no";
-    const multiContractDeploymentChoices = [YES, NO];
+    const YES = "yes";
+    const multiContractDeploymentChoices = [NO, YES];
     const deployChoices = [];
     for (let i = 0; i< multiContractDeploymentChoices.length; i++) {
         const entry = multiContractDeploymentChoices[i];
@@ -101,19 +102,23 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         choices.push({title: name, value: name});
     }
 
-    const chosen = await prompt({
-        type: 'select',
-        name: 'contract',
-        message: 'Please select your primary contract',
-        choices,
-    });
-
-    if (!chosen.contract) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT : No primary contract chosen!`)}`);
-        return;
+    if (!primary) {
+        const chosen = await prompt({
+            type: 'select',
+            name: 'contract',
+            message: 'Please select your primary contract',
+            choices,
+        });
+    
+        if (!chosen.contract) {
+            log.error(`${chalk.redBright(`\nsimba: EXIT : No primary contract chosen!`)}`);
+            return;
+        }
+    
+        SimbaConfig.ProjectConfigStore.set('primary', chosen.contract);
+    } else {
+        SimbaConfig.ProjectConfigStore.set('primary', primary);
     }
-
-    SimbaConfig.ProjectConfigStore.set('primary', chosen.contract);
 
     if (!deployingMultipleBool) {
         const primaryName = SimbaConfig.ProjectConfigStore.get('primary');
