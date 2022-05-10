@@ -1,5 +1,15 @@
 import yargs from 'yargs';
-import {SimbaConfig, chooseOrganisation, chooseApplication} from '../lib';
+
+import {
+    SimbaConfig
+} from "@simbachain/web3-suites";
+import {
+    chooseApplicationFromList,
+    chooseOrganisationFromList,
+    log,
+} from "@simbachain/web3-suites";
+// import {default as prompt} from 'prompts';
+import {default as chalk} from 'chalk';
 
 export const command = 'login';
 export const describe = 'log in to SIMBAChain SCaaS';
@@ -12,35 +22,18 @@ export const builder = {
 };
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
-    const config = args.config as SimbaConfig;
-    try {
-        if (!config.authStore.isLoggedIn) {
-            await config.authStore.performLogin();
-        } else {
-            try {
-                await config.authStore.refreshToken();
-            } catch (e) {
-                await config.authStore.performLogin();
-            }
-        }
-
-        const org = await chooseOrganisation(config);
-        if (!org) {
-            return Promise.resolve(new Error('No Organisation Selected!'));
-        }
-        config.organisation = org;
-
-        const app = await chooseApplication(config);
-        if (!app) {
-            return Promise.resolve(new Error('No Application Selected!'));
-        }
-        config.application = app;
-
-        config.logger.info(`simba login: Logged in to ${org.name}`);
-    } catch (e) {
-        // e.keys = [ 'name', 'statusCode', 'message', 'error', 'options', 'response' ]
-        return Promise.resolve(e);
+    const simbaConfig = args.config as SimbaConfig;
+    // logging out by default when we run login
+    await simbaConfig.authStore.logout();
+    const org = await chooseOrganisationFromList(simbaConfig);
+    if (!org) {
+        return Promise.resolve(new Error('No Organisation Selected!'));
     }
+    const app = await chooseApplicationFromList(simbaConfig);
+    if (!app) {
+        return Promise.resolve(new Error('No Application Selected!'));
+    }
+    log.info(`${chalk.cyanBright('\nsimba: Logged in with organisation')} ${chalk.greenBright(org.display_name)} ${chalk.cyanBright('and application')} ${chalk.greenBright(app.display_name)}`);
 
     Promise.resolve(null);
 };

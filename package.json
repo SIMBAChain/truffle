@@ -56,6 +56,7 @@
         "node": ">=10"
     },
     "dependencies": {
+        "@simbachain/web3-suites": "^0.0.23",
         "@truffle/config": "^1.2.33",
         "@types/configstore": "^4.0.0",
         "@types/crypto-js": "^3.1.44",

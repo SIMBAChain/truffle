@@ -82,7 +82,7 @@ export class LoginServer {
     }
 
     public async performLoginViaIntegratedWebserver(): Promise<any> {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             // clear out old auth
             this.deleteConfig(AUTHKEY);
 
@@ -354,7 +354,8 @@ export class LoginServer {
 
         try {
             return call(opts);
-        } catch (e) {
+        } catch (err) {
+            const e = err as any;
             if (e.statusCode === 403 || e.statusCode === '403') {
                 await this.refreshToken();
                 opts = await this.getClientOptions(url, contentType, data);

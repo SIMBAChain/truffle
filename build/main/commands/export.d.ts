@@ -13,4 +13,4 @@ export declare const builder: {
         describe: string;
     };
 };
-export declare const handler: (argv: yargs.Arguments) => Promise<any>;
+export declare const handler: (args: yargs.Arguments) => Promise<any>;

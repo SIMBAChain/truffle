@@ -1,5 +1,9 @@
 import yargs from 'yargs';
-import {SimbaConfig} from '../lib';
+import {
+    SimbaConfig,
+    log,
+} from '@simbachain/web3-suites';
+import {default as chalk} from 'chalk';
 
 export const command = 'logout';
 export const describe = 'log out of SIMBAChain SCaaS';
@@ -12,8 +16,8 @@ export const builder = {
 };
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
-    const config = args.config as SimbaConfig;
-    config.authStore.logout();
-    config.logger.info('Logged out.');
-    Promise.resolve(null);
+    log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    await SimbaConfig.authStore.logout();
+    log.info(`${chalk.cyanBright(`\nsimba: you have logged out.`)}`)
+    log.debug(`:: EXIT :`);
 };
