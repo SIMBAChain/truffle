@@ -57,11 +57,16 @@ interface DeploymentArguments {
 
 interface DeploymentRequest {
     blockchain: string;
-    storage: string;
-    api_name: string;
     app_name: string;
-    display_name: string;
     args: DeploymentArguments;
+    storage?: string;
+    api_name?: string;
+    display_name?: string;
+    language?: string;
+    code?: string;
+    pre_txn_hook?: string;
+    lib_name?: string;
+    libraries?: Record<any, any>;
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -107,9 +112,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             initial: 0,
         },
     ];
-    log.debug(`:: before primaryContractRequiresArgs`);
     const constructorRequiresParams = await primaryConstructorRequiresArgs();
-    log.debug(`:: after primaryContractRequiresArgs`);
     const paramInputQuestions: any = [];
     let inputNameToTypeMap: any = {};
     let inputsAsJson = true;
@@ -218,18 +221,39 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
     }
 
-    const deployment: DeploymentRequest = {
-        blockchain: chosen.blockchain,
-        storage: chosen.storage,
-        api_name: chosen.api,
-        app_name: config.application.name,
-        display_name: config.application.name,
-        args: deployArgs,
-    };
+    const _isLibrary = SimbaConfig.ProjectConfigStore.get("isLib")
+
+    let deployURL;
+    let deployment: DeploymentRequest;
+    if (_isLibrary) {
+        deployURL = `organisations/${config.organisation.id}/deployed_artifacts/create/`;
+        const b64CodeBuffer = Buffer.from(config.ProjectConfigStore.get("sourceCode"))
+        const base64CodeString = b64CodeBuffer.toString('base64')
+        deployment = {
+            args: deployArgs,
+            language: "Solidity",
+            code: base64CodeString,
+            blockchain: chosen.blockchain,
+            app_name: config.application.name,
+            lib_name: config.ProjectConfigStore.get("primary"),
+        };
+    } else {
+        deployURL = `organisations/${config.organisation.id}/contract_designs/${id}/deploy/`;
+        deployment = {
+            blockchain: chosen.blockchain,
+            storage: chosen.storage,
+            api_name: chosen.api,
+            app_name: config.application.name,
+            display_name: config.application.name,
+            args: deployArgs,
+            libraries: config.ProjectConfigStore.get("library_addresses") ? config.ProjectConfigStore.get("library_addresses") : {},
+        };
+
+    }
 
     try {
         const resp = await config.authStore.doPostRequest(
-            `organisations/${config.organisation.id}/contract_designs/${id}/deploy/`,
+            deployURL,
             deployment,
             "application/json",
             true,
@@ -243,8 +267,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         let retVal = null;
 
         do {
+            const checkDeployURL = `organisations/${config.organisation.id}/deployments/${deployment_id}/`;
             const check_resp = await config.authStore.doGetRequest(
-                `organisations/${config.organisation.id}/deployments/${deployment_id}/`,
+                checkDeployURL,
             );
             if (check_resp instanceof Error) {
                 throw new Error(check_resp.message);
@@ -269,10 +294,72 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     break;
                 case 'COMPLETED':
                     deployed = true;
-                    config.ProjectConfigStore.set('deployment_address', check_resp.primary.address);
-                    log.info(
-                        `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${check_resp.primary.address}`)}`,
-                    );
+                    if (!_isLibrary) {
+                        const contractAddress = check_resp.primary.address;
+                        const contractName = config.ProjectConfigStore.get("primary");
+                        let contractsInfo = config.ProjectConfigStore.get("contracts_info");
+                        if (contractsInfo) {
+                            contractsInfo[contractName] = {}
+                            contractsInfo[contractName].address = contractAddress;
+                            contractsInfo[contractName].deployment_id = deployment_id;
+                            contractsInfo[contractName].contract_type = "contract";
+                        } else {
+                            contractsInfo = {};
+                            contractsInfo[contractName] = {};
+                            contractsInfo[contractName].address = contractAddress;
+                            contractsInfo[contractName].deployment_id = deployment_id;
+                            contractsInfo[contractName].contract_type = "contract";
+                        }
+                        config.ProjectConfigStore.set("contracts_info", contractsInfo);
+                        const most_recent_deployment_info = {
+                            address: contractAddress,
+                            deployment_id,
+                            type: "contract"
+                        };
+                        config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
+                        log.info(
+                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${contractAddress}. Information pertaining to this deployment can be found in your simba.json.`)}`,
+                        );
+                    } else {
+                        const deploymentInfo = check_resp.deployment;
+                        const libraryName = config.ProjectConfigStore.get("primary");
+                        for (let i = 0; i < deploymentInfo.length; i++) {
+                            const entry = deploymentInfo[i];
+                            if (!(entry.name === libraryName)) {
+                                continue;
+                            }
+                            const libraryAddress = entry.address;
+                            let contractsInfo = config.ProjectConfigStore.get("contracts_info") as any;
+                            if (contractsInfo) {
+                                contractsInfo[libraryName] = {}
+                                contractsInfo[libraryName].address = libraryAddress;
+                                contractsInfo[libraryName].deployment_id = deployment_id;
+                                contractsInfo[libraryName].contract_type = "library";
+                            } else {
+                                contractsInfo = {} as any;
+                                contractsInfo[libraryName] = {};
+                                contractsInfo[libraryName].address = libraryAddress;
+                                contractsInfo[libraryName].deployment_id = deployment_id;
+                                contractsInfo[libraryName].contract_type = "library";
+                            }
+                            config.ProjectConfigStore.set("contracts_info", contractsInfo);
+                            const most_recent_deployment_info = {
+                                address: libraryAddress,
+                                deployment_id,
+                                type: "library",
+                            };
+                            let libraryAddresses = config.ProjectConfigStore.get("library_addresses") as any;
+                            if (libraryAddresses) {
+                                libraryAddresses[libraryName] = libraryAddress;
+                            } else {
+                                libraryAddresses = {}
+                                libraryAddresses[libraryName] = libraryAddress;
+                            }
+                            config.ProjectConfigStore.set("library_addresses", libraryAddresses);
+                            config.ProjectConfigStore.set("most_recent_deployment_info", most_recent_deployment_info);
+                            log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
+                        }
+                    }
                     break;
                 case 'ABORTED':
                     deployed = true;

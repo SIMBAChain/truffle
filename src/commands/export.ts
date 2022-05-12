@@ -5,6 +5,7 @@ import {
     log,
     promisifiedReadFile,
     walkDirForContracts,
+    isLibrary,
 } from "@simbachain/web3-suites";
 import {default as chalk} from 'chalk';
 import {default as prompt} from 'prompts';
@@ -85,9 +86,10 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const choices = [];
     const importData: Data = {};
     const contractNames = [];
-
+    const supplementalInfo = {} as any;
+    log.info(`before files for loop`);
     for (const file of files) {
-        if (file.endsWith('Migrations.json') || file.endsWith('dbg.json')) {
+        if (file.endsWith('Migrations.json')) {
             continue;
         }
         log.info(`${chalk.green(`\nsimba export: exporting file: ${file}`)}`);
@@ -97,8 +99,12 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         const parsed = JSON.parse(buf.toString());
         const name = parsed.contractName;
+        const ast = parsed.ast;
+        const isLib = isLibrary(ast);
+        supplementalInfo[name] = {} as any;
         contractNames.push(name);
         importData[name] = JSON.parse(buf.toString());
+        supplementalInfo[name].isLib = isLib;
         choices.push({title: name, value: name});
     }
 
@@ -116,8 +122,17 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
     
         SimbaConfig.ProjectConfigStore.set('primary', chosen.contract);
+        SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[chosen.contract].isLib);
+        SimbaConfig.ProjectConfigStore.set('sourceCode', importData[chosen.contract].source);
     } else {
-        SimbaConfig.ProjectConfigStore.set('primary', primary);
+        if ((primary as string) in importData) {
+            SimbaConfig.ProjectConfigStore.set('primary', primary);
+            SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[primary as string].isLib);
+            SimbaConfig.ProjectConfigStore.set('sourceCode', importData[primary as string].sourceCode)
+        } else {
+            log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
+            return;
+        }
     }
 
     if (!deployingMultipleBool) {
