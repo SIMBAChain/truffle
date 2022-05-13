@@ -1,4 +1,3 @@
-import yargs from 'yargs';
 export declare const command = "sync <id>";
 export declare const describe = "Sync / Pull SCaaS contracts to local Truffle project";
 export declare const builder: {
@@ -8,4 +7,3 @@ export declare const builder: {
         describe: string;
     };
 };
-export declare const handler: (args: yargs.Arguments) => Promise<any>;

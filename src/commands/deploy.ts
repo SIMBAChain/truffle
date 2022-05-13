@@ -8,7 +8,6 @@ import {
     getStorages,
     primaryConstructorRequiresArgs,
     primaryConstructorInputs,
-    log,
 } from '@simbachain/web3-suites';
 import { StatusCodeError } from 'request-promise/errors';
 
@@ -70,11 +69,11 @@ interface DeploymentRequest {
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
-    log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    log.debug(`:: ENTER :`);
+    SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
+    SimbaConfig.log.debug(`:: ENTER :`);
     const config = new SimbaConfig();
     if (!config.ProjectConfigStore.has("design_id")) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT : Please export your contracts first with "truffle run simba export".`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Please export your contracts first with "truffle run simba export".`)}`);
         return;
     }
 
@@ -85,7 +84,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         try {
             await chooseApplicationFromList(config);
         } catch (e) {
-            log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(e)}`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(e)}`)}`);
             return;
         }
     }
@@ -137,7 +136,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         });
 
         if (!promptChosen.input_method) {
-            log.error(`${chalk.redBright(`\nsimba: EXIT : no param input method chosen!`)}`)
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : no param input method chosen!`)}`)
             return;
         }
 
@@ -179,7 +178,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     let inputsChosen: any;
     if (!inputsAsJson) {
         inputsChosen = await prompt(paramInputQuestions);
-        log.debug(`:: inputsChosen : ${JSON.stringify(inputsChosen)}`);
+        SimbaConfig.log.debug(`:: inputsChosen : ${JSON.stringify(inputsChosen)}`);
         for (const key in inputsChosen) {
             if (inputNameToTypeMap[key].startsWith("int") ||inputNameToTypeMap[key].startsWith("uint")) {
                 inputsChosen[key] = parseInt(inputsChosen[key]);
@@ -188,22 +187,22 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
 
     if (!chosen.api) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT : No API Name chosen!`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : No API Name chosen!`)}`);
         return;
     }
 
     if (!chosen.blockchain) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT :  No blockchain chosen!`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT :  No blockchain chosen!`)}`);
         return;
     }
 
     if (!chosen.storage) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT : No storage chosen!`)}`)
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : No storage chosen!`)}`)
         return;
     }
 
     if (constructorRequiresParams && !chosen.args && !inputsChosen) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT :  Your contract requires constructor arguments`)}`)
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT :  Your contract requires constructor arguments`)}`)
         return;
     }
 
@@ -258,9 +257,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             "application/json",
             true,
         );
+        if (!resp) {
+            SimbaConfig.log.error(`${chalk.redBright(`simba: EXIT : error deploying contract`)}`);
+            return;
+        }
         const deployment_id = resp.deployment_id;
         config.ProjectConfigStore.set('deployment_id', deployment_id);
-        log.info(`${chalk.cyanBright(`\nsimba deploy: Contract deployment ID ${deployment_id}`)}`);
+        SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: Contract deployment ID ${chalk.greenBright(`${deployment_id}`)}`)}`);
 
         let deployed = false;
         let lastState = null;
@@ -271,17 +274,21 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             const check_resp = await config.authStore.doGetRequest(
                 checkDeployURL,
             );
+            if (!check_resp) {
+                SimbaConfig.log.error(`${chalk.redBright(`simba: EXIT : error checking deployment URL`)}`);
+                return;
+            }
             if (check_resp instanceof Error) {
                 throw new Error(check_resp.message);
             }
             const state: any = check_resp.state;
-            log.debug(`:: state : ${state}`);
+            SimbaConfig.log.debug(`:: state : ${state}`);
 
             switch (state) {
                 case 'INITIALISED':
                     if (lastState !== state) {
                         lastState = state;
-                        log.info(
+                        SimbaConfig.log.info(
                             `${chalk.cyanBright('\nsimba deploy: Your contract deployment has been initialised...')}`,
                         );
                     }
@@ -289,7 +296,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 case 'EXECUTING':
                     if (lastState !== state) {
                         lastState = state;
-                        log.info(`${chalk.cyanBright('\nsimba deploy: deployment is executing...')}`);
+                        SimbaConfig.log.info(`${chalk.cyanBright('\nsimba deploy: deployment is executing...')}`);
                     }
                     break;
                 case 'COMPLETED':
@@ -317,8 +324,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                             type: "contract"
                         };
                         config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
-                        log.info(
-                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${contractAddress}. Information pertaining to this deployment can be found in your simba.json.`)}`,
+                        SimbaConfig.log.info(
+                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${chalk.greenBright(`${contractAddress}`)}. Information pertaining to this deployment can be found in your simba.json.`)}`,
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;
@@ -357,14 +364,14 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                             }
                             config.ProjectConfigStore.set("library_addresses", libraryAddresses);
                             config.ProjectConfigStore.set("most_recent_deployment_info", most_recent_deployment_info);
-                            log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
+                            SimbaConfig.log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
                         }
                     }
                     break;
                 case 'ABORTED':
                     deployed = true;
-                    log.error(`${chalk.red('\nsimba deploy: Your contract deployment was aborted...')}`);
-                    log.error(`${chalk.red(`\nsimba deploy: ${check_resp.error}`)}${check_resp.error}`);
+                    SimbaConfig.log.error(`${chalk.red('\nsimba deploy: Your contract deployment was aborted...')}`);
+                    SimbaConfig.log.error(`${chalk.red(`\nsimba deploy: ${check_resp.error}`)}${check_resp.error}`);
                     retVal = new Error(check_resp.error);
                     break;
             }
@@ -376,7 +383,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         if (err instanceof StatusCodeError) {
             if('errors' in err.error && Array.isArray(err.error.errors)){
                 err.error.errors.forEach((error: any)=>{
-                    log.error(
+                    SimbaConfig.log.error(
                         `${chalk.red('\nsimba export: ')}[STATUS:${
                             error.status
                         }|CODE:${
@@ -387,7 +394,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     );
                 });
             } else {
-                log.error(
+                SimbaConfig.log.error(
                     `${chalk.red('\nsimba export: ')}[STATUS:${
                         err.error.errors[0].status
                     }|CODE:${
@@ -402,7 +409,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         if ('errors' in err) {
             if (Array.isArray(err.errors)) {
-                log.error(
+                SimbaConfig.log.error(
                     `${chalk.red('\nsimba deploy: ')}[STATUS:${err.errors[0].status}|CODE:${
                         err.errors[0].code
                     }] Error Saving contract ${err.errors[0].detail}`,
@@ -412,5 +419,5 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         throw e;
     }
-    log.debug(`:: EXIT :`);
+    SimbaConfig.log.debug(`:: EXIT :`);
 };

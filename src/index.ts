@@ -6,7 +6,7 @@ import {
     SimbaConfig,
     // log,
 } from "@simbachain/web3-suites";
-import {Login, Logout, Export, Deploy, Contract, Help} from './commands';
+import {Login, Logout, Export, Deploy, Contract, Help, LogLevel} from './commands';
 
 const parseArgs = (config: any): Promise<any> =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,6 +24,7 @@ const parseArgs = (config: any): Promise<any> =>
                         .command(Deploy as yargs.CommandModule)
                         .command(Contract as yargs.CommandModule)
                         .command(Help as yargs.CommandModule)
+                        .command(LogLevel as yargs.CommandModule)
                         .demandCommand(1, 'You need at least one command before moving on'),
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 (_yargs: yargs.Arguments) => {

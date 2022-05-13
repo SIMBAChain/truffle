@@ -2,7 +2,6 @@
 
 import {
     SimbaConfig,
-    log,
     promisifiedReadFile,
     walkDirForContracts,
     isLibrary,
@@ -39,7 +38,7 @@ interface Data {
 // }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
-    log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
+    SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
     let primary = args.primary;
     const NO = "no";
     const YES = "yes";
@@ -60,7 +59,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     });
 
     if (!deployingMultiple.multiple_contracts) {
-        log.error(`${chalk.redBright(`\nsimba: EXIT : deployment of multiple contracts not specified!`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : deployment of multiple contracts not specified!`)}`);
         return;
     }
 
@@ -76,10 +75,10 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } catch (e) {
         const err = e as any;
         if (err.code === 'ENOENT') {
-            log.error(`${chalk.redBright(`\nsimba: EXIT : Simba was not able to find any build artifacts.\nDid you forget to run: "truffle compile" ?\n`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Simba was not able to find any build artifacts.\nDid you forget to run: "truffle compile" ?\n`)}`);
             return;
         }
-        log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(err)}`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(err)}`)}`);
         return;
     }
 
@@ -87,12 +86,12 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const importData: Data = {};
     const contractNames = [];
     const supplementalInfo = {} as any;
-    log.info(`before files for loop`);
+    SimbaConfig.log.info(`before files for loop`);
     for (const file of files) {
         if (file.endsWith('Migrations.json')) {
             continue;
         }
-        log.info(`${chalk.green(`\nsimba export: exporting file: ${file}`)}`);
+        SimbaConfig.log.info(`${chalk.green(`\nsimba export: exporting file: ${file}`)}`);
         const buf = await promisifiedReadFile(file, {flag: 'r'});
         if (!(buf instanceof Buffer)) {
             continue;
@@ -117,7 +116,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         });
     
         if (!chosen.contract) {
-            log.error(`${chalk.redBright(`\nsimba: EXIT : No primary contract chosen!`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : No primary contract chosen!`)}`);
             return;
         }
     
@@ -130,7 +129,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[primary as string].isLib);
             SimbaConfig.ProjectConfigStore.set('sourceCode', importData[primary as string].sourceCode)
         } else {
-            log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
             return;
         }
     }
@@ -145,7 +144,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
     }
 
-    log.debug(`importData: ${JSON.stringify(importData)}`);
+    SimbaConfig.log.debug(`importData: ${JSON.stringify(importData)}`);
 
     const request = {
         version: '0.0.2',
@@ -153,7 +152,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         import_data: importData,
     };
 
-    log.info(`${chalk.cyanBright('\nsimba: Sending to SIMBA Chain SCaaS')}`);
+    SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Sending to SIMBA Chain SCaaS')}`);
 
     try {
         const resp = await SimbaConfig.authStore.doPostRequest(
@@ -162,17 +161,21 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             "application/json",
             true,
         );
+        if (!resp) {
+            SimbaConfig.log.error(`${chalk.redBright(`simba: EXIT : error exporting contract`)}`);
+            return;
+        }
         SimbaConfig.ProjectConfigStore.set('design_id', resp.id);
         if (resp.id) {
-            log.info(`${chalk.cyanBright('\nsimba: Saved to Contract Design ID ')}${chalk.greenBright(`${resp.id}`)}`);
+            SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Saved to Contract Design ID ')}${chalk.greenBright(`${resp.id}`)}`);
         } else {
-            log.error(`${chalk.red('\nsimba: EXIT : Error exporting contract to SIMBA Chain')}`);
+            SimbaConfig.log.error(`${chalk.red('\nsimba: EXIT : Error exporting contract to SIMBA Chain')}`);
         }
     } catch (e) {
         if (e instanceof StatusCodeError) {
             if('errors' in e.error && Array.isArray(e.error.errors)){
                 e.error.errors.forEach((error: any)=>{
-                    log.error(
+                    SimbaConfig.log.error(
                         `${chalk.red('\nsimba export: ')}[STATUS:${
                             error.status
                         }|CODE:${
@@ -183,7 +186,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     );
                 });
             } else {
-                log.error(
+                SimbaConfig.log.error(
                     `${chalk.red('\nsimba export: ')}[STATUS:${
                         e.error.errors[0].status
                     }|CODE:${
@@ -199,7 +202,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const err = e as any;
         if ('errors' in err) {
             if (Array.isArray(err.errors)) {
-                log.error(
+                SimbaConfig.log.error(
                     `${chalk.red('\nsimba export: ')}[STATUS:${err.errors[0].status}|CODE:${
                         err.errors[0].code
                     }] Error Saving contract ${err.errors[0].detail}`,

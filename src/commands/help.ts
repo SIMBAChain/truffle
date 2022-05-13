@@ -1,15 +1,18 @@
 
-import { log } from '@simbachain/web3-suites';
+import { SimbaConfig } from '@simbachain/web3-suites';
 import {default as prompt} from 'prompts';
 import {default as chalk} from 'chalk';
 import yargs from 'yargs';
 
-const LOGIN = "login";
-const EXPORT = "export";
-const DEPLOY = "deploy";
-const LOGOUT = "logout";
-const SIMBAJSON = "simbajson";
-const GENERALPROCESS = "generalprocess";
+enum HelpCommands {
+    LOGIN = "login",
+    EXPORT = "export",
+    DEPLOY = "deploy",
+    LOGOUT = "logout",
+    SIMBAJSON = "simbajson",
+    GENERALPROCESS = "generalprocess",
+    LOGLEVEL = "loglevel",
+}
 
 export const command = 'help';
 export const describe = 'get help for a SIMBA truffle plugin topic';
@@ -27,12 +30,13 @@ export async function help(args: yargs.Arguments) {
 
     if (!args.topic) {
         const paramInputChoices = [
-            LOGIN,
-            EXPORT,
-            DEPLOY,
-            LOGOUT,
-            SIMBAJSON,
-            GENERALPROCESS,
+            HelpCommands.LOGIN,
+            HelpCommands.EXPORT,
+            HelpCommands.DEPLOY,
+            HelpCommands.LOGOUT,
+            HelpCommands.SIMBAJSON,
+            HelpCommands.GENERALPROCESS,
+            HelpCommands.LOGLEVEL,
         ];
         const paramChoices = [];
         for (let i = 0; i < paramInputChoices.length; i++) {
@@ -50,7 +54,7 @@ export async function help(args: yargs.Arguments) {
         });
     
         if (!helpTopicPrompt.help_topic) {
-            log.error(`:: EXIT : ERROR : no help topic selected!`)
+            SimbaConfig.log.error(`${chalk.redBright(`simba: no help topic selected!`)}`)
             return;
         }
     
@@ -60,32 +64,36 @@ export async function help(args: yargs.Arguments) {
     }
 
     switch(helpTopic) {
-        case LOGIN: { 
+        case HelpCommands.LOGIN: { 
            await loginHelp();
            break; 
         }
-        case EXPORT: {
+        case HelpCommands.EXPORT: {
             await exportHelp();
             break;
         }
-        case DEPLOY: {
+        case HelpCommands.DEPLOY: {
             await deployHelp();
             break;
         }
-        case LOGOUT: {
+        case HelpCommands.LOGOUT: {
             await logoutHelp();
             break;
         }
-        case SIMBAJSON: {
+        case HelpCommands.SIMBAJSON: {
             await simbaJsonHelp();
             break;
         }
-        case GENERALPROCESS: {
+        case HelpCommands.GENERALPROCESS: {
             await generalProcessHelp();
             break;
         }
+        case HelpCommands.LOGLEVEL: {
+            await logLevelHelp();
+            break;
+        }
         default: { 
-           log.info(`${chalk.cyanBright(`\nsimba: When requesting help, you must enter a valid topic for simba help: 'simbaJson', 'login', 'export', 'deploy', 'generalprocess', or 'logout'. For example, for help with login, run "$ truffle run simba help --topic login"`)}`);
+           SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: When requesting help, you must enter a valid topic for simba help: ${chalk.greenBright("'simbaJson', 'login', 'export', 'deploy', 'generalprocess', 'loglevel', or 'logout'")} . For example, for help with login, run "$ truffle run simba help --topic login"`)}`);
            break; 
         } 
     }
@@ -94,32 +102,37 @@ export async function help(args: yargs.Arguments) {
 
 async function loginHelp() {
     const message = await helpMessage("loginHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function exportHelp() {
     const message = await helpMessage("exportHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function deployHelp() {
     const message = await helpMessage("deployHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function logoutHelp() {
     const message = await helpMessage("logoutHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function simbaJsonHelp() {
     const message = await helpMessage("simbaJsonHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function generalProcessHelp() {
     const message = await helpMessage("generalProcessHelp");
-    log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function logLevelHelp() {
+    const message = await helpMessage("logLevelHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function helpMessage(
@@ -135,11 +148,12 @@ const helpOptions: any = {
     loginHelp: "\n\nOnce you have configured your simba.json file, you will be able to login. the Simba truffle plugin uses keycloack device login, so you will be given a URL that you can navigate to, to grant permission to your device. You will then be prompted to select the organization and application from SIMBA Chain that you wish to log into. To log in, simply run\n\n\t$ truffle run simba login\n\n",
     exportHelp: "\n\nOnce you have logged in, you will be able to export your contracts, which will save them to your organization's contracts. For this command, you can either run export without arguments, or with optional arguments. To export without optional arguments, and simply follow prompts to choose which contract you want to export, run\n\n\t$ truffle run simba export\n\nIf you want to export with optional arguments, you can specify a primary contract by passing the --primary flag, followed by the contract name. So if you wanted to export contract 'MyContract', then you would run\n\n\t$ truffle run simba export --primary MyContract\n\n",
     deployHelp: "\n\nAfter you have logged in and exported your contract, you will be able to deploy your contract. This step will generate the REST API endpoints that you can use to interact with your smart contract's methods, and save them to your organization and app. You will then be able to access those endpoints through either the Blocks (Simba Chain) UI, or programatically through one of Simba's SDKs. To deploy, run\n\n\t$ truffle run simba deploy\n\nYou will then be prompted to:\n\n\t1. choose how you want to specify your contract's constructor parameters (as either a JSON object or one by one)\n\n\t2. choose an API name for your contract\n\n\t3. select the blockchain you want to deploy to\n\n\t4. choose which storage to use (AWS, Azure, etc., but this depends on what you have configured for your account)\n\n\t5. and finally, you will be asked to provide the parameters for your contract constructor, based on the response you gave to the first prompt\n\n",
-    logoutHelp: "\n\nIf you want to logout, then you can do so by running\n\n\t$ truffle run simba logout\n\nDoing so will delete your auth token in authconfig.json"
+    logoutHelp: "\n\nIf you want to logout, then you can do so by running\n\n\t$ truffle run simba logout\n\nDoing so will delete your auth token in authconfig.json",
+    logLevelHelp: "\n\nThe Simba truffle plugin uses tslog for logging / debugging. Setting a log level through this command will set a MINIMUM log level. So for instance, if you set the log level to 'info', then logs of level SimbaConfig.log.info(...) as well as SimbaConfig.log.error(...) will be logged. Valid values for log levels are 'error', 'info', 'debug', 'silly', 'warn', 'trace', and 'fatal'. You can either run this command without any arguments, which will allow you to set a minimum log level from prompt:\n\n\t$ truffle run simba loglevel\n\nOr you can set the specific log level from the CLI:\n\n\t$ truffle run simba loglevel --level <desired log level>"
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
-    log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     await help(args);
     Promise.resolve(null);
 };
