@@ -1,16 +1,5 @@
-import {Argv} from 'yargs';
+import * as ListCommand from './list';
+import * as SyncCommand from './sync';
 
-export const command = 'contract <command>';
-export const describe = 'Manage contracts';
-export const builder = (yargs: any): Argv<any> => yargs.commandDir('.').help('help');
-
-export interface ContractDesign {
-    id: string;
-    name: string;
-    version: string;
-    language: string;
-}
-
-export interface ContractDesignWithCode extends ContractDesign {
-    code: string;
-}
+export const List = ListCommand;
+export const Sync = SyncCommand;

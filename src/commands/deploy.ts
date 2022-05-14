@@ -306,7 +306,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         const contractName = config.ProjectConfigStore.get("primary");
                         let contractsInfo = config.ProjectConfigStore.get("contracts_info");
                         if (contractsInfo) {
-                            contractsInfo[contractName] = {}
+                            contractsInfo[contractName] = contractsInfo[contractName] ?
+                                contractsInfo[contractName] :
+                                {};
                             contractsInfo[contractName].address = contractAddress;
                             contractsInfo[contractName].deployment_id = deployment_id;
                             contractsInfo[contractName].contract_type = "contract";
@@ -325,7 +327,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         };
                         config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
                         SimbaConfig.log.info(
-                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${chalk.greenBright(`${contractAddress}`)}. Information pertaining to this deployment can be found in your simba.json.`)}`,
+                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${chalk.greenBright(``)}. Information pertaining to this deployment can be found in your simba.json.`)}`,
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;
@@ -338,7 +340,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                             const libraryAddress = entry.address;
                             let contractsInfo = config.ProjectConfigStore.get("contracts_info") as any;
                             if (contractsInfo) {
-                                contractsInfo[libraryName] = {}
+                                contractsInfo[libraryName] = contractsInfo[libraryName] ?
+                                    contractsInfo[libraryName] :
+                                    {};
                                 contractsInfo[libraryName].address = libraryAddress;
                                 contractsInfo[libraryName].deployment_id = deployment_id;
                                 contractsInfo[libraryName].contract_type = "library";

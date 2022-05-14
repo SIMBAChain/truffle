@@ -106,7 +106,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         supplementalInfo[name].isLib = isLib;
         choices.push({title: name, value: name});
     }
-
+    let currentContractName;
     if (!primary) {
         const chosen = await prompt({
             type: 'select',
@@ -123,11 +123,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         SimbaConfig.ProjectConfigStore.set('primary', chosen.contract);
         SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[chosen.contract].isLib);
         SimbaConfig.ProjectConfigStore.set('sourceCode', importData[chosen.contract].source);
+        currentContractName = chosen.contract;
     } else {
         if ((primary as string) in importData) {
             SimbaConfig.ProjectConfigStore.set('primary', primary);
             SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[primary as string].isLib);
             SimbaConfig.ProjectConfigStore.set('sourceCode', importData[primary as string].sourceCode)
+            currentContractName = primary;
         } else {
             SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
             return;
@@ -166,6 +168,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
         SimbaConfig.ProjectConfigStore.set('design_id', resp.id);
+        const contractsInfo = SimbaConfig.ProjectConfigStore.get("contracts_info") ?
+            SimbaConfig.ProjectConfigStore.get("contracts_info") :
+            {};
+        contractsInfo[currentContractName] = {
+            design_id: resp.id,
+        }
+        SimbaConfig.ProjectConfigStore.set("contracts_info", contractsInfo);
         if (resp.id) {
             SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Saved to Contract Design ID ')}${chalk.greenBright(`${resp.id}`)}`);
         } else {
