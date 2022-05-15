@@ -167,7 +167,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 paramInputQuestions.push({
                     type: "text",
                     name: paramName,
-                    message: `please input value for param ${paramName} of type ${paramType}`
+                    message: `please input value for param ${chalk.greenBright(`${paramName}`)}  of type  ${chalk.greenBright(`${paramType}`)}`,
                 });
             }
         }
@@ -250,6 +250,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
     }
 
+    SimbaConfig.log.debug(`${chalk.greenBright(`\nsimba: deployment request: ${JSON.stringify(deployment)}`)}`)
+
     try {
         const resp = await config.authStore.doPostRequest(
             deployURL,
@@ -327,7 +329,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         };
                         config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
                         SimbaConfig.log.info(
-                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${chalk.greenBright(``)}. Information pertaining to this deployment can be found in your simba.json.`)}`,
+                            `${chalk.cyanBright(`\nsimba deploy: Your contract was deployed to ${chalk.greenBright(`${contractAddress}`)} . Information pertaining to this deployment can be found in your simba.json under contracts_info.${contractName}.`)}`,
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;

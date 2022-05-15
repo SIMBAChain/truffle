@@ -10,4 +10,3 @@ export declare const Login: typeof LoginCommand;
 export declare const Logout: typeof LogoutCommand;
 export declare const Help: typeof HelpCommand;
 export declare const LogLevel: typeof LogLevelCommand;
-export { List, Sync, } from "./contract";

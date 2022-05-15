@@ -91,7 +91,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         if (file.endsWith('Migrations.json')) {
             continue;
         }
-        SimbaConfig.log.info(`${chalk.green(`\nsimba export: exporting file: ${file}`)}`);
+        SimbaConfig.log.debug(`${chalk.green(`\nsimba export: reading file: ${file}`)}`);
         const buf = await promisifiedReadFile(file, {flag: 'r'});
         if (!(buf instanceof Buffer)) {
             continue;
@@ -147,15 +147,18 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
 
     SimbaConfig.log.debug(`importData: ${JSON.stringify(importData)}`);
-
+    
+    const libraries = await SimbaConfig.ProjectConfigStore.get("library_addresses") ? SimbaConfig.ProjectConfigStore.get("library_addresses") : {};
+    SimbaConfig.log.debug(`libraries: ${JSON.stringify(libraries)}`);
     const request = {
         version: '0.0.2',
         primary: SimbaConfig.ProjectConfigStore.get('primary'),
         import_data: importData,
+        libraries: libraries,
     };
 
     SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Sending to SIMBA Chain SCaaS')}`);
-
+    SimbaConfig.log.debug(`${chalk.cyanBright(`\nsimba: request: ${JSON.stringify(request)}`)}`);
     try {
         const resp = await SimbaConfig.authStore.doPostRequest(
             `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,

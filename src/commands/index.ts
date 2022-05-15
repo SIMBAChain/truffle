@@ -11,7 +11,3 @@ export const Login = LoginCommand;
 export const Logout = LogoutCommand;
 export const Help = HelpCommand;
 export const LogLevel = LogLevelCommand;
-export {
-    List,
-    Sync,
-} from "./contract"
