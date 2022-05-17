@@ -19,9 +19,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sync = exports.List = void 0;
-const ListCommand = __importStar(require("./list"));
+exports.View = exports.Sync = void 0;
 const SyncCommand = __importStar(require("./sync"));
-exports.List = ListCommand;
+const ViewCommand = __importStar(require("./viewContracts"));
 exports.Sync = SyncCommand;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvY29tbWFuZHMvY29udHJhY3QvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFzQztBQUN0QyxvREFBc0M7QUFFekIsUUFBQSxJQUFJLEdBQUcsV0FBVyxDQUFDO0FBQ25CLFFBQUEsSUFBSSxHQUFHLFdBQVcsQ0FBQyJ9
+exports.View = ViewCommand;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvY29tbWFuZHMvY29udHJhY3QvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFxQztBQUNyQyw2REFBK0M7QUFFbEMsUUFBQSxJQUFJLEdBQUcsV0FBVyxDQUFDO0FBQ25CLFFBQUEsSUFBSSxHQUFHLFdBQVcsQ0FBQyJ9

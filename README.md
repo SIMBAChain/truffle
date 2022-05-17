@@ -26,6 +26,12 @@ You should have a SIMBA Blocks Instance to communicate with. Additionally you mu
 
 ## Installation
 
+VERSIONING NOTE: if you are attempting to use a SIMBA Blocks instance that uses Azure AD for authentication, then you will need to use version 1.0.4 of the Truffle plugin. To install that version, you can run:
+
+```
+$ npm install --save-dev @simbachain/truffle@1.0.4
+```
+
 To install the truffle plugin follow these steps.
 
 Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle).
@@ -59,6 +65,8 @@ You should see a message similar to the below output:
     generalprocess
     loglevel
     libraries
+    sync
+    viewcontracts
 ```
 
 ## Project Settings
@@ -247,6 +255,8 @@ And you will be prompted to select from a list of available help topics:
     simbajson
     generalprocess
     loglevel
+    sync
+    viewcontracts
 ```
 
 Or you can pass the specific topic you want help with as an optional argument after the command by passing the --topic flag. For instance, for help with the "deploy" task, run
@@ -264,6 +274,8 @@ As indicated above, the available help topics are:
 - simbajson
 - generalprocess
 - loglevel
+- sync
+- viewcontracts
 
 ## logging and debugging
 

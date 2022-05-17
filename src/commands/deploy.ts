@@ -281,6 +281,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 return;
             }
             if (check_resp instanceof Error) {
+                SimbaConfig.log.debug(`:: EXIT : ${check_resp.message}`);
                 throw new Error(check_resp.message);
             }
             const state: any = check_resp.state;
@@ -410,7 +411,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     } - ${err.error.errors[0].detail}`,
                 );
             }
-
+            SimbaConfig.log.debug(`:: EXIT :`);
             return Promise.resolve();
         }
         if ('errors' in err) {
@@ -420,9 +421,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         err.errors[0].code
                     }] Error Saving contract ${err.errors[0].detail}`,
                 );
+                SimbaConfig.log.debug(`:: EXIT :`);
                 Promise.resolve(e);
             }
         }
+        SimbaConfig.log.debug(`:: EXIT :`);
         throw e;
     }
     SimbaConfig.log.debug(`:: EXIT :`);

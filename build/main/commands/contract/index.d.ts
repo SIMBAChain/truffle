@@ -1,4 +1,4 @@
-import * as ListCommand from './list';
-import * as SyncCommand from './sync';
-export declare const List: typeof ListCommand;
+import * as SyncCommand from "./sync";
+import * as ViewCommand from "./viewContracts";
 export declare const Sync: typeof SyncCommand;
+export declare const View: typeof ViewCommand;

@@ -10,3 +10,5 @@ export declare const Login: typeof LoginCommand;
 export declare const Logout: typeof LogoutCommand;
 export declare const Help: typeof HelpCommand;
 export declare const LogLevel: typeof LogLevelCommand;
+export declare const Sync: typeof import("./contract/sync");
+export declare const View: typeof import("./contract/viewContracts");

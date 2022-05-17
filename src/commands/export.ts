@@ -208,7 +208,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     } - ${e.error.errors[0].detail}`,
                 );
             }
-
+            SimbaConfig.log.debug(`:: EXIT :`);
             return Promise.resolve();
         }
         const err = e as any;
@@ -219,9 +219,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         err.errors[0].code
                     }] Error Saving contract ${err.errors[0].detail}`,
                 );
+                SimbaConfig.log.debug(`:: EXIT :`);
                 return Promise.resolve();
             }
         }
     }
+    SimbaConfig.log.debug(`:: EXIT :`);
     return;
 };

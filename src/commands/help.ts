@@ -13,6 +13,8 @@ enum HelpCommands {
     GENERALPROCESS = "generalprocess",
     LOGLEVEL = "loglevel",
     LIBRARIES = "libraries",
+    SYNC = "sync",
+    VIEWCONTRACTS = "viewcontracts",
 }
 
 export const command = 'help';
@@ -29,17 +31,20 @@ export async function help(args: yargs.Arguments) {
     console.log(`args: ${JSON.stringify(args)}`);
     let helpTopic: string;
 
+    const paramInputChoices = [
+        HelpCommands.LOGIN,
+        HelpCommands.EXPORT,
+        HelpCommands.DEPLOY,
+        HelpCommands.LOGOUT,
+        HelpCommands.SIMBAJSON,
+        HelpCommands.GENERALPROCESS,
+        HelpCommands.LOGLEVEL,
+        HelpCommands.LIBRARIES,
+        HelpCommands.SYNC,
+        HelpCommands.VIEWCONTRACTS,
+    ];
+
     if (!args.topic) {
-        const paramInputChoices = [
-            HelpCommands.LOGIN,
-            HelpCommands.EXPORT,
-            HelpCommands.DEPLOY,
-            HelpCommands.LOGOUT,
-            HelpCommands.SIMBAJSON,
-            HelpCommands.GENERALPROCESS,
-            HelpCommands.LOGLEVEL,
-            HelpCommands.LIBRARIES,
-        ];
         const paramChoices = [];
         for (let i = 0; i < paramInputChoices.length; i++) {
             const entry = paramInputChoices[i];
@@ -98,8 +103,16 @@ export async function help(args: yargs.Arguments) {
             await librariesHelp();
             break;
         }
+        case HelpCommands.SYNC: {
+            await syncHelp();
+            break;
+        }
+        case HelpCommands.VIEWCONTRACTS: {
+            await viewContractsHelp();
+            break;
+        }
         default: { 
-           SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: When requesting help, you must enter a valid topic for simba help: ${chalk.greenBright("'simbaJson', 'login', 'export', 'deploy', 'generalprocess', 'loglevel', or 'logout'")} . For example, for help with login, run "$ truffle run simba help --topic login"`)}`);
+            console.log(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
            break; 
         } 
     }
@@ -142,14 +155,26 @@ async function logLevelHelp() {
 }
 
 async function librariesHelp() {
-    const message = await helpMessage("libraries");
+    const message = await helpMessage("librariesHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function syncHelp() {
+    const message = await helpMessage("syncHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function viewContractsHelp() {
+    const message = await helpMessage("viewContractsHelp");
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
 async function helpMessage(
     topic: string,
 ): Promise<string> {
+    SimbaConfig.log.debug(`:: EXIT : ${topic}`);
     const message = helpOptions[topic];
+    SimbaConfig.log.debug(`:: EXIT : ${message}`);
     return message;
 }
 
@@ -161,7 +186,9 @@ const helpOptions: any = {
     deployHelp: "\n\nAfter you have logged in and exported your contract, you will be able to deploy your contract. This step will generate the REST API endpoints that you can use to interact with your smart contract's methods, and save them to your organization and app. You will then be able to access those endpoints through either the Blocks (Simba Chain) UI, or programatically through one of Simba's SDKs. To deploy, run\n\n\t$ truffle run simba deploy\n\nYou will then be prompted to:\n\n\t1. choose how you want to specify your contract's constructor parameters (as either a JSON object or one by one)\n\n\t2. choose an API name for your contract\n\n\t3. select the blockchain you want to deploy to\n\n\t4. choose which storage to use (AWS, Azure, etc., but this depends on what you have configured for your account)\n\n\t5. and finally, you will be asked to provide the parameters for your contract constructor, based on the response you gave to the first prompt\n\n",
     logoutHelp: "\n\nIf you want to logout, then you can do so by running\n\n\t$ truffle run simba logout\n\nDoing so will delete your auth token in authconfig.json",
     logLevelHelp: "\n\nThe Simba truffle plugin uses tslog for logging / debugging. Setting a log level through this command will set a MINIMUM log level. So for instance, if you set the log level to 'info', then logs of level SimbaConfig.log.info(...) as well as SimbaConfig.log.error(...) will be logged. Valid values for log levels are 'error', 'info', 'debug', 'silly', 'warn', 'trace', and 'fatal'. You can either run this command without any arguments, which will allow you to set a minimum log level from prompt:\n\n\t$ truffle run simba loglevel\n\nOr you can set the specific log level from the CLI:\n\n\t$ truffle run simba loglevel --level <desired log level>",
-    libraries: "\n\nYou do not need to actively link libraries in this plugin. Once you have deployed your contract, SIMBA's Blocks platform handles that for you. All you need to do is make sure that if you are deploying a contractX that depends on libraryX, then FIRST deploy libraryX. Then when you deploy contractX, the library linking will automatically be conducted by SIMBA. If you look in your simba.json after deploying a library, you will see a field for library_addresses. This field gets exported with other contracts, and is how SIMBA knows whether a contract needs to be linked to a library when it is deployed. You don't need to do anything with the library_addresses info; all you need to remember is to deploy the library BEFORE you deploy the contract that depends on it."
+    librariesHelp: "\n\nYou do not need to actively link libraries in this plugin. Once you have deployed your contract, SIMBA's Blocks platform handles that for you. All you need to do is make sure that if you are deploying a contractX that depends on libraryX, then FIRST deploy libraryX. Then when you deploy contractX, the library linking will automatically be conducted by SIMBA. If you look in your simba.json after deploying a library, you will see a field for library_addresses. This field gets exported with other contracts, and is how SIMBA knows whether a contract needs to be linked to a library when it is deployed. You don't need to do anything with the library_addresses info; all you need to remember is to deploy the library BEFORE you deploy the contract that depends on it.",
+    syncHelp: "\n\nThis command is for pulling the contract design you have stored in SIMBA for a given design_id, and then writing that version to your local project. So if you have deployed a contract to Blocks, then made multiple changes, but want to revert them, then you can call:\n\n\t$ truffle run simba sync --id <design_id>\n\n If you deployed those contracts using the SIMBA Truffle plugin, then you can look in your simba.json file for contract design IDs.",
+    viewContractsHelp: "\n\nThis command will return information pertaining to all contracts saved to your organisation on SIMBA Chain. Contract info includes: name, id, and version. For this command, just run:\n\n\t$ truffle run simba viewcontracts",
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {

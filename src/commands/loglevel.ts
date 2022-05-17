@@ -61,16 +61,19 @@ export async function loglevel(args: yargs.Arguments) {
     
         SimbaConfig.logLevel = logLevelPrompt.log_level;
         SimbaConfig.log.info(`${chalk.cyanBright(`simba: log level set to ${logLevelPrompt.log_level}`)}`);
+        SimbaConfig.log.debug(`:: EXIT :`);
         return;
     } else {
         const level = args.level as string;
         const lowLevel = level.toLowerCase();
         if (!Object.values(LogLevel).includes(lowLevel as any)) {
             SimbaConfig.log.error(`${chalk.redBright(`simba: log level can only be one of: 'error', 'debug', 'info', 'warn', 'fatal', 'silly', 'trace'`)}`);
+            SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
         SimbaConfig.logLevel = lowLevel as any;
         SimbaConfig.log.info(`${chalk.cyanBright(`simba: log level set to ${lowLevel}`)}`);
+        SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
 }
