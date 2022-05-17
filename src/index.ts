@@ -30,7 +30,7 @@ const parseArgs = (config: any): Promise<any> =>
                     yargs.showHelp();
                 },
             )
-            .help('OVERRIDDEN')
+            .help('truffle run simba help')
             .version(false)
             .showHelpOnFail(true)
             .strict(true)

@@ -65,7 +65,6 @@ interface DeploymentRequest {
     code?: string;
     pre_txn_hook?: string;
     lib_name?: string;
-    libraries?: Record<any, any>;
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -80,6 +79,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const blockchainList = await getBlockchains(config);
     const storageList = await getStorages(config);
 
+    const contractName = SimbaConfig.ProjectConfigStore.get("primary");
+    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: gathering info for deployment of contract ${chalk.greenBright(`${contractName}`)}`)}`)
     if (!config.application) {
         try {
             await chooseApplicationFromList(config);
@@ -93,7 +94,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         {
             type: 'text',
             name: 'api',
-            message: 'Please choose an API name [^[w-]*$]',
+            message: `Please choose an API name for contract ${chalk.greenBright(`${contractName}`)} [^[w-]*$]`,
             validate: (str: string): boolean => !!/^[\w-]*$/.exec(str),
         },
         {
@@ -167,7 +168,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 paramInputQuestions.push({
                     type: "text",
                     name: paramName,
-                    message: `please input value for param ${chalk.greenBright(`${paramName}`)}  of type  ${chalk.greenBright(`${paramType}`)}`,
+                    message: `please input value for param ${chalk.greenBright(`${paramName}`)} of type ${chalk.greenBright(`${paramType}`)}`,
                 });
             }
         }
@@ -245,7 +246,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             app_name: config.application.name,
             display_name: config.application.name,
             args: deployArgs,
-            libraries: config.ProjectConfigStore.get("library_addresses") ? config.ProjectConfigStore.get("library_addresses") : {},
         };
 
     }
@@ -265,7 +265,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         const deployment_id = resp.deployment_id;
         config.ProjectConfigStore.set('deployment_id', deployment_id);
-        SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: Contract deployment ID ${chalk.greenBright(`${deployment_id}`)}`)}`);
+        SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: Contract deployment ID for contract ${contractName}:`)} ${chalk.greenBright(`${deployment_id}`)}`);
 
         let deployed = false;
         let lastState = null;
