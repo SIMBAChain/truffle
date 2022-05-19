@@ -86,7 +86,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const importData: Data = {};
     const contractNames = [];
     const supplementalInfo = {} as any;
-    SimbaConfig.log.info(`before files for loop`);
     for (const file of files) {
         if (file.endsWith('Migrations.json')) {
             continue;
@@ -167,7 +166,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             true,
         );
         if (!resp) {
-            SimbaConfig.log.error(`${chalk.redBright(`simba: EXIT : error exporting contract`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : error exporting contract`)}`);
             return;
         }
         SimbaConfig.ProjectConfigStore.set('design_id', resp.id);
