@@ -9,14 +9,14 @@ import {default as chalk} from 'chalk';
 
 export const command = 'login';
 export const describe = 'log in to SIMBAChain SCaaS';
-export const builder = {
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
-};
+export const builder = {};
 
+/**
+ * get auth token and choose both organisation and application
+ * to deploy contract(s) to on simbachain.com
+ * @param args 
+ * @returns 
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const simbaConfig = args.config as SimbaConfig;

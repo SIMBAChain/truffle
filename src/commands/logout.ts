@@ -6,14 +6,12 @@ import {default as chalk} from 'chalk';
 
 export const command = 'logout';
 export const describe = 'log out of SIMBAChain SCaaS';
-export const builder = {
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
-};
+export const builder = {};
 
+/**
+ * deletes access/auth token from configstore (authconfig.json)
+ * @param args 
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     await SimbaConfig.authStore.logout();

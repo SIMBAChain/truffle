@@ -19,13 +19,14 @@ export const builder = {
         'type': 'string',
         'describe': 'minimum level of logging to use',
     },
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
 };
 
+/**
+ * choose minimum logging level, such as "debug", "info", etc.
+ * @param args 
+ * args can contain optional param args.level
+ * @returns 
+ */
 export async function loglevel(args: yargs.Arguments) {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
 

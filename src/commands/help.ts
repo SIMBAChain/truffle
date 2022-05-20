@@ -27,6 +27,12 @@ export const builder = {
     },
 };
 
+/**
+ * retrieve help on a topic
+ * @param args
+ * args can contain optional param of "topic", which specifies the help topic
+ * @returns 
+ */
 export async function help(args: yargs.Arguments) {
     console.log(`args: ${JSON.stringify(args)}`);
     let helpTopic: string;
@@ -119,6 +125,10 @@ export async function help(args: yargs.Arguments) {
 
 }
 
+/**
+ * The following functions all use helpMessage() to gather help message on a topic
+ */
+
 async function loginHelp() {
     const message = await helpMessage("loginHelp");
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
@@ -169,6 +179,11 @@ async function viewContractsHelp() {
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
+/**
+ * pulls help message from helpOptions object
+ * @param topic 
+ * @returns 
+ */
 async function helpMessage(
     topic: string,
 ): Promise<string> {

@@ -19,11 +19,6 @@ export const builder = {
         'type': 'string',
         'describe': 'the name of the primary contract to use',
     },
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
 };
 
 interface Data {
@@ -37,6 +32,11 @@ interface Data {
 //     import_data: Data;
 // }
 
+/**
+ * for exporting contract to simbachain.com (can also think of this as "importing" it to simbachain.com)
+ * @param args 
+ * @returns 
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
     let primary = args.primary;

@@ -17,7 +17,7 @@ export const builder = {
     'api': {
         'string': true,
         'type': 'string',
-        'describe': 'the name of the app to deploy to',
+        'describe': 'the name of the api to deploy to',
     },
     'app': {
         'string': true,
@@ -43,11 +43,6 @@ export const builder = {
         'type': 'boolean',
         'describe': 'skip interactive questions',
     },
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
 };
 
 interface DeploymentArguments {
@@ -67,6 +62,11 @@ interface DeploymentRequest {
     lib_name?: string;
 }
 
+/**
+ * for deploying contract to simbachain.com
+ * @param args 
+ * @returns 
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
     SimbaConfig.log.debug(`:: ENTER :`);
@@ -78,6 +78,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
     const blockchainList = await getBlockchains(config);
     const storageList = await getStorages(config);
+
+    // I can insert all new logic before this line, for allowing users to choose
+    // which contract they want to deploy
 
     const contractName = SimbaConfig.ProjectConfigStore.get("primary");
     SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: gathering info for deployment of contract ${chalk.greenBright(`${contractName}`)}`)}`)

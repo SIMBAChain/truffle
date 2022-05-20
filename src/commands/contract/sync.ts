@@ -14,13 +14,13 @@ export const builder = {
         'type': 'string',
         'describe': 'design_id for the contract you want to sync from Blocks to your local project',
     },
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
 };
 
+/**
+ * for syncing contractX from your org in simbachain.com with contractX in your project
+ * @param args 
+ * @returns 
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     const designID = args.id;
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
