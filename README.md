@@ -11,6 +11,7 @@
     - [Export](#export)
     - [Logout](#logout)
     - [Help](#help)
+6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
 
 ## Summary
 
@@ -305,3 +306,24 @@ $ truffle run simba loglevel --level debug
 ```
 
 If you pass an invalid log level, then the plugin defaults to "info".
+
+## Deploying and Linking Libraries
+A brief note here about deploying and linking libraries. You do not need to actively link libraries in this plugin. Once you have deployed your contract, SIMBA's Blocks platform handles that for you. All you need to do is make sure that if you are deploying a contractX that depends on libraryX, then first deploy libraryX. Then when you deploy contractX, the library linking will automatically be conducted by SIMBA. If you look in your simba.json after deploying a library, you will see a field for library_addresses (below) This field gets exported with other contracts, and is how SIMBA knows whether a contract needs to be linked to a library when it is deployed.
+
+```json
+...
+	"library_addresses": {
+		"MetadataLib": "0x96E07C02A523f254E17F23Cd577f4518B0c9A855"
+	},
+```
+
+Adding libraries: If a contract that you are trying to deploy requires an external library that you did not deploy to SIMBA Chain, but you have the name and address of that library, then you can add the library by running the following command, which does not take parameters:
+
+```
+$ truffle run simba addlib
+```
+
+and you will then be prompted to specify the name and address of your library. If you want to specify the name and address of the library from the CLI, then you can run:
+
+```$ truffle run simba addlib --libname <library name> --libaddr <library address>
+```

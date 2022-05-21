@@ -7,10 +7,10 @@ export declare const builder: {
         type: string;
         describe: string;
     };
-    help: {
-        alias: string;
-        type: string;
-        describe: string;
-    };
 };
+/**
+ * for exporting contract to simbachain.com (can also think of this as "importing" it to simbachain.com)
+ * @param args
+ * @returns
+ */
 export declare const handler: (args: yargs.Arguments) => Promise<any>;

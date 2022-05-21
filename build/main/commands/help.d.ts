@@ -8,5 +8,11 @@ export declare const builder: {
         describe: string;
     };
 };
+/**
+ * retrieve help on a topic
+ * @param args
+ * args can contain optional param of "topic", which specifies the help topic
+ * @returns
+ */
 export declare function help(args: yargs.Arguments): Promise<void>;
 export declare const handler: (args: yargs.Arguments) => Promise<any>;

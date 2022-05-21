@@ -7,6 +7,7 @@ import * as LogLevelCommand from "./loglevel";
 import {
     Sync as SyncCommand,
     View as ViewCommand,
+    AddLib as AddLibCommand,
 } from "./contract";
 
 export const Export = ExportCommand;
@@ -17,3 +18,4 @@ export const Help = HelpCommand;
 export const LogLevel = LogLevelCommand;
 export const Sync = SyncCommand;
 export const View = ViewCommand;
+export const AddLib = AddLibCommand;

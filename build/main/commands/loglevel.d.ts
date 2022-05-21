@@ -7,11 +7,12 @@ export declare const builder: {
         type: string;
         describe: string;
     };
-    help: {
-        alias: string;
-        type: string;
-        describe: string;
-    };
 };
+/**
+ * choose minimum logging level, such as "debug", "info", etc.
+ * @param args
+ * args can contain optional param args.level
+ * @returns
+ */
 export declare function loglevel(args: yargs.Arguments): Promise<void>;
 export declare const handler: (args: yargs.Arguments) => Promise<any>;

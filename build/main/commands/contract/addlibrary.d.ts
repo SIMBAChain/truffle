@@ -1,15 +1,20 @@
 import yargs from 'yargs';
-export declare const command = "sync";
-export declare const describe = "pull contract from Blocks and sync in your local project";
+export declare const command = "addlib";
+export declare const describe = "add external library to your project";
 export declare const builder: {
-    id: {
+    libname: {
+        string: boolean;
+        type: string;
+        describe: string;
+    };
+    libaddr: {
         string: boolean;
         type: string;
         describe: string;
     };
 };
 /**
- * for syncing contractX from your org in simbachain.com with contractX in your project
+ *
  * @param args
  * @returns
  */

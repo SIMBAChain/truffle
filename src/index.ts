@@ -6,7 +6,7 @@ import {
     SimbaConfig,
     // log,
 } from "@simbachain/web3-suites";
-import {Login, Logout, Export, Deploy, Help, LogLevel, Sync, View} from './commands';
+import {Login, Logout, Export, Deploy, Help, LogLevel, Sync, View, AddLib} from './commands';
 
 const parseArgs = (config: any): Promise<any> =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,13 +26,14 @@ const parseArgs = (config: any): Promise<any> =>
                         .command(LogLevel as yargs.CommandModule)
                         .command(Sync as yargs.CommandModule)
                         .command(View as yargs.CommandModule)
+                        .command(AddLib as yargs.CommandModule)
                         .demandCommand(1, 'You need at least one command before moving on'),
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 (_yargs: yargs.Arguments) => {
                     yargs.showHelp();
                 },
             )
-            .help('truffle run simba help')
+            .help(' $ truffle run simba help (run as a standalone command to choose help topic from a list)')
             .version(false)
             .showHelpOnFail(true)
             .strict(true)

@@ -12,3 +12,4 @@ export declare const Help: typeof HelpCommand;
 export declare const LogLevel: typeof LogLevelCommand;
 export declare const Sync: typeof import("./contract/sync");
 export declare const View: typeof import("./contract/viewContracts");
+export declare const AddLib: typeof import("./contract/addlibrary");
