@@ -184,12 +184,15 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         inputsChosen = await prompt(paramInputQuestions);
         SimbaConfig.log.debug(`:: inputsChosen : ${JSON.stringify(inputsChosen)}`);
         for (const key in inputsChosen) {
-            if (inputNameToTypeMap[key].startsWith("int") || inputNameToTypeMap[key].startsWith("uint")) {
-                inputsChosen[key] = parseInt(inputsChosen[key]);
-            } else if (inputsChosen[key].startsWith("{") &&
-                inputsChosen[key].endsWith("}") &&
-                !inputNameToTypeMap[key].startsWith("string")) {
-                inputsChosen[key] = JSON.parse(inputsChosen[key]);
+            if (!inputNameToTypeMap[key].startsWith("string") || !inputNameToTypeMap[key].startsWith("address")) {
+                try {
+                    // trying and catching. there are custom data types that users can define
+                    // that we won't be able to anticipate. so we try to parse those,
+                    // and if they're really just extensions of 'string', then we continue
+                    inputsChosen[key] = JSON.parse(inputsChosen[key]);
+                } catch (e) {
+                    continue;
+                }
             }
         }
     }
