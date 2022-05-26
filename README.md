@@ -148,31 +148,28 @@ You will then be prompted to select your application, with something like:
 
 ## export
 
-Once you have logged in, you will be able to export your contracts, which will save them to your organization's contracts (you can also think of this action as "importing" your contracts to Blocks). For this command, you can either run export without arguments, or with optional arguments. To export without optional arguments, run
+Once you have logged in, you will be able to export your contracts, which will save them to your organization's contracts (you can also think of this action as "importing" your contracts to Blocks). For this command, you can either run export without arguments, which allows you to select multiple contracts to export; or with the optional --primary param, which will specify which contract you want to export. To export without optional arguments, run
 
 ```
 $ truffle run simba export
 ```
 
-You will then be prompted to specify whether you will be exporting more than one contrat simultaneously. Except in very rare cases, you should anwer "no" here.
+You will then be prompted to select all contracts you want to export to Blocks:
 
 ```
-? Will you be exporting multiple contracts at once? The answer to this is USUALLY no, except in special cases › - Use arrow-keys. Return to submit.
-❯   no
-    yes
+? Please select all contracts you want to export. Please note that if you're exporting contract X, and contract X depends on library Y, then you need to export Library Y along with Contract X. SIMBA Chain will handle the library linking for you. ›  
+Instructions:
+    ↑/↓: Highlight option
+    ←/→/[space]: Toggle selection
+    a: Toggle all
+    enter/return: Complete answer
+◯   CoffeeERC721
+◯   CoffeeUpgradable
+◯   WatchERC721
+◯   WatchUpgradable
 ```
 
-You will then be prompted to select the contract you want to export to Blocks:
-
-```
-? Please select your primary contract › - Use arrow-keys. Return to submit.
-❯   CoffeeERC721
-    CoffeeUpgradable
-    WatchERC721
-    WatchUpgradable
-```
-
-If you want to export with optional arguments, you can specify a primary contract by passing the --primary flag, followed by the contract name:
+If you want to specify just one contract to export, you can run:
 
 ```
 $ truffle run simba export --primary CoffeeERC721

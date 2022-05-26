@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 export declare const command = "export";
-export declare const describe = "export the project to SIMBAChain SCaaS";
+export declare const describe = "export the contract to SIMBA Chain";
 export declare const builder: {
     primary: {
         string: boolean;
