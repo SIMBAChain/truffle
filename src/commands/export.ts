@@ -25,12 +25,12 @@ interface Data {
     [key: string]: any;
 }
 
-// interface Request {
-//     id: string;
-//     version: string;
-//     primary: string;
-//     import_data: Data;
-// }
+interface Request {
+    libraries: Record<any, any>;
+    version: string;
+    primary: string;
+    import_data: Data;
+}
 
 /**
  * for exporting contract to simbachain.com (can also think of this as "importing" it to simbachain.com)
@@ -150,7 +150,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     
     const libraries = await SimbaConfig.ProjectConfigStore.get("library_addresses") ? SimbaConfig.ProjectConfigStore.get("library_addresses") : {};
     SimbaConfig.log.debug(`libraries: ${JSON.stringify(libraries)}`);
-    const request = {
+    const request: Request = {
         version: '0.0.2',
         primary: SimbaConfig.ProjectConfigStore.get('primary'),
         import_data: importData,
