@@ -69,19 +69,15 @@ interface DeploymentRequest {
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    SimbaConfig.log.debug(`:: ENTER :`);
+    let primary = args.primary;
     const config = new SimbaConfig();
-    if (!config.ProjectConfigStore.has("design_id")) {
+    if (!config.ProjectConfigStore.has("contracts_info")) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Please export your contracts first with "truffle run simba export".`)}`);
         return;
     }
 
     const blockchainList = await getBlockchains(config);
     const storageList = await getStorages(config);
-
-    // I can insert all new logic before this line, for allowing users to choose
-    // which contract they want to deploy
-
 
     if (!config.application) {
         try {
@@ -98,26 +94,38 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         SimbaConfig.log.error(`${chalk.greenBright(`\nsimba: no contracts present in your contracts_info in simba.json. Did you forget to deploy contracts first by running ${chalk.greenBright(`$ npx hardhat simba export`)} ?`)}`);
         return;
     }
-    const choices = [];
+    let contractName;
+    if (primary) {
+        if ((primary as string) in contractsInfo) {
+            SimbaConfig.ProjectConfigStore.set('primary', primary);
+            contractName = primary;
+        } else {
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
+            return;
+        }
+    } else {
+        const choices = [];
 
-    for (const [contractName, _] of Object.entries(contractsInfo)) {
-        choices.push({title: contractName, value: contractName});
+        for (const [contractName, _] of Object.entries(contractsInfo)) {
+            choices.push({title: contractName, value: contractName});
+        }
+    
+        const response = await prompt({
+            type: 'select',
+            name: 'contract_name',
+            message: 'Please pick which contract you want to deploy',
+            choices,
+        });
+    
+        if (!response.contract_name) {
+            SimbaConfig.log.error(`${chalk.redBright('\nsimba: EXIT : No contract selected for deployment!')}`);
+            throw new Error('No Contract Selected!');
+        }
+    
+        contractName = response.contract_name;
+        SimbaConfig.ProjectConfigStore.set("primary", contractName);
     }
 
-    const response = await prompt({
-        type: 'select',
-        name: 'contract_name',
-        message: 'Please pick which contract you want to deploy',
-        choices,
-    });
-
-    if (!response.contract_name) {
-        SimbaConfig.log.error(`${chalk.redBright('\nsimba: EXIT : No contract selected for deployment!')}`);
-        throw new Error('No Contract Selected!');
-    }
-
-    const contractName = response.contract_name;
-    SimbaConfig.ProjectConfigStore.set("primary", contractName);
     const contractInfo = contractsInfo[contractName];
     const sourceCode = contractInfo.source_code;
     const contractType = contractInfo.contract_type;
@@ -266,7 +274,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     let deployment: DeploymentRequest;
     if (_isLibrary) {
         deployURL = `organisations/${config.organisation.id}/deployed_artifacts/create/`;
-        const b64CodeBuffer = Buffer.from(config.ProjectConfigStore.get("sourceCode"))
+        const b64CodeBuffer = Buffer.from(sourceCode)
         const base64CodeString = b64CodeBuffer.toString('base64')
         deployment = {
             args: deployArgs,

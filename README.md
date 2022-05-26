@@ -9,6 +9,7 @@
     - [Contract Compliation](#contract-compilation)
     - [Login](#login)
     - [Export](#export)
+    - [Deploy](#deploy)
     - [Logout](#logout)
     - [Help](#help)
 6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
@@ -179,10 +180,16 @@ $ truffle run simba export --primary CoffeeERC721
 
 ## deploy
 
-After you have logged in and exported your contract, you will be able to deploy your contract. This step will generate the REST API endpoints that you can use to interact with your smart contract's methods, and save them to your organization and app. You will then be able to access those endpoints through either the SIMBA Blocks UI, or programatically through one of SIMBA's SDKs. To deploy, run
+After you have logged in and exported your contract, you will be able to deploy your contract. This step will generate the REST API endpoints that you can use to interact with your smart contract's methods, and save them to your organization and app. You will then be able to access those endpoints through either the SIMBA Blocks UI, or programatically through one of SIMBA's SDKs. To deploy, you have two options. First, you can run:
 
 ```
 $ truffle run simba deploy
+```
+
+Running this command will allow you to select which contract you want to deploy from a list of contracts you have exported. Second, you can specify the primary contract you want to deploy by running:
+
+```
+$ truffle run simba deploy --primary <contract name you want to deploy>
 ```
 
 If your contract's constructor takes parameters, then you will see the following prompt, asking you to specify how you would like to provide the values for these parameters:
