@@ -4,7 +4,7 @@ import {
     SimbaConfig,
     promisifiedReadFile,
     walkDirForContracts,
-    isLibrary,
+    getContractKind,
 } from "@simbachain/web3-suites";
 import {default as chalk} from 'chalk';
 import {default as prompt} from 'prompts';
@@ -86,6 +86,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const importData: Data = {};
     const contractNames = [];
     const supplementalInfo = {} as any;
+
     for (const file of files) {
         if (file.endsWith('Migrations.json')) {
             continue;
@@ -98,11 +99,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const parsed = JSON.parse(buf.toString());
         const name = parsed.contractName;
         const ast = parsed.ast;
-        const isLib = isLibrary(ast);
+        const contractType = getContractKind(ast);
         supplementalInfo[name] = {} as any;
         contractNames.push(name);
         importData[name] = JSON.parse(buf.toString());
-        supplementalInfo[name].isLib = isLib;
+        supplementalInfo[name].contractType = contractType;
         choices.push({title: name, value: name});
     }
     let currentContractName;
@@ -120,14 +121,14 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
     
         SimbaConfig.ProjectConfigStore.set('primary', chosen.contract);
-        SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[chosen.contract].isLib);
-        SimbaConfig.ProjectConfigStore.set('sourceCode', importData[chosen.contract].source);
+        // SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[chosen.contract].isLib);
+        // SimbaConfig.ProjectConfigStore.set('sourceCode', importData[chosen.contract].source);
         currentContractName = chosen.contract;
     } else {
         if ((primary as string) in importData) {
             SimbaConfig.ProjectConfigStore.set('primary', primary);
-            SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[primary as string].isLib);
-            SimbaConfig.ProjectConfigStore.set('sourceCode', importData[primary as string].sourceCode)
+            // SimbaConfig.ProjectConfigStore.set('isLib', supplementalInfo[primary as string].isLib);
+            // SimbaConfig.ProjectConfigStore.set('sourceCode', importData[primary as string].sourceCode)
             currentContractName = primary;
         } else {
             SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
@@ -169,15 +170,19 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : error exporting contract`)}`);
             return;
         }
-        SimbaConfig.ProjectConfigStore.set('design_id', resp.id);
-        const contractsInfo = SimbaConfig.ProjectConfigStore.get("contracts_info") ?
-            SimbaConfig.ProjectConfigStore.get("contracts_info") :
-            {};
-        contractsInfo[currentContractName] = {
-            design_id: resp.id,
-        }
-        SimbaConfig.ProjectConfigStore.set("contracts_info", contractsInfo);
+
         if (resp.id) {
+            const contractType = supplementalInfo[currentContractName].contractType;
+            const sourceCode = importData[primary as string].source;
+            const contractsInfo = SimbaConfig.ProjectConfigStore.get("contracts_info") ?
+                SimbaConfig.ProjectConfigStore.get("contracts_info") :
+                {};
+            contractsInfo[currentContractName] = {
+                design_id: resp.id,
+                contract_type: contractType,
+                source_code: sourceCode,
+            }
+            SimbaConfig.ProjectConfigStore.set("contracts_info", contractsInfo);
             SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Saved to Contract Design ID ')}${chalk.greenBright(`${resp.id}`)}`);
         } else {
             SimbaConfig.log.error(`${chalk.red('\nsimba: EXIT : Error exporting contract to SIMBA Chain')}`);

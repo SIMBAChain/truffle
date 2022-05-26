@@ -82,8 +82,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     // I can insert all new logic before this line, for allowing users to choose
     // which contract they want to deploy
 
-    const contractName = SimbaConfig.ProjectConfigStore.get("primary");
-    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: gathering info for deployment of contract ${chalk.greenBright(`${contractName}`)}`)}`)
+
     if (!config.application) {
         try {
             await chooseApplicationFromList(config);
@@ -92,6 +91,38 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
     }
+
+    const contractsInfo = SimbaConfig.ProjectConfigStore.get("contracts_info");
+
+    if (!contractsInfo) {
+        SimbaConfig.log.error(`${chalk.greenBright(`\nsimba: no contracts present in your contracts_info in simba.json. Did you forget to deploy contracts first by running ${chalk.greenBright(`$ npx hardhat simba export`)} ?`)}`);
+        return;
+    }
+    const choices = [];
+
+    for (const [contractName, _] of Object.entries(contractsInfo)) {
+        choices.push({title: contractName, value: contractName});
+    }
+
+    const response = await prompt({
+        type: 'select',
+        name: 'contract_name',
+        message: 'Please pick which contract you want to deploy',
+        choices,
+    });
+
+    if (!response.contract_name) {
+        SimbaConfig.log.error(`${chalk.redBright('\nsimba: EXIT : No contract selected for deployment!')}`);
+        throw new Error('No Contract Selected!');
+    }
+
+    const contractName = response.contract_name;
+    SimbaConfig.ProjectConfigStore.set("primary", contractName);
+    const contractInfo = contractsInfo[contractName];
+    const sourceCode = contractInfo.source_code;
+    const contractType = contractInfo.contract_type;
+    const _isLibrary = (contractType === "library") ? true : false;
+    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: gathering info for deployment of contract ${chalk.greenBright(`${contractName}`)}`)}`)
     let chosen: any = {};
     const questions: prompt.PromptObject[] = [
         {
@@ -217,7 +248,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         return;
     }
 
-    const id = config.ProjectConfigStore.get('design_id');
+    const id = contractInfo.design_id;
     let deployArgs: DeploymentArguments = {};
     if (chosen.args) {
         deployArgs = JSON.parse(chosen.args) as DeploymentArguments;
@@ -230,8 +261,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             }
         }
     }
-
-    const _isLibrary = SimbaConfig.ProjectConfigStore.get("isLib")
 
     let deployURL;
     let deployment: DeploymentRequest;
@@ -324,13 +353,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                                 {};
                             contractsInfo[contractName].address = contractAddress;
                             contractsInfo[contractName].deployment_id = deployment_id;
-                            contractsInfo[contractName].contract_type = "contract";
                         } else {
                             contractsInfo = {};
                             contractsInfo[contractName] = {};
                             contractsInfo[contractName].address = contractAddress;
                             contractsInfo[contractName].deployment_id = deployment_id;
-                            contractsInfo[contractName].contract_type = "contract";
                         }
                         config.ProjectConfigStore.set("contracts_info", contractsInfo);
                         const most_recent_deployment_info = {
@@ -358,13 +385,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                                     {};
                                 contractsInfo[libraryName].address = libraryAddress;
                                 contractsInfo[libraryName].deployment_id = deployment_id;
-                                contractsInfo[libraryName].contract_type = "library";
                             } else {
                                 contractsInfo = {} as any;
                                 contractsInfo[libraryName] = {};
                                 contractsInfo[libraryName].address = libraryAddress;
                                 contractsInfo[libraryName].deployment_id = deployment_id;
-                                contractsInfo[libraryName].contract_type = "library";
                             }
                             config.ProjectConfigStore.set("contracts_info", contractsInfo);
                             const most_recent_deployment_info = {
