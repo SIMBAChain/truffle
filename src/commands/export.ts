@@ -73,7 +73,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const parsed = JSON.parse(buf.toString());
         const name = parsed.contractName;
         const ast = parsed.ast;
-        const contractType = getContractKind(ast);
+        const contractType = getContractKind(name, ast);
         supplementalInfo[name] = {} as any;
         contractNames.push(name);
         importData[name] = JSON.parse(buf.toString());
@@ -85,7 +85,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const chosen = await prompt({
             type: 'multiselect',
             name: 'contracts',
-            message: `${chalk.cyanBright(`Please select all contracts you want to export. Use -> to select a contract, and <- to un-select a contract. Please note that if you're exporting contract X, and contract X depends on library Y, then you need to export Library Y along with Contract X. SIMBA Chain will handle the library linking for you.`)}`,
+            message: `${chalk.cyanBright(`Please select all contracts you want to export. Use -> to select a contract, and <- to un-select a contract. Please note that if you're exporting contract X, and contract X depends on/imports library Y, then you need to export Library Y before, or simultaneously with, Contract X. Library linking will fail if you export Library Y AFTER you export contract X. SIMBA Chain will handle the library linking for you.`)}`,
             choices,
         });
 
