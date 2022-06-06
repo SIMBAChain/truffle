@@ -28,6 +28,27 @@ You should have a SIMBA Blocks Instance to communicate with. Additionally you mu
 
 ## Installation
 
+First, you need to ensure that you have started a Truffle project, which needs to be done from within an npm project. To start an npm project, simply navigate to the directory where you want that project to live and run:
+
+```
+$ npm init
+```
+Then follow the prompts to name your project, version it, etc.
+
+Then you will need to ensure that Truffle is installed. If not installed, then you can install globally with:
+
+```
+$ npm install -g truffle
+```
+
+Then finally, to start a Truffle project, from within your npm project directory, run:
+
+```
+$ truffle init
+```
+
+Now you're ready to focus on installling the SIMBA Chain Truffle plugin.
+
 VERSIONING NOTE: if you are attempting to use a SIMBA Blocks instance that uses Azure AD for authentication, then you will need to use version 1.0.4 of the Truffle plugin. To install that version, you can run:
 
 ```
