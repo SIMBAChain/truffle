@@ -1,6 +1,6 @@
 {
     "name": "@simbachain/truffle",
-    "version": "2.0.23",
+    "version": "2.0.26",
     "description": "Truffle Plugin for SIMBAChain",
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
@@ -60,7 +60,7 @@
         "node": ">=10"
     },
     "dependencies": {
-        "@simbachain/web3-suites": "^1.0.17",
+        "@simbachain/web3-suites": "^1.0.24",
         "@truffle/config": "^1.2.33",
         "@types/configstore": "^4.0.0",
         "@types/crypto-js": "^3.1.44",
