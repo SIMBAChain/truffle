@@ -300,7 +300,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`${chalk.greenBright(`\nsimba: deployment request: ${JSON.stringify(deployment)}`)}`)
 
     try {
-        const resp = await config.authStore.doPostRequest(
+        const authStore = await SimbaConfig.authStore();
+        const resp = await authStore.doPostRequest(
             deployURL,
             deployment,
             "application/json",
@@ -320,7 +321,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
         do {
             const checkDeployURL = `organisations/${config.organisation.id}/deployments/${deployment_id}/`;
-            const check_resp = await config.authStore.doGetRequest(
+            const check_resp = await authStore.doGetRequest(
                 checkDeployURL,
             );
             if (!check_resp) {

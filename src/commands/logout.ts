@@ -14,7 +14,8 @@ export const builder = {};
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    await SimbaConfig.authStore.logout();
+    const authStore = await SimbaConfig.authStore();
+    await authStore.logout();
     SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: you have logged out.`)}`)
     SimbaConfig.log.debug(`:: EXIT :`);
 };

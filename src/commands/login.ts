@@ -21,7 +21,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const simbaConfig = args.config as SimbaConfig;
     // logging out by default when we run login
-    await simbaConfig.authStore.logout();
+    const authStore = await SimbaConfig.authStore();
+    await authStore.logout();
     const org = await chooseOrganisationFromList(simbaConfig);
     if (!org) {
         SimbaConfig.log.error(`${chalk.redBright(`No Organisation Selected!`)}`);

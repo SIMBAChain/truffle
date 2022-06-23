@@ -60,6 +60,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     let importData: Data = {};
     const contractNames = [];
     const supplementalInfo = {} as any;
+    const authStore = await SimbaConfig.authStore();
 
     for (const file of files) {
         if (file.endsWith('Migrations.json')) {
@@ -128,7 +129,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: exporting contract ${chalk.greenBright(`${currentContractName}`)} to SIMBA Chain`)}`);
             SimbaConfig.log.debug(`${chalk.cyanBright(`\nsimba: request: ${JSON.stringify(request)}`)}`);
             try {
-                const resp = await SimbaConfig.authStore.doPostRequest(
+                const resp = await authStore.doPostRequest(
                     `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
                     request,
                     "application/json",
@@ -203,7 +204,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 return;
             }
         }
-
     } else {
         if ((primary as string) in importData) {
             SimbaConfig.ProjectConfigStore.set('primary', primary);
@@ -225,7 +225,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: exporting contract ${chalk.greenBright(`${currentContractName}`)} to SIMBA Chain`)}`);
             SimbaConfig.log.debug(`${chalk.cyanBright(`\nsimba: request: ${JSON.stringify(request)}`)}`);
             try {
-                const resp = await SimbaConfig.authStore.doPostRequest(
+                const resp = await authStore.doPostRequest(
                     `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
                     request,
                     "application/json",
