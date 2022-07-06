@@ -376,7 +376,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         };
                         config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
                         SimbaConfig.log.info(
-                            `${chalk.cyanBright(`\nsimba deploy: contract ${chalk.greenBright(`${contractName}`)} was deployed to ${chalk.greenBright(`${contractAddress}`)} . Information pertaining to this deployment can be found in your simba.json under contracts_info.${contractName}.`)}`,
+                            `${chalk.cyanBright(`\nsimba deploy: contract ${chalk.greenBright(`${contractName}`)} was deployed to ${chalk.greenBright(`${contractAddress}`)} with deployment_id ${chalk.greenBright(`${deployment_id}`)} . Information pertaining to this deployment can be found in your simba.json under contracts_info.${contractName}.`)}`,
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;
