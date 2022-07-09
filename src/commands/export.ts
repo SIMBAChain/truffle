@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import {
     SimbaConfig,
     promisifiedReadFile,
