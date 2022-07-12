@@ -3,6 +3,7 @@
 # Table of Contents:
 1. [Summary](#summary)
 2. [Prerequisites](#prerequisites)
+3. [Steps to Follow to Get Started](#steps-to-follow-to-get-started)
 3. [Installation](#installation)
 4. [Project Settings](#project-settings)
 5. [Usage](#usage)
@@ -22,13 +23,38 @@ The SIMBA Truffle plugin, as a member of SIMBA's web3 plugin family, allows Soli
 
 The developer can now enjoy all the goodness of SIMBA’s custom auto generated REST API for the contracts, enterprise infrastructure and scalability and advanced search capabilities!
 
+## Steps to Follow to Get Started
+The following are the general steps to get going with the SIMBA Chain Truffle plugin. The rest of the documentation provides details on these and other steps.
+
+1. install truffle globally on your computer
+2. create a directory for your Truffle project.
+3. cd into that directory and start an npm project.
+4. Then in that directory, start a Truffle project. This directory, where your package.json will live, is where you will run your Truffle commands from.
+5. declare your @simbachain/truffle plugin in your truffle-config.js file
+5. create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
+6. run `truffle run simba help` to make sure the plugin is installed
+
 ## Prerequisites
 
 You should have a SIMBA Blocks Instance to communicate with. Additionally you must have at least one contract application created in the instance. To create an application, open your browser, navigate to your instance and log in using your SIMBA user account. Click on your organization -> Applications and then click on the "Add" button. Follow the on screen instructions to create your application.
 
 ## Installation
 
-First, you need to ensure that you have started a Truffle project, which needs to be done from within an npm project. To start an npm project, simply navigate to the directory where you want that project to live and run:
+First, you need to ensure that you have started a Truffle project, which needs to be done from within an npm project. So first create a directory where you want your project to live:
+
+```
+$ mkdir my_truffle_project
+```
+
+And then cd into that directory:
+
+```
+$ cd my_truffle_project
+```
+
+**NOTE: It is this level of your project, where your package.json will live, where you will run your Hardhat CLI commands**
+
+To start an npm project, from that same directory run:
 
 ```
 $ npm init
@@ -49,27 +75,43 @@ $ truffle init
 
 Now you're ready to focus on installling the SIMBA Chain Truffle plugin.
 
-VERSIONING NOTE: if you are attempting to use a SIMBA Blocks instance that uses Azure AD for authentication, then you will need to use version 1.0.4 of the Truffle plugin. To install that version, you can run:
-
-```
-$ npm install --save-dev @simbachain/truffle@1.0.4
-```
-
 To install the truffle plugin follow these steps.
 
 Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle).
 
 `$ npm install --save-dev @simbachain/truffle`
 
-Add the SIMBA plugin to the truffle plugins section in your truffle config.
+Add the SIMBA plugin to your module.exports object in your truffle-config.js file:
 
-```
-{ 
-    ... rest of truffle-config
+```javascript
+module.exports = {
+    ...
     plugins: [
         "@simbachain/truffle"
-    ]
+    ],
+    ...
+};
+```
+
+## Project Settings
+
+To use the SIMBA Chain truffle plugin, you will need to create and configure a simba.json file. Your simba.json file should live in the top level of your Truffle project, where your package.json file lives, and should contain values for baseURL and web3Suite:
+
+NOTE: the following baseURL is an example, and will likely be different for your environment
+
+```json
+{
+  "baseURL": "https://simba-demo-api.platform.simbachain.com/v2",
+  "web3Suite": "truffle"
 }
+```
+
+In addition to these base configs, you can also specify a different contracts directory and build directory in simba.json, in case these directories are not located in the default location for your web3 project, BUT YOU SHOULD NOT CONFIGURE THE FOLLOWING FIELDS UNLESS THE LOCATION OF YOUR CONTRACTS OR BUILD ARTIFACTS HAS BEEN CHANGED FROM THEIR DEFAULT LOCATION FOR SOME REASON.
+
+```json
+...
+"buildDirectory": "custom build directory location",
+"contractDirectory": "custom contract directory location"
 ```
 
 Run the following command to ensure the plugin installed correctly.
@@ -90,25 +132,6 @@ You should see a message similar to the below output:
     libraries
     sync
     viewcontracts
-```
-
-## Project Settings
-
-To use the SIMBA Chain truffle plugin, you will need to configure your simba.json file. Your simba.json file should live in the top level of your Truffle project, and should contain values for baseURL and web3Suite:
-
-```json
-{
-  "baseURL": "https://simba-dev-api.platform.simbachain.com/v2",
-  "web3Suite": "truffle"
-}
-```
-
-In addition to these base configs, you can also specify a different contracts directory and build directory in simba.json, in case these directories are not located in the default location for your web3 project, BUT YOU SHOULD NOT CONFIGURE THE FOLLOWING FIELDS UNLESS THE LOCATION OF YOUR CONTRACTS OR BUILD ARTIFACTS HAS BEEN CHANGED FROM THEIR DEFAULT LOCATION FOR SOME REASON.
-
-```json
-...
-"buildDirectory": "custom build directory location",
-"contractDirectory": "custom contract directory location"
 ```
 
 # Usage
@@ -226,6 +249,8 @@ simba deploy: gathering info for deployment of contract CoffeeERC721
 ✔ Please choose the storage to use. › No Storage
 ? Please enter any arguments for the contract as a JSON dictionary. › {"ownerName": "Brendan", "poundWeight": 13}
 ```
+
+NOTE: regarding your API name, this just needs to be a unique name containing alphanumeric characters and/or underscores. So if your contract is called MyTokenContract, consider giving your API a name something like MyTokenContract_v1.
 
 And just like that, your contract is deployed! If you want to view information on contract deployments you've made through the plugin, you can go to your simba.json, where you will find info similar to what's found below. So if you need to reference any information, you can find it there.
 
