@@ -90,7 +90,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const chosen = await prompt({
             type: 'multiselect',
             name: 'contracts',
-            message: `${chalk.cyanBright(`Please select all contracts you want to export. Use the Space Bar to select or un-select a contract (You can also use -> to select a contract, and <- to un-select a contract). Hit Return/Enter when you are ready to export.\n\nPlease note that if you're exporting contract X, and contract X depends on/imports library Y, then you need to export and deploy Library Y FIRST, before you export and deploy Contract X. Library linking will fail if you do not export and deploy library Y before you export and deploy contract X. If you're uncertain of which contracts depend on which libraries, then we suggest exporting and deploying all of your libraries before you export and deploy any of your contracts. Once these steps are followed, SIMBA Chain will handle the library linking for you.`)}`,
+            message: `${chalk.cyanBright(`Please select all contracts you want to export. Use the Space Bar to select or un-select a contract (You can also use -> to select a contract, and <- to un-select a contract). Hit Return/Enter when you are ready to export. If you have questions on exporting libraries, then please run 'truffle run simba help --topic libraries' .`)}`,
             choices,
         });
 

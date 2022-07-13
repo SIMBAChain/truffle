@@ -30,9 +30,10 @@ The following are the general steps to get going with the SIMBA Chain Truffle pl
 2. create a directory for your Truffle project.
 3. cd into that directory and start an npm project.
 4. Then in that directory, start a Truffle project. This directory, where your package.json will live, is where you will run your Truffle commands from.
-5. declare your @simbachain/truffle plugin in your truffle-config.js file
-5. create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
-6. run `truffle run simba help` to make sure the plugin is installed
+5. install the SIMBA Chain Truffle plugin
+6. declare your @simbachain/truffle plugin in your truffle-config.js file
+7. create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
+8. run `truffle run simba help` to make sure the plugin is installed
 
 ## Prerequisites
 
@@ -61,11 +62,13 @@ $ npm init
 ```
 Then follow the prompts to name your project, version it, etc.
 
-Then you will need to ensure that Truffle is installed. If not installed, then you can install globally with:
+Then you will need to ensure that Truffle is installed globally. Because Truffle seems to have released some unstable versions lately, we highly suggest that you use a version of Truffle that we know works with our plugin. So please run:
 
 ```
-$ npm install -g truffle
+$ npm install -g truffle@5.4.26
 ```
+
+**NOTE: EVEN IF YOU ALREADY HAD TRUFFLE INSTALLED GLOBALLY, PLEASE MAKE SURE YOU HAVE THE VERSION INSTALLED THAT WE INDICATE ABOVE**
 
 Then finally, to start a Truffle project, from within your npm project directory, run:
 
