@@ -3,7 +3,7 @@
 # Table of Contents:
 1. [Summary](#summary)
 2. [Prerequisites](#prerequisites)
-3. [Steps to Follow to Get Started](#steps-to-follow-to-get-started)
+3. [Installation Overview](#installation-overview)
 3. [Installation](#installation)
 4. [Project Settings](#project-settings)
 5. [Usage](#usage)
@@ -23,7 +23,7 @@ The SIMBA Truffle plugin, as a member of SIMBA's web3 plugin family, allows Soli
 
 The developer can now enjoy all the goodness of SIMBA’s custom auto generated REST API for the contracts, enterprise infrastructure and scalability and advanced search capabilities!
 
-## Steps to Follow to Get Started
+## Installation Overview
 The following are the general steps to get going with the SIMBA Chain Truffle plugin. The rest of the documentation provides details on these and other steps.
 
 1. install truffle globally on your computer
