@@ -109,30 +109,28 @@ NOTE: the following baseURL is an example, and will likely be different for your
 }
 ```
 
-NOTE: regarding simba.json in your Truffle project:
+**NOTE: some notes/hints regarding simba.json in your Truffle project:**
 
-1. It may be tempting to just try and start a Truffle project in the same directory as a Hardhat project. ***Do not do this.*** Hardhat projects and Truffle projects should have their own `simba.json` files. Thus, best practice for switching:
+It may be tempting to just try and start a Truffle project in the same directory as a Hardhat project. ***Do not do this.*** Hardhat projects and Truffle projects should have their own `simba.json` files. Thus, best practice for switching:
+
+* between hardhat and truffle **plugins**, and/or
+* between **hosted environments**
+    
+is that you do so in either a new directory or new branch, where your new `simba.json` file takes the format:
 ​
-      * between hardhat and truffle **plugins**, and/or 
-      * between **hosted environments** 
-​
-      is that you do so in either a new directory or new branch, where your new `simba.json` file takes the format:
-​
-      ```json
-      {
-        "baseURL": "https://{your-new-environment-domain}/{version}/",
-        "web3Suite": "truffle"
-      }
-​
-      ```
-​
-2. *HINT 1:* if you *need* to change the value for `baseURL` in your `simba.json` file, then it is likely because you are targeting a new environment. In this scenario, many of the previous artifacts written to `simba.json` will no longer make sense in the context of your new environment. A distinct `simba.json` solves this problem.
-​
-3. *HINT 2:* if you *want* to change the value for `baseURL` in your `simba.json` file but keep working in the same project/directory, then please make sure to: 
-​
-    (a) run `truffle run simba logout` prior to executing any operations in the new environment. This ensures that the prior `authProviderInfo` is removed from `simba.json`. Following this,
-​
-    (b) run `truffle run simba login`. This ensures that the correct `authProviderInfo` context is loaded. You are now ready to execute operations against the new environment.
+```json
+    {
+    "baseURL": "https://{your-new-environment-domain}/{version}/",
+    "web3Suite": "truffle"
+    }
+```
+
+**HINT 1:** if you *need* to change the value for `baseURL` in your `simba.json` file, then it is likely because you are targeting a new environment. In this scenario, many of the previous artifacts written to `simba.json` will no longer make sense in the context of your new environment. A distinct `simba.json` solves this problem.
+
+**HINT 2:** if you *want* to change the value for `baseURL` in your `simba.json` file but keep working in the same project/directory, then please make sure to:
+
+1. run `truffle run simba logout` prior to executing any operations in the new environment. This ensures that the prior `authProviderInfo` is removed from `simba.json`. Following this,
+2. run `truffle run simba login`. This ensures that the correct `authProviderInfo` context is loaded. You are now ready to execute operations against the new environment.
 
 In addition to these base configs, you can also specify a different contracts directory and build directory in simba.json, in case these directories are not located in the default location for your web3 project, **BUT YOU SHOULD NOT CONFIGURE THE FOLLOWING FIELDS UNLESS THE LOCATION OF YOUR CONTRACTS OR BUILD ARTIFACTS HAS BEEN CHANGED FROM THEIR DEFAULT LOCATION FOR SOME REASON.** These additional configurations would look like:
 
