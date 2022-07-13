@@ -109,6 +109,12 @@ NOTE: the following baseURL is an example, and will likely be different for your
 }
 ```
 
+NOTE: regarding simba.json in your Truffle project:
+
+1. It may be tempting to just try to start a Hardhat project in the same directory as a Truffle project. Do not do this. Hardhat projects and Truffle projects should live in different directories, and should have their own simba.json files.
+2. If for some reason you need to change your baseURL field in your simba.json file, then it’s probably a good idea to start a new project in a new directory. This is because if you’re changing your baseURL, it’s likely because you’re using a new environment, so many of the artifacts written to your old simba.json will no longer make sense in your new project.
+3. However, if for some reason you want to change your baseURL but keep working in your same project/directory, then please make sure to run `truffle run simba logout` , and then run `truffle run simba login` again.
+
 In addition to these base configs, you can also specify a different contracts directory and build directory in simba.json, in case these directories are not located in the default location for your web3 project, BUT YOU SHOULD NOT CONFIGURE THE FOLLOWING FIELDS UNLESS THE LOCATION OF YOUR CONTRACTS OR BUILD ARTIFACTS HAS BEEN CHANGED FROM THEIR DEFAULT LOCATION FOR SOME REASON.
 
 ```json

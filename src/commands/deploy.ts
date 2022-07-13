@@ -163,7 +163,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const constructorInputs = await primaryConstructorInputs();
         const allParamsByJson = "enter all params as json object";
         const paramsOneByOne = "enter params one by one from prompts";
-        const paramInputChoices = [allParamsByJson, paramsOneByOne]
+        const paramInputChoices = [paramsOneByOne, allParamsByJson];
         const paramChoices = [];
         for (let i = 0; i < paramInputChoices.length; i++) {
             const entry = paramInputChoices[i];
