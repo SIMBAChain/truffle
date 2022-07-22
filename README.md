@@ -12,6 +12,8 @@
     - [Export](#export)
     - [Deploy](#deploy)
     - [Logout](#logout)
+    - [Sync](#sync)
+    - [ViewContracts](#view-contracts)
     - [Help](#help)
 6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
 
@@ -311,6 +313,33 @@ $ truffle run simba logout
 ```
 
 Doing so will delete your auth token in authconfig.json
+
+## sync
+This command is for syncing contract designs from SIMBA into your local project. It's a great tool for distributed teams to make sure they're all using the same versions of deployed contracts (kind of a lightweight web3 code repo). So for instance, if one team member exports contractX and contractY to SIMBA, and a second team member wants to make sure they are working with the same contracts, then that second team member can call:
+
+```
+$ truffle run simba sync
+```
+
+And then select contractX and contractY to sync. This will overwrite any local versions of contractX and contractY in your local project. You can also pass the --id flag if you want to sync a specific contract instead of selecting contracts from a prompt:
+
+```
+$ truffle run simba sync --id <contract ID>
+```
+
+Contract design IDs can be referenced in your simba.json file under contracts_info -> contract name -> design_id. Contract design IDs can also be viewed by running:
+
+```
+truffle run simba viewcontracts
+```
+
+## view contracts
+
+This command will return information pertaining to all contracts saved to your organisation on SIMBA Chain. Contract info includes: name, id, and version. For this command, just run:
+
+```
+$ truffle run simba viewcontracts
+```
 
 ## help
 
