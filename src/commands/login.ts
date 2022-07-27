@@ -6,6 +6,7 @@ import {
 } from "@simbachain/web3-suites";
 // import {default as prompt} from 'prompts';
 import {default as chalk} from 'chalk';
+import axios from "axios";
 import { KeycloakHandler, AzureHandler } from '@simbachain/web3-suites/dist/commands/lib/authentication';
 
 export const command = 'login';
@@ -25,22 +26,31 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const authStore = await SimbaConfig.authStore();
 
     if (authStore instanceof KeycloakHandler) {
-        await authStore.logout();
-        const org = await chooseOrganisationFromList(simbaConfig);
-        if (!org) {
-            SimbaConfig.log.error(`${chalk.redBright(`No Organisation Selected!`)}`);
+        try {
+            await authStore.logout();
+            const org = await chooseOrganisationFromList(simbaConfig);
+            if (!org) {
+                SimbaConfig.log.error(`${chalk.redBright(`No Organisation Selected!`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
+                return Promise.resolve(new Error('No Organisation Selected!'));
+            }
+            const app = await chooseApplicationFromList(simbaConfig);
+            if (!app) {
+                SimbaConfig.log.error(`${chalk.redBright(`simba: No Application Selected!`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
+                return Promise.resolve(new Error('No Application Selected!'));
+            }
+            SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Logged in with organisation')} ${chalk.greenBright(org.display_name)} ${chalk.cyanBright('and application')} ${chalk.greenBright(app.display_name)}`);
             SimbaConfig.log.debug(`:: EXIT :`);
-            return Promise.resolve(new Error('No Organisation Selected!'));
+            Promise.resolve(null);
+        }  catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+            } else {
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
+            }
+            return;
         }
-        const app = await chooseApplicationFromList(simbaConfig);
-        if (!app) {
-            SimbaConfig.log.error(`${chalk.redBright(`simba: No Application Selected!`)}`);
-            SimbaConfig.log.debug(`:: EXIT :`);
-            return Promise.resolve(new Error('No Application Selected!'));
-        }
-        SimbaConfig.log.info(`${chalk.cyanBright('\nsimba: Logged in with organisation')} ${chalk.greenBright(org.display_name)} ${chalk.cyanBright('and application')} ${chalk.greenBright(app.display_name)}`);
-        SimbaConfig.log.debug(`:: EXIT :`);
-        Promise.resolve(null);
     }
 
     if (authStore instanceof AzureHandler) {
