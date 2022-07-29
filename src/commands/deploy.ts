@@ -1,4 +1,5 @@
 import {default as chalk} from 'chalk';
+import axios from "axios";
 import {default as prompt} from 'prompts';
 import yargs from 'yargs';
 import {
@@ -10,7 +11,6 @@ import {
     primaryConstructorInputs,
     authErrors,
 } from '@simbachain/web3-suites';
-import { StatusCodeError } from 'request-promise/errors';
 
 export const command = 'deploy';
 export const describe = 'deploy the project to SIMBAChain SCaaS';
@@ -434,48 +434,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         } while (!deployed);
 
         Promise.resolve(retVal);
-    } catch (e) {
-        const err = e as any;
-        if (err instanceof StatusCodeError) {
-            if('errors' in err.error && Array.isArray(err.error.errors)){
-                err.error.errors.forEach((error: any)=>{
-                    SimbaConfig.log.error(
-                        `${chalk.red('\nsimba export: ')}[STATUS:${
-                            error.status
-                        }|CODE:${
-                            error.code
-                        }] Error Saving contract ${
-                            error.title
-                        } - ${error.detail}`,
-                    );
-                });
-            } else {
-                SimbaConfig.log.error(
-                    `${chalk.red('\nsimba export: ')}[STATUS:${
-                        err.error.errors[0].status
-                    }|CODE:${
-                        err.error.errors[0].code
-                    }] Error Saving contract ${
-                        err.error.errors[0].title
-                    } - ${err.error.errors[0].detail}`,
-                );
-            }
-            SimbaConfig.log.debug(`:: EXIT :`);
-            return Promise.resolve();
+    }  catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+        } else {
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
         }
-        if ('errors' in err) {
-            if (Array.isArray(err.errors)) {
-                SimbaConfig.log.error(
-                    `${chalk.red('\nsimba deploy: ')}[STATUS:${err.errors[0].status}|CODE:${
-                        err.errors[0].code
-                    }] Error Saving contract ${err.errors[0].detail}`,
-                );
-                SimbaConfig.log.debug(`:: EXIT :`);
-                Promise.resolve(e);
-            }
-        }
-        SimbaConfig.log.debug(`:: EXIT :`);
-        throw e;
+        return;
     }
     SimbaConfig.log.debug(`:: EXIT :`);
 };
