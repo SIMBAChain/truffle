@@ -55,6 +55,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
     if (authStore instanceof AzureHandler) {
         try {
+            authStore.logout();
             if (!authStore.isLoggedIn()) {
                 await authStore.performLogin();
             } else {

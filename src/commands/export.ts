@@ -1,6 +1,7 @@
 /* eslint-disable */
 import {
     SimbaConfig,
+    SourceCodeComparer,
     promisifiedReadFile,
     walkDirForContracts,
     getContractKind,
@@ -19,6 +20,11 @@ export const builder = {
         'type': 'string',
         'describe': 'the name of the primary contract to use',
     },
+    'interactive': {
+        'string': true,
+        'type': 'string',
+        'describe': '"true" or "false" for interactive export mode'
+    }
 };
 
 interface Data {
@@ -40,9 +46,31 @@ interface Request {
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
     let primary = args.primary;
+    let _interactive = args.interactive;
+    let interactive: boolean;
+    if (_interactive && typeof _interactive === 'string') {
+        _interactive = _interactive.toLowerCase();
+        switch (_interactive) {
+            case "false": {
+                interactive = false;
+                break;
+            }
+            case "true": {
+                interactive = true;
+                break;
+            }
+            default: { 
+                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                return;
+             } 
+        }
+    } else {
+        interactive = true;
+    }
 
     const buildDir = SimbaConfig.buildDirectory;
     let files: string[] = [];
+    const sourceCodeComparer = new SourceCodeComparer();
 
     try {
         files = await walkDirForContracts(buildDir, '.json');
@@ -85,14 +113,30 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         supplementalInfo[name].contractType = contractType;
         choices.push({title: name, value: name});
     }
+    // use sourceCodeComparer to prevent export of contracts that
+    // do not have any changes:
+    const exportStatuses = await sourceCodeComparer.exportStatuses(choices);
+
     let currentContractName;
     if (!primary) {
-        const chosen = await prompt({
-            type: 'multiselect',
-            name: 'contracts',
-            message: `${chalk.cyanBright(`Please select all contracts you want to export. Use the Space Bar to select or un-select a contract (You can also use -> to select a contract, and <- to un-select a contract). Hit Return/Enter when you are ready to export. If you have questions on exporting libraries, then please run 'truffle run simba help --topic libraries' .`)}`,
-            choices,
-        });
+        let chosen: Record<string, Array<any>>;
+        if (interactive) {
+            chosen = await prompt({
+                type: 'multiselect',
+                name: 'contracts',
+                message: `${chalk.cyanBright(`Please select all contracts you want to export. Use the Space Bar to select or un-select a contract (You can also use -> to select a contract, and <- to un-select a contract). Hit Return/Enter when you are ready to export. If you have questions on exporting libraries, then please run 'truffle run simba help --topic libraries' .`)}`,
+                choices,
+            });
+        } else {
+            const contracts: Array<any> = [];
+            for (let i = 0; i < choices.length; i++) {
+                const contractName = choices[i].title;
+                contracts.push(contractName);
+            }
+            chosen = {
+                contracts,
+            };
+        }
 
         SimbaConfig.log.debug(`chosen: ${JSON.stringify(chosen)}`);
 
@@ -112,10 +156,14 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             }
         }
         const allContracts = libsArray.concat(nonLibsArray);
-
+        const attemptedExports: Record<any, any> = {};
         for (let i = 0; i < allContracts.length; i++) {
             const singleContractImportData = {} as any;
             currentContractName = allContracts[i];
+            attemptedExports[currentContractName] = exportStatuses[currentContractName];
+            if (!exportStatuses[currentContractName].newOrChanged) {
+                continue;
+            }
             singleContractImportData[currentContractName] = importData[currentContractName]
             SimbaConfig.ProjectConfigStore.set('primary', currentContractName);
         
@@ -124,7 +172,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             const libraries = await SimbaConfig.ProjectConfigStore.get("library_addresses") ? SimbaConfig.ProjectConfigStore.get("library_addresses") : {};
             SimbaConfig.log.debug(`libraries: ${JSON.stringify(libraries)}`);
             const request: Request = {
-                version: '0.0.2',
+                version: "0.0.7",
                 primary: SimbaConfig.ProjectConfigStore.get('primary'),
                 import_data: singleContractImportData,
                 libraries: libraries,
@@ -166,15 +214,41 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 }
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response) {
-                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`);
+                    SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
+                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+                    for (let contractName in attemptedExports) {
+                        const message = attemptedExports[contractName].message;
+                        attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
+                    }
+                    SimbaConfig.log.info(attemptsString);
                 } else {
                     SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
+                    SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
+                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+                    for (let contractName in attemptedExports) {
+                        const message = attemptedExports[contractName].message;
+                        attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
+                    }
+                    SimbaConfig.log.info(attemptsString);
                 }
                 return;
             }
         }
+        SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
+        let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+        for (let contractName in attemptedExports) {
+            const message = attemptedExports[contractName].message;
+            attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
+        }
+        SimbaConfig.log.info(attemptsString);
     } else {
         if ((primary as string) in importData) {
+            if (!exportStatuses[primary as string].newOrChanged) {
+                SimbaConfig.log.info(`${chalk.cyanBright(`simba: Export statuses:\n${exportStatuses[primary as string]}: ${exportStatuses[primary as string].message}`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
+                return;
+            }
             SimbaConfig.ProjectConfigStore.set('primary', primary);
             currentContractName = primary as string;
             const currentData = importData[currentContractName];
@@ -231,7 +305,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 return;
             }
         } else {
-            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Primary contract ${primary} is not the name of a contract in this project. Did you remember to compile your contracts?`)}`);
             return;
         }
     }

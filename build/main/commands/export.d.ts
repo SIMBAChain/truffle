@@ -7,6 +7,11 @@ export declare const builder: {
         type: string;
         describe: string;
     };
+    interactive: {
+        string: boolean;
+        type: string;
+        describe: string;
+    };
 };
 /**
  * for exporting contract to simbachain.com (can also think of this as "importing" it to simbachain.com)
