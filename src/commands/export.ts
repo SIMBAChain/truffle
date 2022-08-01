@@ -216,7 +216,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 if (axios.isAxiosError(error) && error.response) {
                     SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`);
                     SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
-                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export results:`)}`;
                     for (let contractName in attemptedExports) {
                         const message = attemptedExports[contractName].message;
                         attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
@@ -225,7 +225,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 } else {
                     SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
                     SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
-                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+                    let attemptsString = `${chalk.cyanBright(`\nsimba: Export results:`)}`;
                     for (let contractName in attemptedExports) {
                         const message = attemptedExports[contractName].message;
                         attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
@@ -236,7 +236,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             }
         }
         SimbaConfig.log.debug(`attemptedExports : ${JSON.stringify(attemptedExports)}`);
-        let attemptsString = `${chalk.cyanBright(`\nsimba: Export statuses:`)}`;
+        let attemptsString = `${chalk.cyanBright(`\nsimba: Export results:`)}`;
         for (let contractName in attemptedExports) {
             const message = attemptedExports[contractName].message;
             attemptsString += `\n${chalk.cyanBright(`${contractName}`)}: ${message}`; 
@@ -245,7 +245,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } else {
         if ((primary as string) in importData) {
             if (!exportStatuses[primary as string].newOrChanged) {
-                SimbaConfig.log.info(`${chalk.cyanBright(`simba: Export statuses:\n${exportStatuses[primary as string]}: ${exportStatuses[primary as string].message}`)}`);
+                SimbaConfig.log.info(`${chalk.cyanBright(`simba: Export results:\n${exportStatuses[primary as string]}: ${exportStatuses[primary as string].message}`)}`);
                 SimbaConfig.log.debug(`:: EXIT :`);
                 return;
             }
