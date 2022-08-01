@@ -140,8 +140,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 
         SimbaConfig.log.debug(`chosen: ${JSON.stringify(chosen)}`);
 
-        if (!chosen.contracts) {
-            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : No contracts chosen!`)}`);
+        if (!chosen.contracts.length) {
+            const message = "\nsimba: No contracts were selected for export. Please make sure you use the SPACE BAR to select all contracts you want to export, THEN hit RETURN / ENTER when exporting.";
+            SimbaConfig.log.error(`${chalk.redBright(`${message}`)}`);
             return;
         }
 
