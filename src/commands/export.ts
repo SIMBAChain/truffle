@@ -69,6 +69,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
 
     const buildDir = SimbaConfig.buildDirectory;
+    SimbaConfig.log.debug(`buildDir: ${buildDir}`);
     let files: string[] = [];
     const sourceCodeComparer = new SourceCodeComparer();
 
@@ -77,7 +78,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } catch (e) {
         const err = e as any;
         if (err.code === 'ENOENT') {
-            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Simba was not able to find any build artifacts.\nDid you forget to run: "truffle compile" ?\n`)}`);
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Simba was not able to find any build artifacts.\nDid you forget to run: "truffle compile"? If you've compiled and this persists, then check to make sure your "web3Suite" field in simba.json is set to "truffle"\n`)}`);
             return;
         }
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(err)}`)}`);

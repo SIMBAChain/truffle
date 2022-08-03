@@ -3,6 +3,8 @@ import {
     SimbaConfig,
     chooseApplicationFromList,
     chooseOrganisationFromList,
+    chooseOrganisationFromName,
+    chooseApplicationFromName,
 } from "@simbachain/web3-suites";
 // import {default as prompt} from 'prompts';
 import {default as chalk} from 'chalk';
@@ -11,7 +13,23 @@ import { KeycloakHandler, AzureHandler } from '@simbachain/web3-suites/dist/comm
 
 export const command = 'login';
 export const describe = 'log in to SIMBAChain SCaaS';
-export const builder = {};
+export const builder = {
+    'interactive': {
+        'string': true,
+        'type': 'string',
+        'describe': '"true" or "false" for interactive export mode'
+    },
+    'org': {
+        'string': true,
+        'type': 'string',
+        'describe': 'the name of the SIMBA org to log into non-interactively',
+    },
+    'app': {
+        'string': true,
+        'type': 'string',
+        'describe': 'the name of the SIBMBA app to log into non-interactively',
+    },
+};
 
 /**
  * get auth token and choose both organisation and application
@@ -22,9 +40,35 @@ export const builder = {};
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const simbaConfig = args.config as SimbaConfig;
-    // logging out by default when we run login
     const authStore = await SimbaConfig.authStore();
-
+    let _interactive = args.interactive;
+    const org = args.org;
+    const app = args.app;
+    let interactive: boolean;
+    if (_interactive && typeof _interactive === 'string') {
+        _interactive = _interactive.toLowerCase();
+        switch (_interactive) {
+            case "false": {
+                interactive = false;
+                break;
+            }
+            case "true": {
+                interactive = true;
+                break;
+            }
+            default: { 
+                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                return;
+             } 
+        }
+    } else {
+        interactive = true;
+    }
+    if (!interactive && (!org || !app)) {
+        const message = "\nsimba: if logging in with --interactive false, then you must specify an org and app using --org <org> --app <app> syntax";
+        SimbaConfig.log.error(`${chalk.redBright(`${message}`)}`);
+        return Promise.resolve(new Error(`${message}`));
+    }
     if (authStore instanceof KeycloakHandler) {
         try {
             await authStore.logout();
@@ -54,6 +98,28 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
 
     if (authStore instanceof AzureHandler) {
+        if (!interactive) {
+            if (!org || !app) {
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : org and app must both be specified when using non-interactive mode.`)}`);
+                return;
+            }
+            authStore.logout();
+            try {
+                await authStore.performLogin(interactive, org as string, app as string);
+                await chooseOrganisationFromName(simbaConfig, org as string);
+                await chooseApplicationFromName(simbaConfig, app as string);
+                SimbaConfig.log.info(`${chalk.greenBright(`Logged in to SIMBA Chain!`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
+                return;
+            } catch (error) {
+                if (axios.isAxiosError(error) && error.response) {
+                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+                } else {
+                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
+                }
+                return;
+            }
+        }
         try {
             authStore.logout();
             if (!authStore.isLoggedIn()) {
