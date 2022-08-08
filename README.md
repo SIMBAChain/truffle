@@ -217,6 +217,20 @@ You will then be prompted to select your application, with something like:
     revisedApp
 ```
 
+There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set:
+
+a. SIMBA_PLUGIN_ID for your client ID
+b. SIMBA_PLUGIN_SECRET for your client secret, and 
+c. SIMBA_PLUGIN_AUTH_ENDPOINT for your auth endpoint
+
+NOTE: SIMBA_PLUGIN_AUTH_ENDPOINT defaults to '/o/' if not set.
+
+To run login in non-interactive mode, you will need to pass the name of the organisation (org) and application (app) that you would like to log into:
+
+```
+$ truffle run simba login --interactive false --org <myOrg> --app <myApp>
+```
+
 ## export
 
 Once you have logged in, you will be able to export your contracts, which will save them to your organization's contracts (you can also think of this action as "importing" your contracts to Blocks). For this command, you can either run export without arguments, which allows you to select multiple contracts to export; or with the optional --primary param, which will specify which contract you want to export. To export without optional arguments, run
@@ -244,6 +258,12 @@ If you want to specify just one contract to export, you can run:
 
 ```
 $ truffle run simba export --primary CoffeeERC721
+```
+
+There is also a non-interactive export mode. This mode is mainly for CI/CD, but it can be run like any other export command. If you want to export all contracts that have compiled changes since the last time you exported, then you can export in non-interactive mode. Note that this will not export contracts that are strictly dependencies (eg OpenZeppelin imported contracts). To run export in non-interactive mode, run:
+
+```
+$ truffle run simba export --interactive false
 ```
 
 ## deploy

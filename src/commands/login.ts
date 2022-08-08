@@ -3,6 +3,8 @@ import {
     SimbaConfig,
     chooseApplicationFromList,
     chooseOrganisationFromList,
+    chooseOrganisationFromName,
+    chooseApplicationFromName,
 } from "@simbachain/web3-suites";
 // import {default as prompt} from 'prompts';
 import {default as chalk} from 'chalk';
@@ -11,7 +13,23 @@ import { KeycloakHandler, AzureHandler } from '@simbachain/web3-suites/dist/comm
 
 export const command = 'login';
 export const describe = 'log in to SIMBAChain SCaaS';
-export const builder = {};
+export const builder = {
+    'interactive': {
+        'string': true,
+        'type': 'string',
+        'describe': '"true" or "false" for interactive export mode'
+    },
+    'org': {
+        'string': true,
+        'type': 'string',
+        'describe': 'the name of the SIMBA org to log into non-interactively',
+    },
+    'app': {
+        'string': true,
+        'type': 'string',
+        'describe': 'the name of the SIBMBA app to log into non-interactively',
+    },
+};
 
 /**
  * get auth token and choose both organisation and application
@@ -22,8 +40,30 @@ export const builder = {};
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const simbaConfig = args.config as SimbaConfig;
-    // logging out by default when we run login
     const authStore = await SimbaConfig.authStore();
+    let _interactive = args.interactive;
+    const org = args.org;
+    const app = args.app;
+    let interactive: boolean;
+    if (_interactive && typeof _interactive === 'string') {
+        _interactive = _interactive.toLowerCase();
+        switch (_interactive) {
+            case "false": {
+                interactive = false;
+                break;
+            }
+            case "true": {
+                interactive = true;
+                break;
+            }
+            default: { 
+                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                return;
+             } 
+        }
+    } else {
+        interactive = true;
+    }
 
     if (authStore instanceof KeycloakHandler) {
         try {
@@ -54,6 +94,48 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
 
     if (authStore instanceof AzureHandler) {
+        if (!interactive) {
+            if (!org || !app) {
+                const orgFromSimbaJson = SimbaConfig.ProjectConfigStore.get("organisation");
+                const orgName = orgFromSimbaJson.name;
+                if (!orgName) {
+                    SimbaConfig.log.error(`${chalk.redBright(`no organisation specified in your login command, and no organisation present in your simba.json. Please login in non-inetractive mode and choose your organisation, or use the --org <org> flag in your non-interactive login command.`)}`);
+                    return;
+                } else {
+                    SimbaConfig.log.info(`${chalk.cyanBright(`no org was specified in login command; logging in using org ${orgName} from simba.json`)}`);
+                }
+                const appFromSimbaJson = SimbaConfig.ProjectConfigStore.get("application");
+                const appName = appFromSimbaJson.name;
+                if (!appName) {
+                    SimbaConfig.log.error(`${chalk.redBright(`no app specified in your login command, and no application present in your simba.json. Please login in non-inetractive mode and choose your application, or use the --app <app> flag in your non-interactive login command.`)}`);
+                    return;
+                } else {
+                    SimbaConfig.log.info(`${chalk.cyanBright(`no app was specified in login command; logging in using app ${appName} from simba.json`)}`);
+                }
+            }
+            authStore.logout();
+            try {
+                await authStore.performLogin(interactive);
+                if (org) {
+                    await chooseOrganisationFromName(simbaConfig, org as string);
+                }
+                // do no nothing if we found organisation.name in simba.json
+                if (app) {
+                    await chooseApplicationFromName(simbaConfig, app as string);
+                }
+                // do nothing if we found application.name in simba.json
+                SimbaConfig.log.info(`${chalk.greenBright(`Logged in to SIMBA Chain!`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
+                return;
+            } catch (error) {
+                if (axios.isAxiosError(error) && error.response) {
+                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+                } else {
+                    SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
+                }
+                return;
+            }
+        }
         try {
             authStore.logout();
             if (!authStore.isLoggedIn()) {
