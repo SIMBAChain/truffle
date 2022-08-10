@@ -217,7 +217,7 @@ You will then be prompted to select your application, with something like:
     revisedApp
 ```
 
-There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set:
+There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set
 
 1. SIMBA_PLUGIN_ID for your client ID
 2. SIMBA_PLUGIN_SECRET for your client secret, and 
@@ -225,10 +225,28 @@ There is also a non-interactive login mode. This mode is mainly for CI/CD, but y
 
 NOTE: SIMBA_PLUGIN_AUTH_ENDPOINT defaults to '/o/' if not set.
 
-To run login in non-interactive mode, you will need to pass the name of the organisation (org) and application (app) that you would like to log into:
+To run login in non-interactive mode, you can run with org and app flag:
 
 ```
 $ truffle run simba login --interactive false --org <myOrg> --app <myApp>
+```
+
+Or you can run with just the app flag, if you already have logged into an org before, and just want to switch your app:
+
+```
+$ truffle run simba login --interactive false --app <myApp>
+```
+
+If you already have an org and app set in simba.json, and want to use that org and app, you can just run:
+
+```
+$ truffle run simba login --interactive false
+```
+
+However, if you specify an org, you must specify an app. The following will throw an error:
+
+```
+$ truffle run simba login --interactive false --org <myOrg>
 ```
 
 ## export
