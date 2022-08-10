@@ -13,7 +13,7 @@ enum HelpCommands {
     GENERALPROCESS = "generalprocess",
     LOGLEVEL = "loglevel",
     LIBRARIES = "libraries",
-    SYNC = "sync",
+    PULL = "pull",
     VIEWCONTRACTS = "viewcontracts",
 }
 
@@ -46,7 +46,7 @@ export async function help(args: yargs.Arguments) {
         HelpCommands.GENERALPROCESS,
         HelpCommands.LOGLEVEL,
         HelpCommands.LIBRARIES,
-        HelpCommands.SYNC,
+        HelpCommands.PULL,
         HelpCommands.VIEWCONTRACTS,
     ];
 
@@ -109,8 +109,8 @@ export async function help(args: yargs.Arguments) {
             await librariesHelp();
             break;
         }
-        case HelpCommands.SYNC: {
-            await syncHelp();
+        case HelpCommands.PULL: {
+            await pullHelp();
             break;
         }
         case HelpCommands.VIEWCONTRACTS: {
@@ -169,8 +169,8 @@ async function librariesHelp() {
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
-async function syncHelp() {
-    const message = await helpMessage("syncHelp");
+async function pullHelp() {
+    const message = await helpMessage("pullHelp");
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
@@ -202,7 +202,7 @@ const helpOptions: any = {
     logoutHelp: "\n\nIf you want to logout, then you can do so by running\n\n\t$ truffle run simba logout\n\nDoing so will delete your auth token in authconfig.json\n\n",
     logLevelHelp: "\n\nThe Simba truffle plugin uses tslog for logging / debugging. Setting a log level through this command will set a MINIMUM log level. So for instance, if you set the log level to 'info', then logs of level SimbaConfig.log.info(...) as well as SimbaConfig.log.error(...) will be logged. Valid values for log levels are 'error', 'info', 'debug', 'silly', 'warn', 'trace', and 'fatal'. You can either run this command without any arguments, which will allow you to set a minimum log level from prompt:\n\n\t$ truffle run simba loglevel\n\nOr you can set the specific log level from the CLI:\n\n\t$ truffle run simba loglevel --level <desired log level>\n\n",
     librariesHelp: "\n\nYou do not need to actively link libraries in this plugin. Once you have deployed your contract, SIMBA's Blocks platform handles that for you. All you need to do is make sure that if you are deploying a contractX that depends on libraryX, then FIRST deploy libraryX. Then when you deploy contractX, the library linking will automatically be conducted by SIMBA. If you look in your simba.json after deploying a library, you will see a field for library_addresses. This field gets exported with other contracts, and is how SIMBA knows whether a contract needs to be linked to a library when it is deployed. You don't need to do anything with the library_addresses info; all you need to remember is to deploy the library BEFORE you deploy the contract that depends on it.\n\nAdding libraries: If a contract that you are trying to deploy requires an external library that you did not deploy to SIMBA Chain, but you have the name and address of that library, then you can add the library by running the following command, which does not take parameters:\n\n\t$ truffle run simba addlib\n\nAnd you will then be prompted to specify the name and address of your library. If you want to specify the name and address of the library from the CLI, then you can run:\n\n\t$ truffle run simba addlib --libname <library name> --libaddr <library address>\n\n",
-    syncHelp: "\n\nThis command is for syncing contract designs from SIMBA into your local project. It's a great tool for distributed teams to make sure they're all using the same versions of deployed contracts (kind of a lightweight code repo). So for instance, if one team member exports contractX and contractY to SIMBA, and a second team member wants to make sure they are working with the same contracts, then that second team member can call:\n\n\t$ truffle run simba sync\n\nAnd then select contractX and contractY to sync. This will overwrite any local versions of contractX and contractY in your local project. You can also pass the --id flag if you want to sync a specific contract instead of selecting contracts from a prompt:\n\n\t$ truffle run simba sync --id <contract ID>\n\nContract design IDs can be referenced in your simba.json file under contracts_info -> contract name -> design_id. Contract design IDs can also be viewed by running\n\n\t$truffle run simba viewcontracts\n\n",
+    pullHelp: "\n\nThis command is mainly designed to be used in the CI/CD process, but it can actually be used for many things. Regarding the CI/CD use, if you use CI/CD to export your contracts in the CI/CD pipeline after you push, then you'll need to update your project's simba.json after you do a git pull. This is because the plugin relies on the 'source_code' field for each contract in your simba.json's 'contract_info' section to know which contracts to export. So to get the most up to date version of your exported contracts' source code in your simba.json, just run:\n\n\t$ truffle run simba pull\n\nIn addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. Technically, you shouldn't need to do this if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:\n\n\t$ truffle run simba pull --pullsolfiles true\n\nThis will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/ folder.\n\nIf you would like to interactively choose which .sol contract files to choose, in addition to auto pulling your source code for your simba.json, you can run:\n\n\t$ truffle run simba pull --interactive true\n\nIf you would like to skip pulling your simba.json source code (though you really should not), you can set the --pullsourcecode flag to false. For example, the following command will only pull your .sol contract files:\n\n\t$ truffle run simba pull --pullsourcecode false --pullsolfiles true\n\nIf you would like to pull your .sol contract files interactively, while skipping your simba.json source code pull, you can run:\n\n\t$ truffle run simba pull --pullsourcecode false --interactive true\n\nIf you want to pull a specific contract's most recently exported edition, by name, from SIMBA, then you can run:\n\n\t$ truffle run simba pull --contractname <your contract name>\n\nIf you would like to pull a specific contract version from its design_id, you can run:\n\n\t$ truffle run simba pull --id <your contract design_id>\n\nContract design IDs can be referenced in your simba.json file under contracts_info -> contract name -> design_id. Contract design IDs can also be viewed by running:\n\n\t$ truffle run simba viewcontracts\n\n",
     viewContractsHelp: "\n\nThis command will return information pertaining to all contracts saved to your organisation on SIMBA Chain. Contract info includes: name, id, and version. For this command, just run:\n\n\t$ truffle run simba viewcontracts\n\n",
 }
 

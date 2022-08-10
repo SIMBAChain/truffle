@@ -21,7 +21,7 @@ new Promise((resolve, _reject) => {
         .command(commands_1.Deploy)
         .command(commands_1.Help)
         .command(commands_1.LogLevel)
-        .command(commands_1.Sync)
+        .command(commands_1.Pull)
         .command(commands_1.View)
         .command(commands_1.AddLib)
         .demandCommand(1, 'You need at least one command before moving on'), 

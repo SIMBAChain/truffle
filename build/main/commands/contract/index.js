@@ -19,11 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddLib = exports.View = exports.Sync = void 0;
-const SyncCommand = __importStar(require("./sync"));
+exports.AddLib = exports.View = exports.Pull = void 0;
+const PullCommand = __importStar(require("./pull"));
 const ViewCommand = __importStar(require("./viewContracts"));
 const AddLibCommand = __importStar(require("./addlibrary"));
-exports.Sync = SyncCommand;
+exports.Pull = PullCommand;
 exports.View = ViewCommand;
 exports.AddLib = AddLibCommand;
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvY29tbWFuZHMvY29udHJhY3QvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG9EQUFxQztBQUNyQyw2REFBK0M7QUFDL0MsNERBQThDO0FBRWpDLFFBQUEsSUFBSSxHQUFHLFdBQVcsQ0FBQztBQUNuQixRQUFBLElBQUksR0FBRyxXQUFXLENBQUM7QUFDbkIsUUFBQSxNQUFNLEdBQUcsYUFBYSxDQUFDIn0=

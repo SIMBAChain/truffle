@@ -55,7 +55,7 @@ And then cd into that directory:
 $ cd my_truffle_project
 ```
 
-**NOTE: It is this level of your project, where your package.json will live, where you will run your Hardhat CLI commands**
+**NOTE: It is this level of your project, where your package.json will live, where you will run your Truffle CLI commands**
 
 To start an npm project, from that same directory run:
 
@@ -158,7 +158,7 @@ You should see a message similar to the below output:
     generalprocess
     loglevel
     libraries
-    sync
+    pull
     viewcontracts
 ```
 
@@ -219,9 +219,9 @@ You will then be prompted to select your application, with something like:
 
 There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set:
 
-a. SIMBA_PLUGIN_ID for your client ID
-b. SIMBA_PLUGIN_SECRET for your client secret, and 
-c. SIMBA_PLUGIN_AUTH_ENDPOINT for your auth endpoint
+1. SIMBA_PLUGIN_ID for your client ID
+2. SIMBA_PLUGIN_SECRET for your client secret, and 
+3. SIMBA_PLUGIN_AUTH_ENDPOINT for your auth endpoint. 
 
 NOTE: SIMBA_PLUGIN_AUTH_ENDPOINT defaults to '/o/' if not set.
 
@@ -334,17 +334,49 @@ $ truffle run simba logout
 
 Doing so will delete your auth token in authconfig.json
 
-## sync
-This command is for syncing contract designs from SIMBA into your local project. It's a great tool for distributed teams to make sure they're all using the same versions of deployed contracts (kind of a lightweight web3 code repo). So for instance, if one team member exports contractX and contractY to SIMBA, and a second team member wants to make sure they are working with the same contracts, then that second team member can call:
+### pull
+This command is mainly designed to be used in the CI/CD process, but it can actually be used for many things. Regarding the CI/CD use, if you use CI/CD to export your contracts in the CI/CD pipeline after you push, then you'll need to update your project's simba.json after you do a git pull. This is because the plugin relies on the "source_code" field for each contract in your simba.json's "contract_info" section to know which contracts to export. So to get the most up to date version of your exported contracts' source code in your simba.json, just run:
 
 ```
-$ truffle run simba sync
+$ truffle run simba pull
 ```
 
-And then select contractX and contractY to sync. This will overwrite any local versions of contractX and contractY in your local project. You can also pass the --id flag if you want to sync a specific contract instead of selecting contracts from a prompt:
+In addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. Technically, you shouldn't need to do this if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:
 
 ```
-$ truffle run simba sync --id <contract ID>
+$ truffle run simba pull --pullsolfiles true
+```
+
+This will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/ folder.
+
+If you would like to interactively choose which .sol contract files to choose, in addition to auto pulling your source code for your simba.json, you can run:
+
+```
+$ truffle run simba pull --interactive true
+```
+
+If you would like to skip pulling your simba.json source code (though you really should not), you can set the --pullsourcecode flag to false. For example, the following command will only pull your .sol contract files:
+
+```
+$ truffle run simba pull --pullsourcecode false --pullsolfiles true
+```
+
+If you would like to pull your .sol contract files interactively, while skipping your simba.json source code pull, you can run:
+
+```
+$ truffle run simba pull --pullsourcecode false --interactive true
+```
+
+If you want to pull a specific contract's most recently exported edition, by name, from SIMBA, then you can run:
+
+```
+$ truffle run simba pull --contractname <your contract name>
+```
+
+If you would like to pull a specific contract version from its design_id, you can run:
+
+```
+$ truffle run simba pull --id <your contract design_id>
 ```
 
 Contract design IDs can be referenced in your simba.json file under contracts_info -> contract name -> design_id. Contract design IDs can also be viewed by running:
@@ -380,7 +412,7 @@ And you will be prompted to select from a list of available help topics:
     simbajson
     generalprocess
     loglevel
-    sync
+    pull
     viewcontracts
 ```
 
@@ -399,7 +431,7 @@ As indicated above, the available help topics are:
 - simbajson
 - generalprocess
 - loglevel
-- sync
+- pull
 - viewcontracts
 
 ## logging and debugging
