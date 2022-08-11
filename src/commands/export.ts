@@ -11,7 +11,7 @@ import {default as chalk} from 'chalk';
 import axios from "axios";
 import {default as prompt} from 'prompts';
 import yargs from 'yargs';
-
+import { execSync } from "child_process";
 export const command = 'export';
 export const describe = 'export the contract to SIMBA Chain';
 export const builder = {
@@ -72,7 +72,12 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`buildDir: ${buildDir}`);
     let files: string[] = [];
     const sourceCodeComparer = new SourceCodeComparer();
-
+    try {
+        execSync('truffle compile', { stdio: 'inherit'});
+    } catch (e) {
+        SimbaConfig.log.info(`${chalk.redBright(`\nsimba: there was an error compiling you contracts`)}`);
+        return;
+    }
     try {
         files = await walkDirForContracts(buildDir, '.json');
     } catch (e) {
