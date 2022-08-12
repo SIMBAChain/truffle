@@ -359,13 +359,25 @@ This command is mainly designed to be used in the CI/CD process, but it can actu
 $ truffle run simba pull
 ```
 
-In addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. Technically, you shouldn't need to do this if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:
+In addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. 
+
+A brief note on file structure is worthwhile here. By default, contracts pulled from SIMBA Chain will be written to /contracts/SimbaImports/ directory. If you would like to place pulled files in the top level of your /contracts/ directory, then you can pass the --usesimbapath false flag in your call. 
+
+A note on file names is also in order. Files that are pulled form SIMBA are placed into files named after the contract name. So if you have two contracts, token1 and token2, which both originally lived in OurTokens.sol. Then both of those will end up in files named token1.sol and token2.sol. This is done becuase, currently, contracts that are pushed to SIMBA Chain sit in a flat structure, without sub-directories.
+
+Usually, you shouldn't need to do pull contracts from SIMBA if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:
 
 ```
 $ truffle run simba pull --pullsolfiles true
 ```
 
-This will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/ folder.
+This will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/SimbaImports/ folder.
+
+If you want to place your pulled contracts in the top level of your /contracts/ directory, instead of into /contracts/SimbaImports/, then you can run:
+
+```
+$ truffle run simba pull --pullsolfiles true --usesimbapath false
+```
 
 If you would like to interactively choose which .sol contract files to choose, in addition to auto pulling your source code for your simba.json, you can run:
 

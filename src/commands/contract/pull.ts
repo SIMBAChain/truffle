@@ -38,6 +38,11 @@ export const builder = {
         'type': 'string',
         'describe': 'true/false, as to whether you want to pull interactively (ie choose which contract .sol files you want to pull)',
     },
+    'usesimbapath': {
+        'string': true,
+        'type': 'string',
+        'describe': 'true/false, as to whether you want to pull your SIMBA remote .sol files to contracts/SimbaImports/ dir',
+    },
 };
 
 /**
@@ -51,6 +56,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     const contractName = args.contractname;
     let pullSolFiles = args.pullsolfiles;
     let pullSourceCode = args.pullsourcecode;
+    let useSimbaPath = args.usesimbapath;
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     let _interactive: boolean = true;
     if (interactive) {
@@ -70,7 +76,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             } 
         }
     } else {
-        _interactive = true;
+        _interactive = false;
     }
     let _pullSourceCode: boolean = true;
     if (pullSourceCode) {
@@ -112,6 +118,26 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } else {
         _pullSolFiles = false;
     }
+    let _useSimbaPath: boolean = true;
+    if (useSimbaPath) {
+        useSimbaPath = (useSimbaPath as string).toLowerCase();
+        switch (useSimbaPath) {
+            case "false": {
+                _useSimbaPath = false;
+                break;
+            }
+            case "true": {
+                _useSimbaPath = true;
+                break;
+            }
+            default: { 
+                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "useSimbaPath" flag. Please enter '--useSimbaPath true' or '--useSimbaPath false' for this flag`)}`);
+                return;
+            } 
+        }
+    } else {
+        _useSimbaPath = true;
+    }
     if (designID && contractName) {
         const message = `${chalk.redBright(`\nsimba: designid and contractname were both specified. Only one of these parameters can be passed.`)}`;
         SimbaConfig.log.error(message);
@@ -128,18 +154,18 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         return;
     }
     if (designID) {
-        await pullContractFromDesignId(designID as string);
+        await pullContractFromDesignId(designID as string, _useSimbaPath);
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
     if (contractName) {
         if (pullSolFiles && pullSourceCode) {
-            await pullMostRecentFromContractName(contractName as string);
+            await pullMostRecentFromContractName(contractName as string, undefined, _useSimbaPath);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
         if (pullSolFiles) {
-            await pullMostRecentRecentSolFileFromContractName(contractName as string);
+            await pullMostRecentRecentSolFileFromContractName(contractName as string, undefined, _useSimbaPath);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
@@ -149,7 +175,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
         // default to pulling sol files and source code for simba.json
-        await pullMostRecentFromContractName(contractName as string);
+        await pullMostRecentFromContractName(contractName as string, undefined, _useSimbaPath);
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
@@ -160,6 +186,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         _pullSourceCode,
         _pullSolFiles,
         _interactive,
+        _useSimbaPath,
     );
     SimbaConfig.log.debug(`:: EXIT :`);
     return;
