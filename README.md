@@ -16,6 +16,7 @@
     - [ViewContracts](#view-contracts)
     - [Help](#help)
 6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
+7. [CI/CD](#continuous-integration-continuous-deployment)
 
 ## Summary
 
@@ -359,13 +360,25 @@ This command is mainly designed to be used in the CI/CD process, but it can actu
 $ truffle run simba pull
 ```
 
-In addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. Technically, you shouldn't need to do this if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:
+In addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory. 
+
+A brief note on file structure is worthwhile here. By default, contracts pulled from SIMBA Chain will be written to /contracts/SimbaImports/ directory. If you would like to place pulled files in the top level of your /contracts/ directory, then you can pass the --usesimbapath false flag in your call. 
+
+A note on file names is also in order. Files that are pulled form SIMBA are placed into files named after the contract name. So if you have two contracts, token1 and token2, which both originally lived in OurTokens.sol. Then both of those will end up in files named token1.sol and token2.sol. This is done becuase, currently, contracts that are pushed to SIMBA Chain sit in a flat structure, without sub-directories.
+
+Usually, you shouldn't need to do pull contracts from SIMBA if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:
 
 ```
 $ truffle run simba pull --pullsolfiles true
 ```
 
-This will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/ folder.
+This will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/SimbaImports/ folder.
+
+If you want to place your pulled contracts in the top level of your /contracts/ directory, instead of into /contracts/SimbaImports/, then you can run:
+
+```
+$ truffle run simba pull --pullsolfiles true --usesimbapath false
+```
 
 If you would like to interactively choose which .sol contract files to choose, in addition to auto pulling your source code for your simba.json, you can run:
 
@@ -501,3 +514,75 @@ and you will then be prompted to specify the name and address of your library. I
 
 ```$ truffle run simba addlib --libname <library name> --libaddr <library address>
 ```
+
+## CI/CD
+### Continuous Integration Continuous Deployment
+
+SIMBA Chain’s web3 plugins offer CI/CD support, so that when you push your git project, you automatically export all of your recently changed contracts in your project to your SIMBA Chain org. In this process, any contracts that you have made recent changes to will be compiled and exported to SIMBA Chain. If no changes have been made to your contracts, then nothing will be exported to SIMBA Chain.
+
+### Requirements & Configuration
+To use SIMBA’s plugins' CI/CD functionality, you will need to be working with a Truffle project that has the SIMBA Chain Truffle plugin installed. Please see the following for more details on installing and using our plugins:
+
+1.Acquire a client ID and secret from SIMBA Chain for step 4 (below). You can acquire a client ID and secret from the SIMBA Chain UI, by navigating to your org, then application, and then selecting “secrets” in the upper right hand corner of the page.
+2. You will need to be working with a git project that supports CI/CD. The setup for different providers varies, but the directions for getting started with CI/CD in Gitlab are here: https://docs.gitlab.com/ee/ci/quick_start/
+3. You will need to configure three protected environment variables in your git service environment:
+
+    a. SIMBA_PLUGIN_ID
+    b. SIMBA_PLUGIN_SECRET
+    c. SIMBA_PLUGIN_AUTH_ENDPOINT (if you don’t set this last variable, it defaults to “/o/”)
+
+4. Since these are protected variables, you will probably need to be pushing from a protected branch, regardless of your git service.
+5. You will then need to create your pipeline. In Gitlab, that means creating a .gitlab-ci.yml file. Your pipeline will look different, depending on which plugin you’re using. Here is what a pipeline for gitlab would look like:
+
+```yaml
+image: node:16.14.2
+
+stages:
+  - install_dependencies_and_run
+
+job_install_compile_and_run:
+  stage: install_dependencies_and_run
+  script:
+    - npm install
+    - npm install -g truffle@5.4.26
+    # following will use the organisation and application from your simba.json
+    - truffle run simba login --interactive false
+    # # if you always want to use the same org and app, then provide <org name> and <app name> below
+    # # but this approach only works if your 'organisation' and 'application' are set in simba.json,
+    # # which you can do by running 'truffle run simba login' before pushing
+    # - truffle run simba login --interactive false --org <org name> --app <app name>
+    # pull most recently changed contracts to simba.json:
+    - truffle run simba pull
+    - truffle run simba export --interactive false
+```
+
+### CI/CD Process
+
+The process for enabling CI/CD in your team’s workflow is very simple. We list the steps here:
+
+1. run git pull:
+```
+$ git pull
+```
+
+2. run simba pull:
+```
+$ truffle run simba pull
+```
+
+this command ensures that your simba.json source code for each contract is up to date. To determine which contracts need to be exported, the plugin compares the source code it finds in your simba.json to the source code it finds in compiled artifacts. If there is a difference, then the plugin knows that a contract has changed and needs to be exported. Running simba pull is necessary because in CI/CD, exporting happens in the git service environment, so there is no way for your simba.json to be updated with most recent source code during export. So what simba pull does is retrieve that source code from SIMBA Chain and write it to your simba.json
+
+You may notice above in the pipeline that simba pull is run inside the pipeline. This is as a precaution, in case you forgot to run in your local environment. It’s never a bad idea to include simba pull in your CI/CD pipeline, but it will make the pipeline run more slowly.
+
+3. modify contracts as desired within your project
+
+4. compilation of contracts is optional. The Hardhat and Truffle plugins automatically compile your contracts when exported.
+
+5. run git push:
+```
+$ git push
+```
+
+And that’s it!
+
+So if you were to make changes to a contract called TestContractVt6, then run git push, you would see in your pipeline job logs that this contract was exported to SIMBA Chain

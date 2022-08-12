@@ -27,6 +27,11 @@ export declare const builder: {
         type: string;
         describe: string;
     };
+    usesimbapath: {
+        string: boolean;
+        type: string;
+        describe: string;
+    };
 };
 /**
  * for syncing contractX from your org in simbachain.com with contractX in your project
