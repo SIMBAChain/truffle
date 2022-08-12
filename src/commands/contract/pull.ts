@@ -159,17 +159,17 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         return;
     }
     if (contractName) {
-        if (pullSolFiles && pullSourceCode) {
+        if (_pullSolFiles && _pullSourceCode) {
             await pullMostRecentFromContractName(contractName as string, undefined, _useSimbaPath);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
-        if (pullSolFiles) {
+        if (_pullSolFiles) {
             await pullMostRecentRecentSolFileFromContractName(contractName as string, undefined, _useSimbaPath);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
-        if (pullSourceCode) {
+        if (_pullSourceCode) {
             await pullMostRecentSourceCodeFromContractName(contractName as string);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
