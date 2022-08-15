@@ -67,7 +67,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } else {
         interactive = true;
     }
-
+    
     const buildDir = SimbaConfig.buildDirectory;
     SimbaConfig.log.debug(`buildDir: ${buildDir}`);
     let files: string[] = [];
@@ -122,9 +122,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     // use sourceCodeComparer to prevent export of contracts that
     // do not have any changes:
     const exportStatuses = await sourceCodeComparer.exportStatuses(choices);
+    const successfulExportMessage = `${chalk.greenBright(`Successfully exported`)}`;
 
     let currentContractName;
     if (!primary) {
+        const attemptedExports: Record<any, any> = {};
         let chosen: Record<string, Array<any>>;
         if (interactive) {
             chosen = await prompt({
@@ -156,6 +158,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         const nonLibsArray = [];
         for (let i = 0; i < chosen.contracts.length; i++) {
             const contractName = chosen.contracts[i];
+            attemptedExports[contractName] = exportStatuses[contractName];
             if (supplementalInfo[contractName].contractType === "library") {
                 libsArray.push(contractName);
             } else {
@@ -163,11 +166,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             }
         }
         const allContracts = libsArray.concat(nonLibsArray);
-        const attemptedExports: Record<any, any> = {};
         for (let i = 0; i < allContracts.length; i++) {
             const singleContractImportData = {} as any;
             currentContractName = allContracts[i];
-            attemptedExports[currentContractName] = exportStatuses[currentContractName];
             if (!exportStatuses[currentContractName].newOrChanged) {
                 continue;
             }
@@ -200,6 +201,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 }
         
                 if (resp.id) {
+                    attemptedExports[currentContractName].message = successfulExportMessage;
                     SimbaConfig.log.debug(`entering id exists logic`);
                     const contractType = supplementalInfo[currentContractName].contractType;
                     SimbaConfig.log.debug(`contractType: ${contractType}`);
@@ -214,8 +216,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         source_code: sourceCode,
                     }
                     SimbaConfig.ProjectConfigStore.set("contracts_info", contractsInfo);
-                    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: Saved Contract ${chalk.greenBright(`${currentContractName}`)} to Design ID `)}${chalk.greenBright(`${resp.id}`)}`);
+                    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: Successful Export! Saved Contract ${chalk.greenBright(`${currentContractName}`)} to Design ID `)}${chalk.greenBright(`${resp.id}`)}`);
                 } else {
+                    attemptedExports[currentContractName] = exportStatuses[currentContractName];
                     SimbaConfig.log.error(`${chalk.red('\nsimba: EXIT : Error exporting contract to SIMBA Chain')}`);
                     return;
                 }
