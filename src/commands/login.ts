@@ -157,5 +157,4 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } catch (e) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: ${e}`)}`)
     }
-    //}
 };
