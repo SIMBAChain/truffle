@@ -121,7 +121,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 }
             }
             authStore.logout();
-            // SimbaConfig.resetSimbaJson();
             try {
                 await authStore.performLogin(interactive);
                 if (org) {
@@ -145,7 +144,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         try {
             authStore.logout();
-            // SimbaConfig.resetSimbaJson();
             if (!authStore.isLoggedIn()) {
                 await authStore.performLogin();
             } else {
