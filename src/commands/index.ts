@@ -3,13 +3,15 @@ import * as DeployCommand from './deploy';
 import * as LoginCommand from './login';
 import * as LogoutCommand from './logout';
 import * as HelpCommand from './help';
-import * as LogLevelCommand from "./loglevel";
+import * as LogLevelCommand from './loglevel';
+import * as CleanCommand from './clean';
 import {
     Pull as PullCommand,
     View as ViewCommand,
     AddLib as AddLibCommand,
 } from "./contract";
 
+export const Clean = CleanCommand;
 export const Export = ExportCommand;
 export const Deploy = DeployCommand;
 export const Login = LoginCommand;
