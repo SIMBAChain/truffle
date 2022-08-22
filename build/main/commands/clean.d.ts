@@ -1,5 +1,5 @@
 export declare const command = "clean";
-export declare const describe = "clean artifacts by removing contracts directory";
+export declare const describe = "clean artifacts by removing build directory";
 /**
  * clean artifact directory
  * @returns

@@ -8,14 +8,14 @@ import * as path from "path";
 import {cwd} from "process";
 
 export const command = 'clean';
-export const describe = 'clean artifacts by removing contracts directory';
+export const describe = 'clean artifacts by removing build directory';
 
 /**
  * clean artifact directory
  * @returns
  */
 export const handler = async (): Promise<any> => {
-    SimbaConfig.log.info(`${chalk.cyanBright(`simba: cleaning builds directory.`)}`)
+    SimbaConfig.log.info(`${chalk.cyanBright(`simba: cleaning build directory.`)}`)
     await clean_builds();
     return Promise.resolve(null);
 }
