@@ -12,6 +12,8 @@ import axios from "axios";
 import {default as prompt} from 'prompts';
 import yargs from 'yargs';
 import { execSync } from "child_process";
+import { clean_builds } from "./clean";
+
 export const command = 'export';
 export const describe = 'export the contract to SIMBA Chain';
 export const builder = {
@@ -67,6 +69,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } else {
         interactive = true;
     }
+    clean_builds()
     
     const buildDir = SimbaConfig.buildDirectory;
     SimbaConfig.log.debug(`buildDir: ${buildDir}`);
