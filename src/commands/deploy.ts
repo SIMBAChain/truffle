@@ -384,15 +384,14 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;
-                        const libraryName = config.ProjectConfigStore.get("primary");
                         for (let i = 0; i < deploymentInfo.length; i++) {
                             const entry = deploymentInfo[i];
-                            if (!(entry.name === libraryName)) {
+                            if (!(entry.name === contractName)) {
                                 continue;
                             }
                             const libraryAddress = entry.address;
-                            contractsInfo[libraryName].address = libraryAddress;
-                            contractsInfo[libraryName].deployment_id = deployment_id;
+                            contractsInfo[contractName].address = libraryAddress;
+                            contractsInfo[contractName].deployment_id = deployment_id;
 
                             config.ProjectConfigStore.set("contracts_info", contractsInfo);
                             const most_recent_deployment_info = {
@@ -404,7 +403,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                             let libraryAddresses = config.ProjectConfigStore.get("library_addresses") ?
                                 config.ProjectConfigStore.get("library_addresses") :
                                 {};
-                            libraryAddresses[libraryName] = libraryAddress;
+                            libraryAddresses[contractName] = libraryAddress;
                             config.ProjectConfigStore.set("library_addresses", libraryAddresses);
                             config.ProjectConfigStore.set("most_recent_deployment_info", most_recent_deployment_info);
                             SimbaConfig.log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)} and transaction_hash ${chalk.greenBright(`${transaction_hash}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
