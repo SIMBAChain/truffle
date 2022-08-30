@@ -26,7 +26,7 @@ export const builder = {
     'app': {
         'string': true,
         'type': 'string',
-        'describe': 'the name of the SIBMBA app to log into non-interactively',
+        'describe': 'the name of the SIMBA app to log into non-interactively',
     },
 };
 
