@@ -5,6 +5,7 @@ import * as LogoutCommand from './logout';
 import * as HelpCommand from './help';
 import * as LogLevelCommand from './loglevel';
 import * as CleanCommand from './clean';
+import * as InfoCommand from './simbainfo';
 import {
     Pull as PullCommand,
     View as ViewCommand,
@@ -21,3 +22,4 @@ export const LogLevel = LogLevelCommand;
 export const Pull = PullCommand;
 export const View = ViewCommand;
 export const AddLib = AddLibCommand;
+export const SimbaInfo = InfoCommand;

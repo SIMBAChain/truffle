@@ -17,6 +17,7 @@
     - [Help](#help)
 6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
 7. [CI/CD](#continuous-integration-continuous-deployment)
+8. [SimbaInfo](#simbainfo)
 
 ## Summary
 
@@ -586,3 +587,24 @@ $ git push
 And that’s it!
 
 So if you were to make changes to a contract called TestContractVt6, then run git push, you would see in your pipeline job logs that this contract was exported to SIMBA Chain
+
+### simbainfo
+This command allows you to view info from your simba.json, as well as auth token (with token redacted) from authconfig.json. The command takes two optional parameters: 'field' and 'contract'. If you run the command without any parameters:
+
+```
+$ truffle run simba simbainfo
+```
+
+then your simba.json will be printed in its entirety.
+
+For the 'field' parameter, you can either pass the exact name of a simba.json field (eg 'most_recent_deployment_info'), or you can pass one of the following abbreviations: 'org' for organisation info, 'app' for application info, 'deploy' for most recent deployment info, 'auth' for authProviderInfo, 'contracts' for all contracts (this would be the same as using the --contract all flag), 'web3' for web3Suite, 'baseurl' for 'baseURL', and 'authtoken' to retrieve info for your current auth credentials from authconfig.json. As an example, to retrieve most recent deployment info, you should run
+
+```
+$ truffle run simba simbainfo --field deploy
+```
+
+For the 'contract' parameter, you can either pass the name of a contract, eg 'MyContract,' or you can pass 'all' to view info for all of your contracts in simba.json.contracts_info. An example of this call would be
+
+```
+$ truffle run simba simbainfo --contract MyContract
+```
