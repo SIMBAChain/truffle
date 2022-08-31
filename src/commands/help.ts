@@ -17,6 +17,7 @@ enum HelpCommands {
     VIEWCONTRACTS = "viewcontracts",
     CICD = "cicd",
     CLEAN = "clean",
+    SIMBAINFO = "simbainfo",
 }
 
 export const command = 'help';
@@ -52,6 +53,7 @@ export async function help(args: yargs.Arguments) {
         HelpCommands.VIEWCONTRACTS,
         HelpCommands.CICD,
         HelpCommands.CLEAN,
+        HelpCommands.SIMBAINFO,
     ];
 
     if (!args.topic) {
@@ -129,6 +131,10 @@ export async function help(args: yargs.Arguments) {
             await cleanHelp();
             break;
         }
+        case HelpCommands.SIMBAINFO: {
+            await simbaInfoHelp();
+            break;
+        }
         default: { 
             console.log(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
            break; 
@@ -201,6 +207,11 @@ async function cleanHelp() {
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
+async function simbaInfoHelp() {
+    const message = await helpMessage("simbaInfoHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
 /**
  * pulls help message from helpOptions object
  * @param topic 
@@ -227,7 +238,8 @@ const helpOptions: any = {
     pullHelp: "\n\nThis command is mainly designed to be used in the CI/CD process, but it can actually be used for many things. Regarding the CI/CD use, if you use CI/CD to export your contracts in the CI/CD pipeline after you push, then you'll need to update your project's simba.json after you do a git pull. This is because the plugin relies on the 'source_code' field for each contract in your simba.json's 'contract_info' section to know which contracts to export. So to get the most up to date version of your exported contracts' source code in your simba.json, just run:\n\n\t$ truffle run simba pull\n\nIn addition to pulling source code for your simba.json, you can also use the pull command to pull the most recent versions of your solidity contracts from SIMBA Chain and place them in your /contracts/ directory.\n\nA brief note on file structure is worthwhile here. By default, contracts pulled from SIMBA Chain will be written to /contracts/SimbaImports/ directory. If you would like to place pulled files in the top level of your /contracts/ directory, then you can pass the --usesimbapath false flag in your call.\n\nA note on file names is also in order. Files that are pulled form SIMBA are placed into files named after the contract name. So if you have two contracts, token1 and token2, which both originally lived in OurTokens.sol. Then both of those will end up in files named token1.sol and token2.sol. This is done becuase, currently, contracts that are pushed to SIMBA Chain sit in a flat structure, without sub-directories.\n\nUsually, you shouldn't need to do pull contracts from SIMBA if you have git pulled, but there may be cases when, for instance, you want ALL of your most recent contracts from your SIMBA Chain organisation, even ones that weren't living in your current project. In that case, you can run:\n\n\t$ truffle run simba pull --pullsolfiles true\n\nThis will pull all most recent contracts from your SIMBA Chain org and place them in your /contracts/SimbaImports/ folder.\n\nIf you want to place your pulled contracts in the top level of your /contracts/ directory, instead of into /contracts/SimbaImports/, then you can run:\n\n\t$ truffle run simba pull --pullsolfiles true --usesimbapath false\n\nIf you would like to interactively choose which .sol contract files to choose, in addition to auto pulling your source code for your simba.json, you can run:\n\n\t$ truffle run simba pull --interactive true\n\nIf you would like to skip pulling your simba.json source code (though you really should not), you can set the --pullsourcecode flag to false. For example, the following command will only pull your .sol contract files:\n\n\t$ truffle run simba pull --pullsourcecode false --pullsolfiles true\n\nIf you would like to pull your .sol contract files interactively, while skipping your simba.json source code pull, you can run:\n\n\t$ truffle run simba pull --pullsourcecode false --interactive true\n\nIf you want to pull a specific contract's most recently exported edition, by name, from SIMBA, then you can run:\n\n\t$ truffle run simba pull --contractname <your contract name>\n\nIf you would like to pull a specific contract version from its design_id, you can run:\n\n\t$ truffle run simba pull --id <your contract design_id>\n\nContract design IDs can be referenced in your simba.json file under contracts_info -> contract name -> design_id. Contract design IDs can also be viewed by running:\n\n\t$ truffle run simba viewcontracts\n\n",
     viewContractsHelp: "\n\nThis command will return information pertaining to all contracts saved to your organisation on SIMBA Chain. Contract info includes: name, id, and version. For this command, just run:\n\n\t$ truffle run simba viewcontracts\n\n",
     cicdHelp: "\n\nFor CI/CD (continuous integration / continuous deployment) support in the Truffle plugin, please see: https://www.npmjs.com/package/@simbachain/truffle#continuous-integration-continuous-deployment\n\n",
-    cleanHelp: "\n\nThis command will clean up old build artifacts for your project by deleting your 'build' directory. This function automatically gets called at export, but you can explicitly call it with\n\n\t$ truffle run simba clean\n\n"
+    cleanHelp: "\n\nThis command will clean up old build artifacts for your project by deleting your 'build' directory. This function automatically gets called at export, but you can explicitly call it with\n\n\t$ truffle run simba clean\n\n",
+    simbaInfoHelp: "\n\nThis command allows you to view info from your simba.json, as well as auth token (with token redacted) from authconfig.json. The command takes two optional parameters: 'field' and 'contract'. If you run the command without any parameters:\n\n\t$ truffle run simba simbainfo\n\nthen your simba.json will be printed in its entirety. For the 'field' parameter, you can either pass the exact name of a simba.json field (eg 'most_recent_deployment_info'), or you can pass one of the following abbreviations: 'org' for organisation info, 'app' for application info, 'deploy' for most recent deployment info, 'auth' for authProviderInfo, 'contracts' for all contracts (this would be the same as using the --contract all flag), 'web3' for web3Suite, 'baseurl' for 'baseURL', and 'authtoken' to retrieve info for your current auth credentials from authconfig.json. As an example, to retrieve most recent deployment info, you should run\n\n\t$ truffle run simba simbainfo --field deploy\n\nFor the 'contract' parameter, you can either pass the name of a contract, eg 'MyContract,' or you can pass 'all' to view info for all of your contracts in simba.json.contracts_info. An example of this call would be\n\n\t$ truffle run simba simbainfo --contract MyContract\n\n",
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {
