@@ -91,10 +91,12 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         return Promise.resolve(new Error(authErrors.badAuthProviderInfo));
     }
 
+    let nb_contracts: number = 0;
     for (const file of files) {
         if (file.endsWith('Migrations.json')) {
             continue;
         }
+        nb_contracts += 1;
         SimbaConfig.log.debug(`${chalk.green(`\nsimba export: reading file: ${file}`)}`);
         const buf = await promisifiedReadFile(file, {flag: 'r'});
         if (!(buf instanceof Buffer)) {
@@ -110,6 +112,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         supplementalInfo[name].contractType = contractType;
         choices.push({title: name, value: name});
     }
+    if (!nb_contracts) {
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: no contracts in contracts directory. Please make sure your contracts have been saved.`)}`);
+        return;
+    }
+
     // use sourceCodeComparer to prevent export of contracts that
     // do not have any changes:
     const exportStatuses = await sourceCodeComparer.exportStatuses(choices);
