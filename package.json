@@ -68,6 +68,7 @@
         "@types/prompts": "^2.0.5",
         "@types/request-promise": "^4.1.46",
         "@types/trouter": "^3.1.0",
+        "axios": "^0.27.2",
         "configstore": "^5.0.1",
         "crypto-js": "^4.0.0",
         "crypto-random-string": "^3.2.0",
