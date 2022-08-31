@@ -226,6 +226,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                         design_id: resp.id,
                         contract_type: contractType,
                         source_code: sourceCode,
+                        organisation: SimbaConfig.organisation.name,
                     }
                     SimbaConfig.ProjectConfigStore.set("contracts_info", contractsInfo);
                     SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: Successful Export! Saved Contract ${chalk.greenBright(`${currentContractName}`)} to Design ID `)}${chalk.greenBright(`${resp.id}`)}`);

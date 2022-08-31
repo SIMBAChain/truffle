@@ -366,6 +366,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     contractsInfo[contractName] = contractsInfo[contractName] ?
                     contractsInfo[contractName] :
                     {};
+                    contractsInfo[contractName].application = SimbaConfig.application.name;
                     if (!_isLibrary) {
                         const contractAddress = check_resp.primary.address;
                         contractsInfo[contractName].address = contractAddress;
