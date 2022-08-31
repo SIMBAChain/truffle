@@ -11,6 +11,13 @@ export declare const builder: {
         string: boolean;
         type: string;
         describe: string;
+        default: boolean;
+    };
+    savemode: {
+        type: string;
+        describe: string;
+        choices: string[];
+        default: string;
     };
 };
 /**
