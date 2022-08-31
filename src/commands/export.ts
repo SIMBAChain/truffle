@@ -182,7 +182,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             try {
                 let resp;
                 if (await sourceCodeComparer.sourceCodeExistsInSimbaJson(currentContractName) && 
-                    savemode == 'update'
+                    savemode === 'update'
                 ) {
                     const contractId = SimbaConfig.ProjectConfigStore.get("contracts_info")[currentContractName]["design_id"]
                     resp = await authStore.doPutRequest(
@@ -285,7 +285,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             try {
                 let resp;
                 if (await sourceCodeComparer.sourceCodeExistsInSimbaJson(currentContractName) && 
-                    savemode == 'update'
+                    savemode === 'update'
                 ) {
                     const contractId = SimbaConfig.ProjectConfigStore.get("contracts_info")[currentContractName]["design_id"]
                     resp = await authStore.doPutRequest(
