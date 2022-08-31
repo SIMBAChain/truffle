@@ -112,7 +112,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         supplementalInfo[name].contractType = contractType;
         choices.push({title: name, value: name});
     }
-    if (!(nb_contracts)) {
+    if (!nb_contracts) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: no contracts in contracts directory. Make sure contracts has been saved.`)}`);
         return;
     }
