@@ -317,8 +317,10 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
         const deployment_id = resp.deployment_id;
+        const transaction_hash = resp.transaction_hash;
         config.ProjectConfigStore.set('deployment_id', deployment_id);
         SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: Contract deployment ID for contract ${contractName}:`)} ${chalk.greenBright(`${deployment_id}`)}`);
+        SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba deploy: txn hash for contract ${contractName}:`)} ${chalk.greenBright(`${transaction_hash}`)}`);
 
         let deployed = false;
         let lastState = null;
@@ -357,70 +359,54 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                     break;
                 case 'COMPLETED':
                     deployed = true;
+                    const contractName = config.ProjectConfigStore.get("primary");
+                    let contractsInfo = config.ProjectConfigStore.get("contracts_info") ?
+                        config.ProjectConfigStore.get("contracts_info") :
+                        {};
+                    contractsInfo[contractName] = contractsInfo[contractName] ?
+                    contractsInfo[contractName] :
+                    {};
                     if (!_isLibrary) {
                         const contractAddress = check_resp.primary.address;
-                        const contractName = config.ProjectConfigStore.get("primary");
-                        let contractsInfo = config.ProjectConfigStore.get("contracts_info");
-                        if (contractsInfo) {
-                            contractsInfo[contractName] = contractsInfo[contractName] ?
-                                contractsInfo[contractName] :
-                                {};
-                            contractsInfo[contractName].address = contractAddress;
-                            contractsInfo[contractName].deployment_id = deployment_id;
-                        } else {
-                            contractsInfo = {};
-                            contractsInfo[contractName] = {};
-                            contractsInfo[contractName].address = contractAddress;
-                            contractsInfo[contractName].deployment_id = deployment_id;
-                        }
+                        contractsInfo[contractName].address = contractAddress;
+                        contractsInfo[contractName].deployment_id = deployment_id;
+                        contractsInfo[contractName].transaction_hash = transaction_hash;
                         config.ProjectConfigStore.set("contracts_info", contractsInfo);
                         const most_recent_deployment_info = {
                             address: contractAddress,
                             deployment_id,
+                            transaction_hash,
                             type: "contract"
                         };
                         config.ProjectConfigStore.set('most_recent_deployment_info', most_recent_deployment_info);
                         SimbaConfig.log.info(
-                            `${chalk.cyanBright(`\nsimba deploy: contract ${chalk.greenBright(`${contractName}`)} was deployed to ${chalk.greenBright(`${contractAddress}`)} with deployment_id ${chalk.greenBright(`${deployment_id}`)} . Information pertaining to this deployment can be found in your simba.json under contracts_info.${contractName}.`)}`,
+                            `${chalk.cyanBright(`\nsimba deploy: contract ${chalk.greenBright(`${contractName}`)} was deployed to ${chalk.greenBright(`${contractAddress}`)} with deployment_id ${chalk.greenBright(`${deployment_id}`)} and transaction_hash ${chalk.greenBright(`${transaction_hash}`)}. Information pertaining to this deployment can be found in your simba.json under contracts_info.${contractName}.`)}`,
                         );
                     } else {
                         const deploymentInfo = check_resp.deployment;
-                        const libraryName = config.ProjectConfigStore.get("primary");
                         for (let i = 0; i < deploymentInfo.length; i++) {
                             const entry = deploymentInfo[i];
-                            if (!(entry.name === libraryName)) {
+                            if (!(entry.name === contractName)) {
                                 continue;
                             }
                             const libraryAddress = entry.address;
-                            let contractsInfo = config.ProjectConfigStore.get("contracts_info") as any;
-                            if (contractsInfo) {
-                                contractsInfo[libraryName] = contractsInfo[libraryName] ?
-                                    contractsInfo[libraryName] :
-                                    {};
-                                contractsInfo[libraryName].address = libraryAddress;
-                                contractsInfo[libraryName].deployment_id = deployment_id;
-                            } else {
-                                contractsInfo = {} as any;
-                                contractsInfo[libraryName] = {};
-                                contractsInfo[libraryName].address = libraryAddress;
-                                contractsInfo[libraryName].deployment_id = deployment_id;
-                            }
+                            contractsInfo[contractName].address = libraryAddress;
+                            contractsInfo[contractName].deployment_id = deployment_id;
+
                             config.ProjectConfigStore.set("contracts_info", contractsInfo);
                             const most_recent_deployment_info = {
                                 address: libraryAddress,
                                 deployment_id,
+                                transaction_hash,
                                 type: "library",
                             };
-                            let libraryAddresses = config.ProjectConfigStore.get("library_addresses") as any;
-                            if (libraryAddresses) {
-                                libraryAddresses[libraryName] = libraryAddress;
-                            } else {
-                                libraryAddresses = {}
-                                libraryAddresses[libraryName] = libraryAddress;
-                            }
+                            let libraryAddresses = config.ProjectConfigStore.get("library_addresses") ?
+                                config.ProjectConfigStore.get("library_addresses") :
+                                {};
+                            libraryAddresses[contractName] = libraryAddress;
                             config.ProjectConfigStore.set("library_addresses", libraryAddresses);
                             config.ProjectConfigStore.set("most_recent_deployment_info", most_recent_deployment_info);
-                            SimbaConfig.log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
+                            SimbaConfig.log.info(`${chalk.cyanBright(`simba: your library was deployed to address ${chalk.greenBright(`${libraryAddress}`)}, with deployment_id ${chalk.greenBright(`${deployment_id}`)} and transaction_hash ${chalk.greenBright(`${transaction_hash}`)}. Information pertaining to this deployment can be found in your simba.json`)}`);
                         }
                     }
                     break;
