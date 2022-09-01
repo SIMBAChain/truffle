@@ -11,7 +11,8 @@ export const builder = {
     'dirname': {
         'string': true,
         'type': 'string',
-        'describe': '"build" or "contract" or "contracts" or "artifact" or "artifacts" or "all"',
+        'choices': ["build", "contract", "contracts", "artifact", "artifacts", "all"],
+        'describe': 'name fo the directory to reset directory path for',
     },
 };
 
@@ -19,11 +20,8 @@ export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     let dirName = args.dirname;
     if (!dirName) {
-        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: dirname must be specified.`)}`)
-        return;
-    }
-    if (dirName !== "contract" && dirName !== "contracts" &&  dirName !== "build" && dirName !== "all") {
-        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: dirname param must be one of "contract", "contracts", "build", or "all"`)}`);
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: dirname must be specified.`)}`);
+        SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
     if (dirName === "contracts" || dirName === "contract") {
@@ -36,9 +34,11 @@ export const handler = (args: yargs.Arguments): any => {
         for (const value in AllDirs) {
             SimbaConfig.setDirectory((AllDirs as any)[value] as AllDirs, "reset");
         }
+        SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
     SimbaConfig.setDirectory(dirName as AllDirs, "reset");
+    SimbaConfig.log.debug(`:: EXIT :`);
     return;
 };
 

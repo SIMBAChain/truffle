@@ -5,6 +5,7 @@ export declare const builder: {
     dirname: {
         string: boolean;
         type: string;
+        choices: string[];
         describe: string;
     };
 };
