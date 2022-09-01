@@ -6,6 +6,9 @@ import * as HelpCommand from './help';
 import * as LogLevelCommand from './loglevel';
 import * as CleanCommand from './clean';
 import * as InfoCommand from './simbainfo';
+import * as SetDirCommand from './setdir';
+import * as GetDirCommand from "./getdirs";
+import * as ResetDirCommand from "./resetdir";
 import {
     Pull as PullCommand,
     View as ViewCommand,
@@ -23,3 +26,6 @@ export const Pull = PullCommand;
 export const View = ViewCommand;
 export const AddLib = AddLibCommand;
 export const SimbaInfo = InfoCommand;
+export const SetDir = SetDirCommand;
+export const GetDirs = GetDirCommand;
+export const ResetDir = ResetDirCommand;

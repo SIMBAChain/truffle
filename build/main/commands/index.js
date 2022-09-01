@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SimbaInfo = exports.AddLib = exports.View = exports.Pull = exports.LogLevel = exports.Help = exports.Logout = exports.Login = exports.Deploy = exports.Export = exports.Clean = void 0;
+exports.ResetDir = exports.GetDirs = exports.SetDir = exports.SimbaInfo = exports.AddLib = exports.View = exports.Pull = exports.LogLevel = exports.Help = exports.Logout = exports.Login = exports.Deploy = exports.Export = exports.Clean = void 0;
 const ExportCommand = __importStar(require("./export"));
 const DeployCommand = __importStar(require("./deploy"));
 const LoginCommand = __importStar(require("./login"));
@@ -28,6 +28,9 @@ const HelpCommand = __importStar(require("./help"));
 const LogLevelCommand = __importStar(require("./loglevel"));
 const CleanCommand = __importStar(require("./clean"));
 const InfoCommand = __importStar(require("./simbainfo"));
+const SetDirCommand = __importStar(require("./setdir"));
+const GetDirCommand = __importStar(require("./getdirs"));
+const ResetDirCommand = __importStar(require("./resetdir"));
 const contract_1 = require("./contract");
 exports.Clean = CleanCommand;
 exports.Export = ExportCommand;
@@ -40,4 +43,7 @@ exports.Pull = contract_1.Pull;
 exports.View = contract_1.View;
 exports.AddLib = contract_1.AddLib;
 exports.SimbaInfo = InfoCommand;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvY29tbWFuZHMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLHdEQUEwQztBQUMxQyx3REFBMEM7QUFDMUMsc0RBQXdDO0FBQ3hDLHdEQUEwQztBQUMxQyxvREFBc0M7QUFDdEMsNERBQThDO0FBQzlDLHNEQUF3QztBQUN4Qyx5REFBMkM7QUFDM0MseUNBSW9CO0FBRVAsUUFBQSxLQUFLLEdBQUcsWUFBWSxDQUFDO0FBQ3JCLFFBQUEsTUFBTSxHQUFHLGFBQWEsQ0FBQztBQUN2QixRQUFBLE1BQU0sR0FBRyxhQUFhLENBQUM7QUFDdkIsUUFBQSxLQUFLLEdBQUcsWUFBWSxDQUFDO0FBQ3JCLFFBQUEsTUFBTSxHQUFHLGFBQWEsQ0FBQztBQUN2QixRQUFBLElBQUksR0FBRyxXQUFXLENBQUM7QUFDbkIsUUFBQSxRQUFRLEdBQUcsZUFBZSxDQUFDO0FBQzNCLFFBQUEsSUFBSSxHQUFHLGVBQVcsQ0FBQztBQUNuQixRQUFBLElBQUksR0FBRyxlQUFXLENBQUM7QUFDbkIsUUFBQSxNQUFNLEdBQUcsaUJBQWEsQ0FBQztBQUN2QixRQUFBLFNBQVMsR0FBRyxXQUFXLENBQUMifQ==
+exports.SetDir = SetDirCommand;
+exports.GetDirs = GetDirCommand;
+exports.ResetDir = ResetDirCommand;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvY29tbWFuZHMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLHdEQUEwQztBQUMxQyx3REFBMEM7QUFDMUMsc0RBQXdDO0FBQ3hDLHdEQUEwQztBQUMxQyxvREFBc0M7QUFDdEMsNERBQThDO0FBQzlDLHNEQUF3QztBQUN4Qyx5REFBMkM7QUFDM0Msd0RBQTBDO0FBQzFDLHlEQUEyQztBQUMzQyw0REFBOEM7QUFDOUMseUNBSW9CO0FBRVAsUUFBQSxLQUFLLEdBQUcsWUFBWSxDQUFDO0FBQ3JCLFFBQUEsTUFBTSxHQUFHLGFBQWEsQ0FBQztBQUN2QixRQUFBLE1BQU0sR0FBRyxhQUFhLENBQUM7QUFDdkIsUUFBQSxLQUFLLEdBQUcsWUFBWSxDQUFDO0FBQ3JCLFFBQUEsTUFBTSxHQUFHLGFBQWEsQ0FBQztBQUN2QixRQUFBLElBQUksR0FBRyxXQUFXLENBQUM7QUFDbkIsUUFBQSxRQUFRLEdBQUcsZUFBZSxDQUFDO0FBQzNCLFFBQUEsSUFBSSxHQUFHLGVBQVcsQ0FBQztBQUNuQixRQUFBLElBQUksR0FBRyxlQUFXLENBQUM7QUFDbkIsUUFBQSxNQUFNLEdBQUcsaUJBQWEsQ0FBQztBQUN2QixRQUFBLFNBQVMsR0FBRyxXQUFXLENBQUM7QUFDeEIsUUFBQSxNQUFNLEdBQUcsYUFBYSxDQUFDO0FBQ3ZCLFFBQUEsT0FBTyxHQUFHLGFBQWEsQ0FBQztBQUN4QixRQUFBLFFBQVEsR0FBRyxlQUFlLENBQUMifQ==
