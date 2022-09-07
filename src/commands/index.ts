@@ -13,6 +13,7 @@ import {
     Pull as PullCommand,
     View as ViewCommand,
     AddLib as AddLibCommand,
+    DeleteContract as DeleteCommand,
 } from "./contract";
 
 export const Clean = CleanCommand;
@@ -29,3 +30,4 @@ export const SimbaInfo = InfoCommand;
 export const SetDir = SetDirCommand;
 export const GetDirs = GetDirCommand;
 export const ResetDir = ResetDirCommand;
+export const DeleteContract = DeleteCommand;

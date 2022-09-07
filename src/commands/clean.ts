@@ -4,8 +4,6 @@ import {
 } from "@simbachain/web3-suites";
 import {default as chalk} from "chalk";
 import * as fs from "fs";
-import * as path from "path";
-import {cwd} from "process";
 
 export const command = 'clean';
 export const describe = 'clean artifacts by removing build directory';
@@ -21,17 +19,18 @@ export const handler = async (): Promise<any> => {
 }
 
 export async function clean_builds() {
-    const filePath = path.join(cwd(), "build");
+    const filePath = SimbaConfig.buildDirectory;
+    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: cleaning build artifacts`)}`);
     try {
         if (fs.existsSync(filePath)) {
             fs.rmSync(filePath, { recursive: true });
-            SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: builds directory cleaned.`)}`)
+            SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: build directory cleaned.`)}`)
         } else {
-            SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: builds directory already empty, nothing to do.`)}`)
+            SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: build directory already empty; nothing to delete.`)}`)
         
         }
     } catch (err) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: error while deleting ${filePath}.`)}`)
-        SimbaConfig.log.debug(`${chalk.redBright(`\nsimabe: ${JSON.stringify(err)}.`)}`)
+        SimbaConfig.log.debug(`${chalk.redBright(`\nsimba: ${JSON.stringify(err)}.`)}`)
     }
 }
