@@ -32,6 +32,6 @@ export async function clean_builds() {
         }
     } catch (err) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: error while deleting ${filePath}.`)}`)
-        SimbaConfig.log.debug(`${chalk.redBright(`\nsimabe: ${JSON.stringify(err)}.`)}`)
+        SimbaConfig.log.debug(`${chalk.redBright(`\nsimba: ${JSON.stringify(err)}.`)}`)
     }
 }
