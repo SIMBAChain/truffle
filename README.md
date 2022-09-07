@@ -21,6 +21,7 @@
 9. [Viewing current directory paths for your project](#getdirs)
 10. [Setting a directory path](#setdir)
 11. [Resetting directory paths to default settings](#resetdir)
+12. [Deleting contracts from your organisation](#deletecontract)
 
 ## Summary
 
@@ -642,4 +643,18 @@ To reset both of 'contracts' and 'build', run:
 
 ```
 $ truffle run simba resetdir --dirname all
+```
+
+### deletecontract
+
+This command allows the user to delete contract designs from their organisation. This command can be run with an optional 'id' parameter to delete a single contract, or it can be run without any parameters, which will allow the user to choose from prompts which contract designs they want to delete. To run with the 'id' parameter:
+
+```
+$ truffle run simba deletecontract --id <your contract design_id>
+```
+
+To run without parameters:
+
+```
+$ truffle run simba deletecontract
 ```

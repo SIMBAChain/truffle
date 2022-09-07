@@ -23,3 +23,4 @@ export declare const SimbaInfo: typeof InfoCommand;
 export declare const SetDir: typeof SetDirCommand;
 export declare const GetDirs: typeof GetDirCommand;
 export declare const ResetDir: typeof ResetDirCommand;
+export declare const DeleteContract: typeof import("./contract/deletecontract");

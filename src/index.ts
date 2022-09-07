@@ -21,6 +21,7 @@ import {
     SetDir,
     GetDirs,
     ResetDir,
+    DeleteContract,
 } from './commands';
 
 const parseArgs = (config: any): Promise<any> =>
@@ -47,6 +48,7 @@ const parseArgs = (config: any): Promise<any> =>
                         .command(SetDir as yargs.CommandModule)
                         .command(GetDirs as yargs.CommandModule)
                         .command(ResetDir as yargs.CommandModule)
+                        .command(DeleteContract as yargs.CommandModule)
                         .demandCommand(1, 'You need at least one command before moving on'),
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 (_yargs: yargs.Arguments) => {
