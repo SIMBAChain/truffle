@@ -57,7 +57,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 break;
             }
             default: { 
-                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
                 return;
              } 
         }

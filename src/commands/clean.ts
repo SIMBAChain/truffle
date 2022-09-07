@@ -19,7 +19,7 @@ export const handler = async (): Promise<any> => {
 }
 
 export async function clean_builds() {
-    const filePath = SimbaConfig.buildDirectory;
+    const filePath = SimbaConfig.artifactDirectory;
     SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: cleaning build artifacts`)}`);
     try {
         if (fs.existsSync(filePath)) {

@@ -41,7 +41,6 @@ export const builder = {
  * @returns 
  */
 export async function help(args: yargs.Arguments) {
-    console.log(`args: ${JSON.stringify(args)}`);
     let helpTopic: string;
 
     const paramInputChoices = [
@@ -160,7 +159,7 @@ export async function help(args: yargs.Arguments) {
             break;
         }
         default: { 
-            console.log(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
+            SimbaConfig.log.error(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
            break; 
         } 
     }

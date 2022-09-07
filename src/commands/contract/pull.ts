@@ -71,7 +71,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 break;
             }
             default: { 
-                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
                 return;
             } 
         }
@@ -91,7 +91,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 break;
             }
             default: { 
-                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "pullsourcecode" flag. Please enter '--pullsourcecode true' or '--pullsourcecode false' for this flag`)}`);
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "pullsourcecode" flag. Please enter '--pullsourcecode true' or '--pullsourcecode false' for this flag`)}`);
                 return;
             } 
         }
@@ -111,7 +111,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 break;
             }
             default: { 
-                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "pullsolfiles" flag. Please enter '--pullsolfiles true' or '--pullsolfiles false' for this flag`)}`);
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "pullsolfiles" flag. Please enter '--pullsolfiles true' or '--pullsolfiles false' for this flag`)}`);
                 return;
             } 
         }
@@ -131,7 +131,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
                 break;
             }
             default: { 
-                console.log(`${chalk.redBright(`\nsimba: unrecognized value for "useSimbaPath" flag. Please enter '--useSimbaPath true' or '--useSimbaPath false' for this flag`)}`);
+                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "useSimbaPath" flag. Please enter '--useSimbaPath true' or '--useSimbaPath false' for this flag`)}`);
                 return;
             } 
         }
