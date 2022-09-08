@@ -54,11 +54,16 @@ interface Request {
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    let primary = args.primary;
-    let interactive = args.interactive;
-    let savemode = args.savemode;
+    //let primary: string = args.primary;
+    //let interactive: boolean = args.interactive;
+    //let savemode: string = args.savemode;
+    await export_contracts(args.primary, args.interactive, args.savemode);
+    return Promise.resolve(null);
+};
+
+
+export async function export_contracts(primary, interactive, savemode): Promise<any> {
     clean_builds()
-    
     const buildDir = SimbaConfig.buildDirectory;
     SimbaConfig.log.debug(`buildDir: ${buildDir}`);
     let files: string[] = [];
@@ -346,4 +351,4 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
     }
-};
+}

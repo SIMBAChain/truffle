@@ -1,0 +1,28 @@
+import {
+    SimbaConfig,
+} from "@simbachain/web3-suites";
+import {export_contracts} from "../../commands/export";
+import { expect } from 'chai';
+import yargs from 'yargs';
+import 'mocha';
+
+describe('tests export', () => {
+    it('design_id for TestContractChanged should be different, then stay the same', async () => {
+        const bob = yargs(['interactive', 'false']);
+        const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
+        const originalDesignID = originalSimbaJson.contracts_info.TestContractChanged.design_id;
+        await export_contracts('', false, 'new');
+        const newDesignID = SimbaConfig.ProjectConfigStore.get("contracts_info").TestContractChanged.design_id;
+        expect(newDesignID).to.exist;
+        expect(originalDesignID).to.not.equal(newDesignID);
+
+        await export_contracts('', false, 'new');
+        const newestDesignID = SimbaConfig.ProjectConfigStore.get("contracts_info").TestContractChanged.design_id;
+        expect(newDesignID).to.exist;
+        expect(newDesignID).to.equal(newestDesignID);
+
+        // reset
+        SimbaConfig.ProjectConfigStore.clear();
+        SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
+    }).timeout(10000);
+});

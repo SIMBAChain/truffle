@@ -21,14 +21,15 @@ const deployInfo = {
 describe('tests deploy', () => {
     it('testing that endpoint is being hit correctly, but not actually deploying since "ourtestapi" already exists', async () => {
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
-        // let detail: any;
-        // const res = await handler(undefined, deployInfo);
-        // if (axios.isAxiosError(res) && res.response) {
-        //         detail = res.response.data.errors[0].detail;
-        //     } else {
-        //         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unknown error type`)}`);
-        //     }
-        // expect(detail).to.equal(`name ${deployInfo.api} already exists`);
+        let detail: any;
+        const res = await handler(undefined, deployInfo);
+        if (axios.isAxiosError(res) && res.response) {
+            console.log(res.response);
+            detail = res.response.data.errors[0].detail;
+        } else {
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unknown error type`)}`);
+        }
+        expect(detail).to.equal(`name ${deployInfo.api} already exists`);
         SimbaConfig.ProjectConfigStore.clear();
         SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
     }).timeout(150000);
