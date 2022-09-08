@@ -22,10 +22,11 @@ describe('tests deploy', () => {
     it('testing that endpoint is being hit correctly, but not actually deploying since "ourtestapi" already exists', async () => {
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
         let detail: any;
-        const res = await handler(undefined, deployInfo);
+        const res = await handler(undefined, deployInfo) as any;
         if (axios.isAxiosError(res) && res.response) {
             console.log(res.response);
-            detail = res.response.data.errors[0].detail;
+            const data = res.response.data as any;
+            detail = data.errors[0].detail;
         } else {
             SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unknown error type`)}`);
         }
