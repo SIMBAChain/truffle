@@ -1,3 +1,7 @@
+
+# build
+build
+
 node_modules
 test
 src/**.js

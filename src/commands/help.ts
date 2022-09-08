@@ -18,6 +18,10 @@ enum HelpCommands {
     CICD = "cicd",
     CLEAN = "clean",
     SIMBAINFO = "simbainfo",
+    GETDIRS = "getdirs",
+    SETDIR = "setdir",
+    RESETDIR = "resetdir",
+    DELETECONTRACT = "deletecontract",
 }
 
 export const command = 'help';
@@ -37,7 +41,6 @@ export const builder = {
  * @returns 
  */
 export async function help(args: yargs.Arguments) {
-    console.log(`args: ${JSON.stringify(args)}`);
     let helpTopic: string;
 
     const paramInputChoices = [
@@ -54,6 +57,10 @@ export async function help(args: yargs.Arguments) {
         HelpCommands.CICD,
         HelpCommands.CLEAN,
         HelpCommands.SIMBAINFO,
+        HelpCommands.GETDIRS,
+        HelpCommands.SETDIR,
+        HelpCommands.RESETDIR,
+        HelpCommands.DELETECONTRACT,
     ];
 
     if (!args.topic) {
@@ -135,8 +142,24 @@ export async function help(args: yargs.Arguments) {
             await simbaInfoHelp();
             break;
         }
+        case HelpCommands.GETDIRS: {
+            await getDirsHelp();
+            break;
+        }
+        case HelpCommands.SETDIR: {
+            await setDirHelp();
+            break;
+        }
+        case HelpCommands.RESETDIR: {
+            await resetDirHelp();
+            break;
+        }
+        case HelpCommands.DELETECONTRACT: {
+            await deleteContractHelp();
+            break;
+        }
         default: { 
-            console.log(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
+            SimbaConfig.log.error(`${chalk.cyanBright(`Please enter a valid topic from these choices: ${chalk.greenBright(`${JSON.stringify(paramInputChoices)}.`)} For example, run '$ truffle run simba help --topic deploy' for help deploying your contract.`)}`);
            break; 
         } 
     }
@@ -212,6 +235,26 @@ async function simbaInfoHelp() {
     SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
 }
 
+async function getDirsHelp() {
+    const message = await helpMessage("getDirsHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function setDirHelp() {
+    const message = await helpMessage("setDirHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function resetDirHelp() {
+    const message = await helpMessage("resetDirHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
+async function deleteContractHelp() {
+    const message = await helpMessage("deleteContractHelp");
+    SimbaConfig.log.info(`${chalk.cyanBright("simba help:")}${chalk.greenBright(message)}`);
+}
+
 /**
  * pulls help message from helpOptions object
  * @param topic 
@@ -240,6 +283,10 @@ const helpOptions: any = {
     cicdHelp: "\n\nFor CI/CD (continuous integration / continuous deployment) support in the Truffle plugin, please see: https://www.npmjs.com/package/@simbachain/truffle#continuous-integration-continuous-deployment\n\n",
     cleanHelp: "\n\nThis command will clean up old build artifacts for your project by deleting your 'build' directory. This function automatically gets called at export, but you can explicitly call it with\n\n\t$ truffle run simba clean\n\n",
     simbaInfoHelp: "\n\nThis command allows you to view info from your simba.json, as well as auth token (with token redacted) from authconfig.json. The command takes two optional parameters: 'field' and 'contract'. If you run the command without any parameters:\n\n\t$ truffle run simba simbainfo\n\nthen your simba.json will be printed in its entirety. For the 'field' parameter, you can either pass the exact name of a simba.json field (eg 'most_recent_deployment_info'), or you can pass one of the following abbreviations: 'org' for organisation info, 'app' for application info, 'deploy' for most recent deployment info, 'auth' for authProviderInfo, 'contracts' for all contracts (this would be the same as using the --contract all flag), 'web3' for web3Suite, 'baseurl' for 'baseURL', and 'authtoken' to retrieve info for your current auth credentials from authconfig.json. As an example, to retrieve most recent deployment info, you should run\n\n\t$ truffle run simba simbainfo --field deploy\n\nFor the 'contract' parameter, you can either pass the name of a contract, eg 'MyContract,' or you can pass 'all' to view info for all of your contracts in simba.json.contracts_info. An example of this call would be\n\n\t$ truffle run simba simbainfo --contract MyContract\n\n",
+    getDirsHelp: "\n\nThis command will retrieve and print the current path to relevant directories in your project: 'artifacts', 'contracts', and 'build'. Note that in Truffle projects, 'artifacts' and 'build' are the same directory. Simply run:\n\n\t$ truffle run simba getdirs\n\n",
+    setDirHelp: "\n\nThis command allows the user to set the absolute directory path for a relevant directory in their project. Most users won't need this, but there may be cases in which you've changed your default directory for 'contracts' or 'build'. Note that you should not need this functionality in a Truffle project, and should only modify your directory paths if you REALLY know what you're doing. The model use case for this functionality would be if you're using a Foundry project that has been integrated into a Hardhat project. To set a new directory path, pass the -dirname and -dirpath parameters. Valid values for dirname are 'contract', 'contracts', and 'build'. Note that 'contract' and 'contracts' both refer to the directory named 'contracts'. So for instance, to change the absolute directory path for 'build' to '/myhomedir/dev/myproject/build/', just run:\n\n\t$ truffle run simba setdir --dirname build --dirpath /myhomedir/dev/myproject/build/\n\nNote that if you pass 'reset' as --dirpath, then the path to the directory specified in --dirname will be reset to its default path.\n\n",
+    resetDirHelp: "\n\nThis command allows the user to reset a directory path for 'build' and 'contracts' to default settings for their project. To reset a directory path with this command, just pass --dirname, which can be any of 'build', 'contract', 'contracts', or 'all'. Note that 'contract' and 'contracts' both refer to the directory named 'contracts'. So for example, to reset the path to your 'contracts' directory, just run:\n\n\t$ truffle run simba resetdir --dirname contracts\n\nTo reset both of 'contracts' and 'build', run:\n\n\t$ truffle run simba resetdir --dirname all\n\n",
+    deleteContractHelp: "\n\nThis command allows the user to delete contract designs from their organisation. This command can be run with an optional 'id' parameter to delete a single contract, or it can be run without any parameters, which will allow the user to choose from prompts which contract designs they want to delete. To run with the 'id' parameter:\n\n\t$ truffle run simba deletecontract --id <your contract design_id>\n\nTo run without parameters:\n\n\t$ truffle run simba deletecontract\n\n"
 }
 
 export const handler = async (args: yargs.Arguments): Promise<any> => {

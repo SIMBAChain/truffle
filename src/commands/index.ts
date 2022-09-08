@@ -6,10 +6,14 @@ import * as HelpCommand from './help';
 import * as LogLevelCommand from './loglevel';
 import * as CleanCommand from './clean';
 import * as InfoCommand from './simbainfo';
+import * as SetDirCommand from './setdir';
+import * as GetDirCommand from "./getdirs";
+import * as ResetDirCommand from "./resetdir";
 import {
     Pull as PullCommand,
     View as ViewCommand,
     AddLib as AddLibCommand,
+    DeleteContract as DeleteCommand,
 } from "./contract";
 
 export const Clean = CleanCommand;
@@ -23,3 +27,7 @@ export const Pull = PullCommand;
 export const View = ViewCommand;
 export const AddLib = AddLibCommand;
 export const SimbaInfo = InfoCommand;
+export const SetDir = SetDirCommand;
+export const GetDirs = GetDirCommand;
+export const ResetDir = ResetDirCommand;
+export const DeleteContract = DeleteCommand;

@@ -17,7 +17,11 @@
     - [Help](#help)
 6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
 7. [CI/CD](#continuous-integration-continuous-deployment)
-8. [SimbaInfo](#simbainfo)
+8. [Retrieving information from simba.json and authconfig.json](#simbainfo)
+9. [Viewing current directory paths for your project](#getdirs)
+10. [Setting a directory path](#setdir)
+11. [Resetting directory paths to default settings](#resetdir)
+12. [Deleting contracts from your organisation](#deletecontract)
 
 ## Summary
 
@@ -607,4 +611,50 @@ For the 'contract' parameter, you can either pass the name of a contract, eg 'My
 
 ```
 $ truffle run simba simbainfo --contract MyContract
+```
+
+#### getdirs
+
+This command will retrieve and print the current path to relevant directories in your project: 'artifacts', 'contracts', and 'build'. Note that in Truffle projects, 'artifacts' and 'build' are the same directory. Simply run:
+
+```
+$ truffle run simba getdirs
+```
+
+### setdir
+
+This command allows the user to set the absolute directory path for a relevant directory in their project. Most users won't need this, but there may be cases in which you've changed your default directory for 'contracts' or 'build'. Note that you should not need this functionality in a Truffle project, and should only modify your directory paths if you REALLY know what you're doing. The model use case for this functionality would be if you're using a Foundry project that has been integrated into a Hardhat project. To set a new directory path, pass the -dirname and -dirpath parameters. Valid values for dirname are 'contract', 'contracts', and 'build'. Note that 'contract' and 'contracts' both refer to the directory named 'contracts'. So for instance, to change the absolute directory path for 'build' to '/myhomedir/dev/myproject/build/', just run:
+
+```
+$ truffle run simba setdir --dirname build --dirpath /myhomedir/dev/myproject/build/
+```
+
+Note that if you pass 'reset' as --dirpath, then the path to the directory specified in --dirname will be reset to its default path.
+
+### resetdir
+
+This command allows the user to reset a directory path for 'build' and 'contracts' to default settings for their project. To reset a directory path with this command, just pass --dirname, which can be any of 'build', 'contract', 'contracts', or 'all'. Note that 'contract' and 'contracts' both refer to the directory named 'contracts'. So for example, to reset the path to your 'contracts' directory, just run:
+
+```
+$ truffle run simba resetdir --dirname contracts
+```
+
+To reset both of 'contracts' and 'build', run:
+
+```
+$ truffle run simba resetdir --dirname all
+```
+
+### deletecontract
+
+This command allows the user to delete contract designs from their organisation. This command can be run with an optional 'id' parameter to delete a single contract, or it can be run without any parameters, which will allow the user to choose from prompts which contract designs they want to delete. To run with the 'id' parameter:
+
+```
+$ truffle run simba deletecontract --id <your contract design_id>
+```
+
+To run without parameters:
+
+```
+$ truffle run simba deletecontract
 ```
