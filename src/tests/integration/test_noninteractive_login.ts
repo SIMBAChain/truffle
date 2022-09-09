@@ -7,7 +7,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 
-describe('tests login', () => {
+describe('tests noninteractive login', () => {
     it('authtoken should be present in authconfig.json after login; org and app should be in simba.json after login', async () => {
         // grab full simba.json so we can use it to reset after
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
