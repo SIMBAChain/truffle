@@ -15,8 +15,9 @@ export const describe = 'log in to SIMBAChain SCaaS';
 export const builder = {
     'interactive': {
         'string': true,
-        'type': 'string',
-        'describe': '"true" or "false" for interactive export mode'
+        'type': 'boolean',
+        'describe': 'true or false for interactive export mode',
+        'default': true,
     },
     'org': {
         'string': true,
@@ -38,33 +39,27 @@ export const builder = {
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    const simbaConfig = args.config as SimbaConfig;
-    const authStore = await SimbaConfig.authStore();
-    let _interactive = args.interactive;
+    const interactive = args.interactive;
     const org = args.org;
     const app = args.app;
-    let interactive: boolean;
-    const previousSimbaJson = SimbaConfig.ProjectConfigStore.all;
-    if (_interactive && typeof _interactive === 'string') {
-        _interactive = _interactive.toLowerCase();
-        switch (_interactive) {
-            case "false": {
-                interactive = false;
-                break;
-            }
-            case "true": {
-                interactive = true;
-                break;
-            }
-            default: { 
-                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
-                return;
-             } 
-        }
-    } else {
-        interactive = true;
-    }
+    await login(interactive, org, app)
+    SimbaConfig.log.debug(`:: EXIT :`);
+};
 
+export async function login(
+    interactive: boolean | unknown = true,
+    org?: string | unknown,
+    app?: string | unknown,
+) {
+    const entryParams = {
+        interactive,
+        org,
+        app,
+    };
+    SimbaConfig.log.debug(`:: ENTER : entryParams : ${JSON.stringify(entryParams)}`);
+    const authStore = await SimbaConfig.authStore();
+    const simbaConfig = new SimbaConfig();
+    const previousSimbaJson = SimbaConfig.ProjectConfigStore.all;
     if (authStore == null) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: authStore not set!`)}`);
         return;
@@ -100,7 +95,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         }
         authStore.logout();
         try {
-            await authStore.performLogin(interactive);
+            await authStore.performLogin(interactive as boolean);
             if (org) {
                 orgData = await chooseOrganisationFromName(simbaConfig, org as string);
             }
@@ -157,4 +152,6 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     } catch (e) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: ${e}`)}`)
     }
-};
+}
+
+
