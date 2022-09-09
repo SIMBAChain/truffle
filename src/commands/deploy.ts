@@ -448,11 +448,13 @@ export const handler = async (
         Promise.resolve(retVal);
     }  catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
+            SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`);
+            return error;
         } else {
             SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
+            return error;
         }
-        return;
     }
     SimbaConfig.log.debug(`:: EXIT :`);
+    return;
 };
