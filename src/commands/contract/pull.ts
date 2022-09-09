@@ -63,6 +63,35 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     let pullSourceCode = args.pullsourcecode as boolean;
     let useSimbaPath = args.usesimbapath as boolean;
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    await pull(
+        designID,
+        contractName,
+        pullSourceCode,
+        pullSolFiles,
+        interactive,
+        useSimbaPath,
+    )
+    SimbaConfig.log.debug(`:: EXIT :`);
+    return;
+};
+
+export async function pull(
+    designID?: string | unknown,
+    contractName?: string | unknown,
+    pullSourceCode: boolean | unknown = true,
+    pullSolFiles: boolean | unknown = false,
+    interactive: boolean | unknown = false,
+    useSimbaPath: boolean | unknown = true,
+): Promise<any> {
+    const entryParams = {
+        designID,
+        contractName,
+        pullSourceCode,
+        pullSolFiles,
+        interactive,
+        useSimbaPath,
+    };
+    SimbaConfig.log.debug(`:: ENTER : entryParams : ${JSON.stringify(entryParams)}`);
     if (designID && contractName) {
         const message = `${chalk.redBright(`\nsimba: designid and contractname were both specified. Only one of these parameters can be passed.`)}`;
         SimbaConfig.log.error(message);
@@ -79,18 +108,18 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         return;
     }
     if (designID) {
-        await pullContractFromDesignId(designID as string, useSimbaPath);
+        await pullContractFromDesignId(designID as string, useSimbaPath as boolean);
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
     if (contractName) {
         if (pullSolFiles && pullSourceCode) {
-            await pullMostRecentFromContractName(contractName as string, undefined, useSimbaPath);
+            await pullMostRecentFromContractName(contractName as string, undefined, useSimbaPath as boolean);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
         if (pullSolFiles) {
-            await pullMostRecentRecentSolFileFromContractName(contractName as string, undefined, useSimbaPath);
+            await pullMostRecentRecentSolFileFromContractName(contractName as string, undefined, useSimbaPath as boolean);
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         }
@@ -100,7 +129,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             return;
         }
         // default to pulling sol files and source code for simba.json
-        await pullMostRecentFromContractName(contractName as string, undefined, useSimbaPath);
+        await pullMostRecentFromContractName(contractName as string, undefined, useSimbaPath as boolean);
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
@@ -108,11 +137,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
         pullSolFiles = true;
     }
     await pullAllMostRecentSolFilesAndSourceCode(
-        pullSourceCode,
-        pullSolFiles,
-        interactive,
-        useSimbaPath,
+        pullSourceCode as boolean,
+        pullSolFiles as boolean,
+        interactive as boolean,
+        useSimbaPath as boolean,
     );
     SimbaConfig.log.debug(`:: EXIT :`);
     return;
-};
+}
