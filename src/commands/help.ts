@@ -34,6 +34,12 @@ export const builder = {
     },
 };
 
+export const handler = async (args: yargs.Arguments): Promise<any> => {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    await help(args);
+    Promise.resolve(null);
+};
+
 /**
  * retrieve help on a topic
  * @param args
@@ -289,8 +295,3 @@ const helpOptions: any = {
     deleteContractHelp: "\n\nThis command allows the user to delete contract designs from their organisation. This command can be run with an optional 'id' parameter to delete a single contract, or it can be run without any parameters, which will allow the user to choose from prompts which contract designs they want to delete. To run with the 'id' parameter:\n\n\t$ truffle run simba deletecontract --id <your contract design_id>\n\nTo run without parameters:\n\n\t$ truffle run simba deletecontract\n\n"
 }
 
-export const handler = async (args: yargs.Arguments): Promise<any> => {
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    await help(args);
-    Promise.resolve(null);
-};

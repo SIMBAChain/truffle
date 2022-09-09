@@ -15,6 +15,12 @@ export const builder = {};
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    await printAllContracts();
+    await viewContracts();
     SimbaConfig.log.debug(`:: EXIT :`);
 };
+
+async function viewContracts(): Promise<any> {
+    SimbaConfig.log.debug(`:: ENTER :`);
+    await printAllContracts();
+    SimbaConfig.log.debug(`:: EXIT :`);
+}
