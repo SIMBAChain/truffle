@@ -21,16 +21,22 @@ export const builder = {
     },
 };
 
+export const handler = async (args: yargs.Arguments): Promise<any> => {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    const level = args.level;
+    await logLevel(level);
+    Promise.resolve(null);
+};
+
 /**
  * choose minimum logging level, such as "debug", "info", etc.
  * @param args 
  * args can contain optional param args.level
  * @returns 
  */
-export async function loglevel(args: yargs.Arguments) {
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-
-    if (!args.level) {
+export async function logLevel(level?: string | unknown) {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(level)}`);
+    if (!level) {
         const paramInputChoices = [
             LogLevel.DEBUG,
             LogLevel.ERROR,
@@ -65,8 +71,7 @@ export async function loglevel(args: yargs.Arguments) {
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     } else {
-        const level = args.level as string;
-        const lowLevel = level.toLowerCase();
+        const lowLevel = (level as string).toLowerCase();
         if (!Object.values(LogLevel).includes(lowLevel as any)) {
             SimbaConfig.log.error(`${chalk.redBright(`simba: log level can only be one of: 'error', 'debug', 'info', 'warn', 'fatal', 'silly', 'trace'`)}`);
             SimbaConfig.log.debug(`:: EXIT :`);
@@ -78,11 +83,5 @@ export async function loglevel(args: yargs.Arguments) {
         return;
     }
 }
-
-export const handler = async (args: yargs.Arguments): Promise<any> => {
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    await loglevel(args);
-    Promise.resolve(null);
-};
 
 

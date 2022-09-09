@@ -33,7 +33,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 };
 
 export async function addLibrary(libName: string | undefined, libAddress: string | undefined): Promise<void> {
+    const entryParams = {
+        libName,
+        libAddress,
+    };
+    SimbaConfig.log.debug(`:: ENTER : enteryParams : ${JSON.stringify(entryParams)}`);
     await addLib(libName, libAddress);
+    SimbaConfig.log.debug(`:: EXIT :`);
 }
 
 

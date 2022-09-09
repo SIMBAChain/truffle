@@ -51,13 +51,13 @@ export const builder = {
  * @returns 
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const designID = args.id;
     let interactive = args.interactive;
     const contractName = args.contractname;
     let pullSolFiles = args.pullsolfiles;
     let pullSourceCode = args.pullsourcecode;
     let useSimbaPath = args.usesimbapath;
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     let _interactive: boolean = true;
     if (interactive) {
         interactive = (interactive as string).toLowerCase();
@@ -72,6 +72,7 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
             }
             default: { 
                 SimbaConfig.log.error(`${chalk.redBright(`\nsimba: unrecognized value for "interactive" flag. Please enter '--interactive true' or '--interactive false' for this flag`)}`);
+                SimbaConfig.log.debug(`:: EXIT :`);
                 return;
             } 
         }
