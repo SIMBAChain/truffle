@@ -1,7 +1,7 @@
 import {default as chalk} from 'chalk';
 import axios from "axios";
 import {default as prompt} from 'prompts';
-import yargs from 'yargs';
+import yargs, { string } from 'yargs';
 import {
     SimbaConfig,
     chooseApplicationFromList,
@@ -11,40 +11,6 @@ import {
     primaryConstructorInputs,
     authErrors,
 } from '@simbachain/web3-suites';
-
-export const command = 'deploy';
-export const describe = 'deploy the project to SIMBAChain SCaaS';
-export const builder = {
-    'api': {
-        'string': true,
-        'type': 'string',
-        'describe': 'the name of the api to deploy to',
-    },
-    'app': {
-        'string': true,
-        'type': 'string',
-        'describe': 'the name of the app to deploy to',
-    },
-    'blockchain': {
-        'string': true,
-        'type': 'string',
-        'describe': 'the name of the blockchain to deploy to',
-    },
-    'storage': {
-        'string': true,
-        'type': 'string',
-        'describe': 'the name of the storage to deploy to',
-    },
-    'args': {
-        'string': true,
-        'type': 'string',
-        'describe': 'arguments for the contract as a JSON dictionary',
-    },
-    'noinput': {
-        'type': 'boolean',
-        'describe': 'skip interactive questions',
-    },
-};
 
 interface DeploymentArguments {
     [key: string]: any;
@@ -63,20 +29,82 @@ interface DeploymentRequest {
     lib_name?: string;
 }
 
+export const command = 'deploy';
+export const describe = 'deploy the project to SIMBAChain SCaaS';
+export const builder = {
+    'primary': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - name of contract to be deployed'
+    },
+    'url': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - url to deploy contract to',
+    },
+    'api': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - the name of the api to deploy to',
+    },
+    'app': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - the name of the app to deploy to',
+    },
+    'blockchain': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - the name of the blockchain to deploy to',
+    },
+    'storage': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - the name of the storage to deploy to',
+    },
+    'args': {
+        'string': true,
+        'type': 'string',
+        'describe': 'optional - arguments for the contract as a JSON dictionary',
+    },
+};
+
 /**
  * for deploying contract to simbachain.com
  * @param args 
  * @returns 
  */
 export const handler = async (
-    args?: yargs.Arguments,
-    deployInfo?: Record<any, any>,
+    args: yargs.Arguments,
 ): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    let primary;
-    if (args) {
-        primary = args.primary;
+    const primary = args.primary;
+    const url = args.url;
+    const api = args.primary;
+    const app = args.app;
+    const blockchain = args.blockchain;
+    const deployArgs = args.args ? JSON.parse(args.args as string) : undefined;
+    let deployInfo;
+    if (url !== undefined && api !== undefined && app !== undefined && blockchain !== undefined && deployArgs !== undefined) {
+        deployInfo = {
+            url,
+            api,
+            app,
+            blockchain,
+            args: deployArgs,
+        };
     }
+    await deployContract(primary, deployInfo);
+    SimbaConfig.log.debug(`:: EXIT :`);
+    return;
+};
+
+export async function deployContract(primary?: string | unknown, deployInfo?: Record<any, any>) {
+    const entryParams = {
+        primary,
+        deployInfo,
+    };
+    SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(entryParams)}`);
     const config = new SimbaConfig();
     if (!config.ProjectConfigStore.has("contracts_info")) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : Please export your contracts first with "truffle run simba export".`)}`);
@@ -457,4 +485,4 @@ export const handler = async (
     }
     SimbaConfig.log.debug(`:: EXIT :`);
     return;
-};
+}

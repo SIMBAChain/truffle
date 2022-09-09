@@ -1,7 +1,7 @@
 import {
     SimbaConfig,
 } from "@simbachain/web3-suites";
-import {handler} from "../../commands/deploy";
+import {deployContract} from "../../commands/deploy";
 import { expect } from 'chai';
 import {default as chalk} from 'chalk';
 import axios from "axios";
@@ -26,7 +26,7 @@ describe('tests deploy', () => {
         await authStore!.performLogin(false);
 
         let detail: any;
-        const res = await handler(undefined, deployInfo) as any;
+        const res = await deployContract(undefined, deployInfo) as any;
         if (axios.isAxiosError(res) && res.response) {
             console.log(res.response);
             const data = res.response.data as any;
