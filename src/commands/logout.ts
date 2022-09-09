@@ -15,6 +15,12 @@ export const builder = {};
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    await logout();
+    SimbaConfig.log.debug(`:: EXIT :`);
+};
+
+export async function logout(): Promise<any> {
+    SimbaConfig.log.debug(`:: ENTER :`);
     const authStore = await SimbaConfig.authStore();
     if (!authStore) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: no authStore created. Please make sure your baseURL is properly configured in your simba.json`)}`);
@@ -23,4 +29,4 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     await authStore.logout();
     SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: you have logged out.`)}`)
     SimbaConfig.log.debug(`:: EXIT :`);
-};
+}

@@ -2,7 +2,7 @@ import {
     SimbaConfig,
     allContracts,
 } from "@simbachain/web3-suites";
-import {export_contracts} from "../../commands/export";
+import {exportContracts} from "../../commands/export";
 import { deleteContract } from "../../commands/contract/deletecontract";
 import { expect } from 'chai';
 import 'mocha';
@@ -15,7 +15,7 @@ describe('tests deleteContract', () => {
         await authStore!.performLogin(false);
 
         const originalDesignID = originalSimbaJson.contracts_info.TestContractChanged.design_id;
-        await export_contracts(undefined, false, 'new');
+        await exportContracts(undefined, false, 'new');
         const newDesignID = SimbaConfig.ProjectConfigStore.get("contracts_info").TestContractChanged.design_id;
         expect(newDesignID).to.exist;
         expect(originalDesignID).to.not.equal(newDesignID);
