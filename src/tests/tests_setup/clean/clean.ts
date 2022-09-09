@@ -16,11 +16,10 @@ async function resetSimbaJson() {
 
 async function resetTruffleArtifacts() {
     SimbaConfig.log.info(`resetting truffle artifacts`);
-    const contractSolName = "TestContractVT20.sol";
     const contractJsonName = "TestContractVT20.json";
-    let pathToContractBuildFile = path.join("../../artifacts/", "contracts", contractSolName, contractJsonName);
+    let pathToContractBuildFile = path.join("../../build/", "contracts", contractJsonName);
 
-    let pathToBackUpBuildArtifact = path.join(cwd(), "../", "backup_files", "artifacts", "contracts", contractSolName, contractJsonName);
+    let pathToBackUpBuildArtifact = path.join(cwd(), "../", "backup_files", "build", "contracts", contractJsonName);
     await FileHandler.transferFile(pathToBackUpBuildArtifact, pathToContractBuildFile);
 }
 

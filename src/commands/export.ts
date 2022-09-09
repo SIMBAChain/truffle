@@ -54,12 +54,12 @@ interface Request {
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    await export_contracts(args.primary as string, args.interactive as boolean, args.savemode as string);
+    await export_contracts(args.primary, args.interactive, args.savemode);
     return Promise.resolve(null);
 };
 
 
-export async function export_contracts(primary: string, interactive: boolean, savemode: string): Promise<any> {
+export async function export_contracts(primary?: string | unknown, interactive?: boolean | unknown, savemode?: string | unknown): Promise<any> {
     clean_builds()
     const buildDir = SimbaConfig.buildDirectory;
     SimbaConfig.log.debug(`buildDir: ${buildDir}`);
