@@ -21,6 +21,10 @@ const deployInfo = {
 describe('tests deploy', () => {
     it('testing that endpoint is being hit correctly, but not actually deploying since "ourtestapi" already exists', async () => {
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
+        const simbaConfig = new SimbaConfig();
+        const authStore = await simbaConfig.authStore();
+        await authStore!.performLogin(false);
+
         let detail: any;
         const res = await handler(undefined, deployInfo) as any;
         if (axios.isAxiosError(res) && res.response) {

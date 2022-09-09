@@ -54,9 +54,6 @@ interface Request {
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args: ${JSON.stringify(args)}`);
-    //let primary: string = args.primary;
-    //let interactive: boolean = args.interactive;
-    //let savemode: string = args.savemode;
     await export_contracts(args.primary as string, args.interactive as boolean, args.savemode as string);
     return Promise.resolve(null);
 };

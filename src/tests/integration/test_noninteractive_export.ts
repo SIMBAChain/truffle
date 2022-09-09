@@ -8,8 +8,11 @@ import 'mocha';
 
 describe('tests export', () => {
     it('design_id for TestContractChanged should be different, then stay the same', async () => {
-        const bob = yargs(['interactive', 'false']);
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
+        const simbaConfig = new SimbaConfig();
+        const authStore = await simbaConfig.authStore();
+        await authStore!.performLogin(false);
+
         const originalDesignID = originalSimbaJson.contracts_info.TestContractChanged.design_id;
         await export_contracts('', false, 'new');
         const newDesignID = SimbaConfig.ProjectConfigStore.get("contracts_info").TestContractChanged.design_id;
