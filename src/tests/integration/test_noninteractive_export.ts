@@ -2,6 +2,7 @@ import {
     SimbaConfig,
 } from "@simbachain/web3-suites";
 import {export_contracts} from "../../commands/export";
+import { deleteContract } from "../../commands/contract/deletecontract";
 import { expect } from 'chai';
 import 'mocha';
 
@@ -24,6 +25,8 @@ describe('tests export', () => {
         expect(newDesignID).to.equal(newestDesignID);
 
         // reset
+        // delete contract 
+        await deleteContract(newDesignID);
         SimbaConfig.ProjectConfigStore.clear();
         SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
     }).timeout(120000);

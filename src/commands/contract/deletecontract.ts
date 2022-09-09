@@ -18,6 +18,12 @@ export const builder = {
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : args : ${JSON.stringify(args)}`);
     const designID = args.id;
+    await deleteContract(designID);
+    SimbaConfig.log.debug(`:: EXIT :`);
+}
+
+export async function deleteContract(designID?: string | unknown): Promise<void> {
+    SimbaConfig.log.debug(`:: ENTER : designID : ${designID}`);
     if (!designID) {
         await deleteContractsFromPrompts();
         SimbaConfig.log.debug(`:: EXIT :`);
@@ -25,4 +31,5 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     }
     await deleteContractFromDesignID(designID as string);
     SimbaConfig.log.debug(`:: EXIT :`);
+
 }
