@@ -225,11 +225,11 @@ You will then be prompted to select your application, with something like:
 
 There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set
 
-1. SIMBA_PLUGIN_ID for your client ID
-2. SIMBA_PLUGIN_SECRET for your client secret, and 
-3. SIMBA_PLUGIN_AUTH_ENDPOINT for your auth endpoint. 
+1. SIMBA_AUTH_CLIENT_ID for your client ID
+2. SIMBA_AUTH_CLIENT_SECRET for your client secret, and 
+3. SIMBA_AUTH_CLIENT_ENDPOINT for your auth endpoint. 
 
-NOTE: SIMBA_PLUGIN_AUTH_ENDPOINT defaults to '/o/' if not set.
+NOTE: SIMBA_AUTH_CLIENT_ENDPOINT defaults to '/o/' if not set.
 
 To run login in non-interactive mode, you can run with org and app flag:
 
@@ -628,6 +628,8 @@ This command allows the user to set the absolute directory path for a relevant d
 ```
 $ truffle run simba setdir --dirname build --dirpath /myhomedir/dev/myproject/build/
 ```
+
+NOTE: for windows users, if the path to your new directory contains "\", then please make sure you're setting with single "\" and not "\\". So "path\to\my\directory" instead of "path\\to\\my\\directory"
 
 Note that if you pass 'reset' as --dirpath, then the path to the directory specified in --dirname will be reset to its default path.
 
