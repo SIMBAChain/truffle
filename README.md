@@ -629,7 +629,7 @@ This command allows the user to set the absolute directory path for a relevant d
 $ truffle run simba setdir --dirname build --dirpath /myhomedir/dev/myproject/build/
 ```
 
-NOTE: for windows users, if the path to your new directory contains "\", then please make sure you're setting with single "\" and not "\\". So "path\to\my\directory" instead of "path\\to\\my\\directory"
+NOTE: for windows users, if the path to your new directory contains "\", then please make sure you're setting with single "\" and not "\\". So "path\to\my\directory" instead of "path\\\to\\\my\\\directory"
 
 Note that if you pass 'reset' as --dirpath, then the path to the directory specified in --dirname will be reset to its default path.
 
