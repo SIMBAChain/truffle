@@ -5,6 +5,7 @@
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
     "module": "build/module/index.js",
+    "types": "build/main/index.d.ts",
     "repository": "https://github.com/simmbachain/truffle",
     "author": "SIMBA Chain",
     "license": "MIT",
@@ -26,7 +27,13 @@
         "fix": "run-s fix:*",
         "fix:prettier": "prettier \"src/**/*.ts\" --write",
         "fix:eslint": "eslint --fix --ext .ts -c .eslintrc.js \"src/**/*.ts\"",
-        "test": "run-s build test:*",
+        "unit_test": "cd src/tests/ && mocha -r ts-node/register './unit/**/*.ts'",
+        "test": "npm run all_clean_test",
+        "clean_test": "cd src/tests/tests_setup/clean/ && ts-node clean.ts",
+        "clean_unit_test": "npm run clean_test && npm run unit_test && npm run clean_test",
+        "integration_test": "cd src/tests/ && env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register './integration/**/*.ts'",
+        "clean_integration_test": "npm run clean_test && npm run integration_test && npm run clean_test",
+        "all_clean_test": "npm run clean_unit_test && npm run clean_integration_test",
         "test:lint": "eslint --ext .ts -c .eslintrc.js \"src/**/*.ts\" && prettier \"src/**/*.ts\" --list-different",
         "test:unit": "nyc --silent ava",
         "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
@@ -56,9 +63,6 @@
         "reset": "Delete all untracked files and reset the repo to the last commit",
         "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
     },
-    "engines": {
-        "node": ">=10"
-    },
     "dependencies": {
         "@simbachain/web3-suites": "^2.5.0",
         "@truffle/config": "^1.2.33",
@@ -86,12 +90,15 @@
         "@bitjson/npm-scripts-info": "^1.0.0",
         "@bitjson/typedoc": "^0.15.0-0",
         "@istanbuljs/nyc-config-typescript": "^0.1.3",
+        "@types/chai": "^4.3.3",
+        "@types/mocha": "^9.1.1",
         "@types/sinon": "^7.5.2",
         "@types/yargs": "^15.0.14",
         "@typescript-eslint/eslint-plugin": "^2.25.0",
         "@typescript-eslint/eslint-plugin-tslint": "^2.25.0",
         "@typescript-eslint/parser": "^2.25.0",
         "ava": "^3.13.0",
+        "chai": "^4.3.6",
         "codecov": "^3.5.0",
         "cz-conventional-changelog": "^2.1.0",
         "eslint": "^6.8.0",
@@ -101,6 +108,7 @@
         "eslint-plugin-prefer-arrow": "^1.1.7",
         "eslint-plugin-prettier": "^3.1.2",
         "gh-pages": "^2.0.1",
+        "mocha": "^9.2.2",
         "npm-run-all": "^4.1.5",
         "nyc": "^14.1.1",
         "open-cli": "^6.0.1",
@@ -108,17 +116,8 @@
         "sinon": "^9.0.1",
         "standard-version": "^9.0.0",
         "trash-cli": "^3.0.0",
-        "ts-node": "^9.0.0",
+        "ts-node": "^8.10.2",
         "typescript": "^3.9.7"
-    },
-    "ava": {
-        "failFast": true,
-        "extensions": [
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ]
     },
     "config": {
         "commitizen": {

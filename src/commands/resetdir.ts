@@ -12,7 +12,7 @@ export const builder = {
         'string': true,
         'type': 'string',
         'choices': ["build", "contract", "contracts", "artifact", "artifacts", "all"],
-        'describe': 'name fo the directory to reset directory path for',
+        'describe': 'name of the directory to reset directory path for',
     },
 };
 
@@ -24,6 +24,13 @@ export const handler = (args: yargs.Arguments): any => {
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
+    resetDir(dirName);
+    SimbaConfig.log.debug(`:: EXIT :`);
+    return;
+};
+
+export function resetDir(dirName: string | unknown): void {
+    SimbaConfig.log.debug(`:: ENTER : ${dirName}`);
     if (dirName === "contracts" || dirName === "contract") {
         dirName = AllDirs.CONTRACTDIRECTORY
     }
@@ -40,7 +47,7 @@ export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.setDirectory(dirName as AllDirs, "reset");
     SimbaConfig.log.debug(`:: EXIT :`);
     return;
-};
+}
 
             
             

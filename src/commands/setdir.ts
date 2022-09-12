@@ -23,13 +23,24 @@ export const builder = {
 
 export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    let dirName = args.dirname;
+    const dirName = args.dirname;
     const dirPath = args.dirpath;
     if (!dirName || !dirPath) {
         SimbaConfig.log.error(`${chalk.redBright(`\nsimba: dirname and dirpath must be specified.`)}`);
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
+    setDir(dirName as string, dirPath as string);
+    SimbaConfig.log.debug(`:: EXIT :`);
+    return;
+};
+
+export function setDir(dirName: string, dirPath: string): void {
+    const entryParams = {
+        dirName,
+        dirPath,
+    };
+    SimbaConfig.log.debug(`:: ENTER : entryParams : ${JSON.stringify(entryParams)}`);
     if (dirName === "contracts" || dirName === "contract") {
         dirName = AllDirs.CONTRACTDIRECTORY
     }
@@ -44,4 +55,4 @@ export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.setDirectory(dirName as AllDirs, dirPath as string);
     SimbaConfig.log.debug(`:: EXIT :`);
     return;
-};
+}

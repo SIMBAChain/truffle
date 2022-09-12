@@ -28,9 +28,19 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const libName = args.libname ? args.libname as string : args.libname as undefined;
     const libAddress = args.libaddr ? args.libaddr as string : args.libaddr as undefined;
-    await addLib(libName, libAddress);
+    await addLibrary(libName, libAddress);
     SimbaConfig.log.debug(`:: EXIT :`);
 };
+
+export async function addLibrary(libName: string | undefined, libAddress: string | undefined): Promise<void> {
+    const entryParams = {
+        libName,
+        libAddress,
+    };
+    SimbaConfig.log.debug(`:: ENTER : enteryParams : ${JSON.stringify(entryParams)}`);
+    await addLib(libName, libAddress);
+    SimbaConfig.log.debug(`:: EXIT :`);
+}
 
 
 
