@@ -28,7 +28,6 @@ describe('tests deploy', () => {
         let detail: any;
         const res = await deployContract(undefined, deployInfo) as any;
         if (axios.isAxiosError(res) && res.response) {
-            console.log(res.response);
             const data = res.response.data as any;
             detail = data.errors[0].detail;
         } else {
