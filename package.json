@@ -1,12 +1,12 @@
 {
     "name": "@simbachain/truffle",
-    "version": "3.4.2",
+    "version": "3.4.3",
     "description": "Truffle Plugin for SIMBAChain",
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
     "module": "build/module/index.js",
     "types": "build/main/index.d.ts",
-    "repository": "https://github.com/simmbachain/truffle",
+    "repository": "https://github.com/simbachain/truffle",
     "author": "SIMBA Chain",
     "license": "MIT",
     "keywords": [
