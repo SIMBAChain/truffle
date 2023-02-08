@@ -327,7 +327,7 @@ export async function deployContract(primary?: string | unknown, deployInfo?: Re
         }
     } else {
         if (_isLibrary) {
-            deployURL = `organisations/${config.organisation.id}/deployed_artifacts/create/`;
+            deployURL = `v2/organisations/${config.organisation.id}/deployed_artifacts/create/`;
             const b64CodeBuffer = Buffer.from(sourceCode)
             const base64CodeString = b64CodeBuffer.toString('base64')
             deployment = {
@@ -339,7 +339,7 @@ export async function deployContract(primary?: string | unknown, deployInfo?: Re
                 lib_name: config.ProjectConfigStore.get("primary"),
             };
         } else {
-            deployURL = `organisations/${config.organisation.id}/contract_designs/${id}/deploy/`;
+            deployURL = `v2/organisations/${config.organisation.id}/contract_designs/${id}/deploy/`;
             deployment = {
                 blockchain: chosen.blockchain,
                 storage: chosen.storage,
@@ -380,7 +380,7 @@ export async function deployContract(primary?: string | unknown, deployInfo?: Re
         let retVal = null;
 
         do {
-            const checkDeployURL = `organisations/${config.organisation.id}/deployments/${deployment_id}/`;
+            const checkDeployURL = `v2/organisations/${config.organisation.id}/deployments/${deployment_id}/`;
             const check_resp = await authStore.doGetRequest(
                 checkDeployURL,
             );

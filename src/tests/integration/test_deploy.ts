@@ -8,7 +8,7 @@ import axios from "axios";
 import 'mocha';
 
 const deployInfo = {
-    url: "organisations/20e69814-43d0-42b4-8499-d13a9d1afb23/contract_designs/6bbd0b0d-c5b2-4488-90a9-8357b77f1850/deploy/",
+    url: "v2/organisations/20e69814-43d0-42b4-8499-d13a9d1afb23/contract_designs/6bbd0b0d-c5b2-4488-90a9-8357b77f1850/deploy/",
     blockchain: "Quorum",
     storage: "azure",
     api: "ourtestapi",

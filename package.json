@@ -1,6 +1,6 @@
 {
     "name": "@simbachain/truffle",
-    "version": "3.4.4",
+    "version": "3.4.7",
     "description": "Truffle Plugin for SIMBAChain",
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
@@ -64,7 +64,7 @@
         "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
     },
     "dependencies": {
-        "@simbachain/web3-suites": "^2.5.1",
+        "@simbachain/web3-suites": "^2.5.3",
         "@truffle/config": "^1.2.33",
         "@types/configstore": "^4.0.0",
         "@types/crypto-js": "^3.1.44",

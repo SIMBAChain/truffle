@@ -174,8 +174,6 @@ export async function exportContracts(primary?: string | unknown, interactive?: 
             }
             singleContractImportData[currentContractName] = importData[currentContractName]
             SimbaConfig.ProjectConfigStore.set('primary', currentContractName);
-        
-            SimbaConfig.log.debug(`singleContractImportData: ${JSON.stringify(singleContractImportData)}`);
 
             const libraries = await SimbaConfig.ProjectConfigStore.get("library_addresses") ? SimbaConfig.ProjectConfigStore.get("library_addresses") : {};
             SimbaConfig.log.debug(`libraries: ${JSON.stringify(libraries)}`);
@@ -195,7 +193,7 @@ export async function exportContracts(primary?: string | unknown, interactive?: 
                 ) {
                     const contractId = SimbaConfig.ProjectConfigStore.get("contracts_info")[currentContractName]["design_id"]
                     resp = await authStore.doPutRequest(
-                        `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/${contractId}/`,
+                        `v2/organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/${contractId}/`,
                         request,
                         "application/json",
                         true,
@@ -203,7 +201,7 @@ export async function exportContracts(primary?: string | unknown, interactive?: 
 
                 } else {
                     resp = await authStore.doPostRequest(
-                        `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
+                        `v2/organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
                         request,
                         "application/json",
                         true,
@@ -299,7 +297,7 @@ export async function exportContracts(primary?: string | unknown, interactive?: 
                 ) {
                     const contractId = SimbaConfig.ProjectConfigStore.get("contracts_info")[currentContractName]["design_id"]
                     resp = await authStore.doPutRequest(
-                        `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/${contractId}/`,
+                        `v2/organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/${contractId}/`,
                         request,
                         "application/json",
                         true,
@@ -307,7 +305,7 @@ export async function exportContracts(primary?: string | unknown, interactive?: 
 
                 } else {
                     resp = await authStore.doPostRequest(
-                        `organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
+                        `v2/organisations/${SimbaConfig.organisation.id}/contract_designs/import/truffle/`,
                         request,
                         "application/json",
                         true,
