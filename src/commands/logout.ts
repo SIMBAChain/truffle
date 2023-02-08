@@ -1,19 +1,32 @@
 import yargs from 'yargs';
-import {SimbaConfig} from '../lib';
+import {
+    SimbaConfig,
+    authErrors,
+} from '@simbachain/web3-suites';
+import {default as chalk} from 'chalk';
 
 export const command = 'logout';
 export const describe = 'log out of SIMBAChain SCaaS';
-export const builder = {
-    'help': {
-        'alias': 'h',
-        'type': 'boolean',
-        'describe': 'show help',
-    },
+export const builder = {};
+
+/**
+ * deletes access/auth token from configstore (authconfig.json)
+ * @param args 
+ */
+export const handler = async (args: yargs.Arguments): Promise<any> => {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    await logout();
+    SimbaConfig.log.debug(`:: EXIT :`);
 };
 
-export const handler = async (args: yargs.Arguments): Promise<any> => {
-    const config = args.config as SimbaConfig;
-    config.authStore.logout();
-    config.logger.info('Logged out.');
-    Promise.resolve(null);
-};
+export async function logout(): Promise<any> {
+    SimbaConfig.log.debug(`:: ENTER :`);
+    const authStore = await SimbaConfig.authStore();
+    if (!authStore) {
+        SimbaConfig.log.error(`${chalk.redBright(`\nsimba: no authStore created. Please make sure your baseURL is properly configured in your simba.json`)}`);
+        return Promise.resolve(new Error(authErrors.badAuthProviderInfo));
+    }
+    await authStore.logout();
+    SimbaConfig.log.info(`${chalk.cyanBright(`\nsimba: you have logged out.`)}`)
+    SimbaConfig.log.debug(`:: EXIT :`);
+}
