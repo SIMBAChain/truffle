@@ -1,0 +1,13 @@
+{
+	"https://simba-dev-api_platform_simbachain_com/v2/": {},
+	"https://simba-dev-api_platform_simbachain_com/": {
+		"SIMBAAUTH": {
+			"access_token": "IDPOUGA0GVtDPqRRTDRvaqhCvExfH8",
+			"expires_in": 36000,
+			"token_type": "Bearer",
+			"scope": "openid read write groups",
+			"retrieved_at": "2023-02-21T20:09:10.067Z",
+			"expires_at": "2023-02-22T06:09:10.067Z"
+		}
+	}
+}

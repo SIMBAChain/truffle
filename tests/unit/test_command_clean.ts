@@ -1,6 +1,6 @@
 import {
     handler, //clean_builds,
-} from "../../commands/clean";
+} from "../../src/commands/clean";
 import {
     FileHandler,
 } from "../tests_setup/file_handler";

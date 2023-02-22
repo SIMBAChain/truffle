@@ -1,5 +1,5 @@
 {
-	"baseURL": "https://simba-dev-api.platform.simbachain.com/v2/",
+	"baseURL": "https://simba-dev-api.platform.simbachain.com/",
 	"web3Suite": "truffle",
 	"logLevel": "info",
 	"primary": "TestContractVT20",

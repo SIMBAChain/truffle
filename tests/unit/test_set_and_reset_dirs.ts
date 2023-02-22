@@ -1,8 +1,8 @@
 import {
     SimbaConfig,
 } from "@simbachain/web3-suites";
-import { setDir } from "../../commands/setdir";
-import { resetDir } from "../../commands/resetdir";
+import { setDir } from "../../src/commands/setdir";
+import { resetDir } from "../../src/commands/resetdir";
 import { expect } from 'chai';
 import 'mocha';
 
