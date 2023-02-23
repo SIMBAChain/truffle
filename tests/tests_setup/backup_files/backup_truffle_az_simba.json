@@ -1,152 +1,160 @@
 {
-	"baseURL": "https://simba-dev-api.platform.simbachain.com/",
-	"web3Suite": "truffle",
 	"logLevel": "info",
-	"primary": "TestContractVT20",
+	"authProviderInfo": {
+		"type": "keycloak",
+		"baseurl": "https://simba-demo-sso.platform.simbachain.com/auth",
+		"client_id": "simba-pkce",
+		"realm": "simbachain"
+	},
 	"organisation": {
-		"id": "20e69814-43d0-42b4-8499-d13a9d1afb23",
+		"id": "9c261cb5-d0a5-4817-9b14-144999969d11",
 		"display_name": "brendan_birch_simbachain_com",
 		"name": "brendan_birch_simbachain_com",
 		"is_user_group": false,
-		"created_on": "2022-06-22T17:44:46.195837Z",
 		"metadata": null,
-		"solution_blocks": [
-			"blocks.platform"
-		]
+		"created_on": "2022-07-05T19:30:29.054462Z",
+		"updated_on": "2022-08-29T13:52:28.451591Z",
+		"users_with_role": [
+			{
+				"id": 30,
+				"username": "guillaume.auger@simbachain.com",
+				"roles": [
+					"Owner"
+				],
+				"is_superuser": true,
+				"email": "guillaume.auger@simbachain.com"
+			},
+			{
+				"id": 11,
+				"username": "brendan.birch@simbachain.com",
+				"roles": [
+					"Owner"
+				],
+				"is_superuser": true,
+				"email": "brendan.birch@simbachain.com"
+			}
+		],
+		"number_of_members": 2,
+		"solution_blocks": []
 	},
 	"application": {
-		"id": "fb5fd523-9982-4785-a0ea-89d277f4014b",
+		"id": "cc8641e1-33e6-411d-bb46-ec1fbc1e5bfb",
 		"display_name": "BrendanTestApp",
 		"name": "BrendanTestApp",
-		"created_on": "2022-07-15T22:00:42.480234Z",
+		"created_on": "2022-08-24T22:02:12.562218Z",
 		"components": [
 			{
-				"id": "3d7ef922-80a0-49c6-91dd-94c475c914c4",
-				"api_name": "nft_vb11",
-				"created_on": "2022-08-03T20:05:35.838110Z",
-				"updated_on": "2022-08-03T20:05:44.784630Z"
+				"id": "2d1d84cc-5dc8-4fd9-a262-444c226fc7cc",
+				"api_name": "greeter888ddd",
+				"created_on": "2023-02-21T20:13:24.523201Z",
+				"updated_on": "2023-02-21T20:13:31.201551Z"
 			},
 			{
-				"id": "50497ad3-c775-48cf-97be-15eb5732f2bd",
-				"api_name": "testcontract_vbb98989",
-				"created_on": "2022-08-03T16:49:22.778297Z",
-				"updated_on": "2022-08-03T16:49:29.931395Z"
+				"id": "a4f4fa84-c66f-4571-b175-75904dbf71e4",
+				"api_name": "greeter_hrd_fixed2",
+				"created_on": "2023-02-11T15:47:16.208180Z",
+				"updated_on": "2023-02-11T15:47:24.615752Z"
 			},
 			{
-				"id": "91a0dc97-4853-4f23-99ea-e2fda34159f8",
-				"api_name": "greeter8_vbb7878",
-				"created_on": "2022-08-03T16:29:56.558020Z",
-				"updated_on": "2022-08-03T16:30:10.315609Z"
+				"id": "62da8df9-5f8c-4a87-bf02-401440f1462e",
+				"api_name": "greeter_hrd_fixed1",
+				"created_on": "2023-02-11T15:30:58.756543Z",
+				"updated_on": "2023-02-11T15:31:04.528022Z"
 			},
 			{
-				"id": "94e454dd-45cf-46a8-aeb5-e2064c7cc61b",
-				"api_name": "test_contract_vb5656",
-				"created_on": "2022-08-03T00:58:40.525870Z",
-				"updated_on": "2022-08-03T00:58:50.109944Z"
+				"id": "c268a65d-7aff-4e72-8814-aa52937f2c13",
+				"api_name": "greeter_tfl_22",
+				"created_on": "2023-02-11T15:23:33.696443Z",
+				"updated_on": "2023-02-11T15:23:39.159683Z"
 			},
 			{
-				"id": "bb40018f-0a26-4124-a5ca-9e5906b2a630",
-				"api_name": "testcontract_vbb7878",
-				"created_on": "2022-08-02T15:21:39.502588Z",
-				"updated_on": "2022-08-02T15:21:45.004781Z"
+				"id": "6375745b-87b4-4cfd-aecc-2a991a415249",
+				"api_name": "greeter_dont_need_web3suite",
+				"created_on": "2023-02-08T18:53:18.683923Z",
+				"updated_on": "2023-02-08T18:53:24.506554Z"
 			},
 			{
-				"id": "eb9bf45f-212d-437a-aaae-aa08bf61842e",
-				"api_name": "testcontract_vbb1212",
-				"created_on": "2022-07-28T13:38:07.256907Z",
-				"updated_on": "2022-07-28T13:38:15.069184Z"
+				"id": "5d997d8f-55db-42ea-9495-432dae454380",
+				"api_name": "greeter_new_v2_fixed",
+				"created_on": "2023-02-08T02:35:40.082803Z",
+				"updated_on": "2023-02-08T02:35:45.032179Z"
 			},
 			{
-				"id": "4292e9e3-3bf6-4912-a98f-9e542919b2ae",
-				"api_name": "simplenum_vbb1010",
-				"created_on": "2022-07-27T18:16:03.885335Z",
-				"updated_on": "2022-07-27T18:16:09.721331Z"
+				"id": "e6682997-6fe2-4c84-b31c-97e23c7ec920",
+				"api_name": "greeter_truffle_no_v2",
+				"created_on": "2023-02-07T20:18:14.569487Z",
+				"updated_on": "2023-02-07T20:18:19.388489Z"
 			},
 			{
-				"id": "440f11f6-3004-4b18-9bf4-924c1b4024ef",
-				"api_name": "simplenum_vbb999",
-				"created_on": "2022-07-27T17:44:12.282245Z",
-				"updated_on": "2022-07-27T17:44:29.322960Z"
+				"id": "2467ec76-a51c-4083-b189-995d590403f9",
+				"api_name": "greeter_truffle_with_v2",
+				"created_on": "2023-02-07T20:03:59.622883Z",
+				"updated_on": "2023-02-07T20:04:04.468797Z"
 			},
 			{
-				"id": "53513eda-c280-468b-8b09-a39522c5868b",
-				"api_name": "test_contract_vbb888",
-				"created_on": "2022-07-27T15:29:52.092693Z",
-				"updated_on": "2022-07-27T15:30:15.677608Z"
+				"id": "28f2ef6a-95df-4968-8859-c40a58401d1e",
+				"api_name": "greeter_handling_multi_v2",
+				"created_on": "2023-02-06T20:47:15.288826Z",
+				"updated_on": "2023-02-06T20:47:19.153889Z"
 			},
 			{
-				"id": "c52c806a-00a3-4a1e-950c-42d3919026cd",
-				"api_name": "greeter_test_vbb777",
-				"created_on": "2022-07-27T01:29:27.116982Z",
-				"updated_on": "2022-07-27T01:29:34.753713Z"
+				"id": "0191800a-5a56-42f1-b008-44881ddebb02",
+				"api_name": "greeter_no_v2",
+				"created_on": "2023-02-06T20:39:21.948342Z",
+				"updated_on": "2023-02-06T20:39:29.189952Z"
 			},
 			{
-				"id": "c99fe8d8-3ae2-40db-80c3-a1471b1ac97e",
-				"api_name": "test_contract_vt3",
-				"created_on": "2022-07-18T05:29:31.916212Z",
-				"updated_on": "2022-07-18T05:29:39.588292Z"
+				"id": "d74db0c2-64ba-4c5c-9e70-84259cb9b024",
+				"api_name": "greeter_janane",
+				"created_on": "2023-02-06T18:31:18.236075Z",
+				"updated_on": "2023-02-06T18:31:24.162084Z"
 			},
 			{
-				"id": "f14ff187-4bc0-4d44-ae30-30c5e723b9a9",
-				"api_name": "test_contract_vt2",
-				"created_on": "2022-07-18T05:24:38.683819Z",
-				"updated_on": "2022-07-18T05:24:45.062144Z"
+				"id": "b88478df-1bb2-4944-997d-65c945ff8a92",
+				"api_name": "mtdvbb33",
+				"created_on": "2022-09-09T19:01:10.041303Z",
+				"updated_on": "2022-09-09T19:01:18.530209Z"
 			},
 			{
-				"id": "4adb1ad0-a3cd-4ee9-aef8-a8b8259ad0e6",
-				"api_name": "test_contract_vt1",
-				"created_on": "2022-07-18T05:12:05.297408Z",
-				"updated_on": "2022-07-18T05:12:14.917702Z"
+				"id": "6ab30948-a3fc-49e1-b1da-e2e8f3007a9d",
+				"api_name": "mtdvb22",
+				"created_on": "2022-09-09T18:59:28.511188Z",
+				"updated_on": "2022-09-09T18:59:33.175416Z"
 			},
 			{
-				"id": "d9e8419a-2a1f-410f-aa0a-0613c31cd366",
-				"api_name": "testcontract_vbb1",
-				"created_on": "2022-07-17T04:50:39.698152Z",
-				"updated_on": "2022-07-17T04:50:45.369131Z"
+				"id": "f780be90-e440-4730-ac36-711f27f6abec",
+				"api_name": "mtdv1",
+				"created_on": "2022-09-07T20:39:16.796294Z",
+				"updated_on": "2022-09-07T20:39:23.611080Z"
 			},
 			{
-				"id": "c3650962-d2eb-4b3a-918d-ca93b1b1c440",
-				"api_name": "complexcontract_v3",
-				"created_on": "2022-07-17T04:38:35.396549Z",
-				"updated_on": "2022-07-17T04:38:45.092369Z"
-			},
-			{
-				"id": "8bb3cc6f-a6cb-4fe7-941a-8094a61bee20",
-				"api_name": "complexcontract_v2",
-				"created_on": "2022-07-17T04:22:10.280170Z",
-				"updated_on": "2022-07-17T04:22:14.681450Z"
-			},
-			{
-				"id": "9d0fda6e-43ca-4ee8-9ed0-bdc1ff34e375",
-				"api_name": "complexcontract_v1",
-				"created_on": "2022-07-16T22:59:27.048662Z",
-				"updated_on": "2022-07-16T22:59:34.634298Z"
-			},
-			{
-				"id": "a3f16a60-bd88-4e55-9ac9-674f20e0f75e",
-				"api_name": "simplenum_vbbt11",
-				"created_on": "2022-07-15T22:04:36.506904Z",
-				"updated_on": "2022-07-15T22:04:41.751385Z"
+				"id": "e36ef4e8-9c66-46a8-953f-741d73ef77c0",
+				"api_name": "test_contract_vds6",
+				"created_on": "2022-08-26T17:26:32.125483Z",
+				"updated_on": "2022-08-26T17:26:38.140891Z"
 			}
 		],
 		"organisation": {
-			"id": "20e69814-43d0-42b4-8499-d13a9d1afb23",
+			"id": "9c261cb5-d0a5-4817-9b14-144999969d11",
 			"display_name": "brendan_birch_simbachain_com",
 			"name": "brendan_birch_simbachain_com"
 		},
 		"metadata": null,
-		"openapi": "https://simba-dev-api.platform.simbachain.com/v2/apps/BrendanTestApp/"
+		"openapi": "https://simba-demo-api.platform.simbachain.com/v2/apps/BrendanTestApp/"
 	},
+	"primary": "TestContractVT20",
 	"contracts_info": {
-		"TestContractVT20": {
-			"design_id": "40eb528a-e365-4a84-b945-44d82029a66b",
-			"contract_type": "contract",
-			"source_code": "//SPDX-License-Identifier: Unlicense\npragma solidity ^0.8.0;\n\n\ncontract TestContractVT20 {\n    uint private ourNum;\n    string private ourString;\n\n    constructor(uint _ourNum, string memory _ourString) {\n        ourNum = _ourNum;\n        ourString = _ourString;\n    }\n\n    function getNum() public view returns (uint) {\n        return ourNum;\n    }\n\n    function setNum(uint _ourNum) public {\n        ourNum = _ourNum;\n    }\n\n    function getString() public view returns (string memory) {\n        return ourString;\n    }\n\n    function setString(string memory _ourString) public {\n        ourString = _ourString;\n    }\n\n    function anArr(uint[] memory first)\n    public {}\n\n    function twoArrs(uint[] memory first, uint[] memory second)\n    public {}\n\n    function addressArr(address[] memory first)\n    public {}\n\n    function nestedArr0(uint[][] memory first)\n    public {}\n\n    function nestedArr1(uint[][5] memory first)\n    public {}\n\n    function nestedArr2(uint[4][] memory first)\n    public {}\n\n    function nestedArr3(uint[3][3] memory first)\n    public {}\n\n    function nestedArr4(uint[3][3] memory first,\n        string memory _bundleHash)\n    public {}\n\n    struct Person{\n        string name;\n        uint age;\n        Addr addr;\n    }\n\n    struct Addr{\n        string street;\n        uint number;\n        string town;\n    }\n\n    struct AddressPerson{\n        string name;\n        uint age;\n        Addr[] addrs;\n    }\n\n    function structTest1 (\n        Person[] memory people,\n        bool test_bool\n        )\n    public {}\n\n    function structTest2 (\n        Person memory person,\n        bool test_bool\n        )\n    public {}\n\n    function structTest3 (\n        AddressPerson memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest4 (\n        AddressPerson[] memory persons,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest5 (\n        Person memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function nowT()\n    public {}\n\n    function clientContainer (\n        Person memory person,\n        string memory _bundleHash,\n        string memory _bundlePath\n        )\n    public {}\n\n}"
-		},
 		"TestContractChanged": {
-			"design_id": "6bbd0b0d-c5b2-4488-90a9-8357b77f1850",
+			"design_id": "43267ec9-a8f5-45d7-9781-586033fe774b",
 			"contract_type": "contract",
-			"source_code": "//SPDX-License-Identifier: Unlicense\npragma solidity ^0.8.0;\n\n\ncontract TestContractChanged {\n    uint private ourNum;\n    string private ourString;\n\n    constructor(uint _ourNum, string memory _ourString) {\n        ourNum = _ourNum;\n        ourString = _ourString;\n    }\n\n    function getNum() public view returns (uint) {\n        return ourNum;\n    }\n\n    function setNum(uint _ourNum) public {\n        ourNum = _ourNum;\n    }\n\n    function getString() public view returns (string memory) {\n        return ourString;\n    }\n\n    function setString(string memory _ourString) public {\n        ourString = _ourString;\n    }\n\n    function anArr(uint[] memory first)\n    public {}\n\n    function twoArrs(uint[] memory first, uint[] memory second)\n    public {}\n\n    function addressArr(address[] memory first)\n    public {}\n\n    function nestedArr0(uint[][] memory first)\n    public {}\n\n    function nestedArr1(uint[][5] memory first)\n    public {}\n\n    function nestedArr2(uint[4][] memory first)\n    public {}\n\n    function nestedArr3(uint[3][3] memory first)\n    public {}\n\n    function nestedArr4(uint[3][3] memory first,\n        string memory _bundleHash)\n    public {}\n\n    struct Person{\n        string name;\n        uint age;\n        Addr addr;\n    }\n\n    struct Addr{\n        string street;\n        uint number;\n        string town;\n    }\n\n    struct AddressPerson{\n        string name;\n        uint age;\n        Addr[] addrs;\n    }\n\n    function structTest1 (\n        Person[] memory people,\n        bool test_bool\n        )\n    public {}\n\n    function structTest2 (\n        Person memory person,\n        bool test_bool\n        )\n    public {}\n\n    function structTest3 (\n        AddressPerson memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest4 (\n        AddressPerson[] memory persons,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest5 (\n        Person memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function nowT()\n    public {}\n\n    function clientContainer (\n        Person memory person,\n        string memory _bundleHash,\n        string memory _bundlePath\n        )\n    public {}\n\n}"
+			"source_code": "//SPDX-License-Identifier: Unlicense\npragma solidity ^0.8.0;\n\n\ncontract TestContractChanged {\n    uint private ourNum;\n    string private ourString;\n    // we inserted a comment here so that this contract is differently\n    // than what's stored in simba.json once it's compiled\n    // this helps us test the sourceCodeComparer\n    constructor(uint _ourNum, string memory _ourString) {\n        ourNum = _ourNum;\n        ourString = _ourString;\n    }\n\n    function getNum() public view returns (uint) {\n        return ourNum;\n    }\n\n    function setNum(uint _ourNum) public {\n        ourNum = _ourNum;\n    }\n\n    function getString() public view returns (string memory) {\n        return ourString;\n    }\n\n    function setString(string memory _ourString) public {\n        ourString = _ourString;\n    }\n\n    function anArr(uint[] memory first)\n    public {}\n\n    function twoArrs(uint[] memory first, uint[] memory second)\n    public {}\n\n    function addressArr(address[] memory first)\n    public {}\n\n    function nestedArr0(uint[][] memory first)\n    public {}\n\n    function nestedArr1(uint[][5] memory first)\n    public {}\n\n    function nestedArr2(uint[4][] memory first)\n    public {}\n\n    function nestedArr3(uint[3][3] memory first)\n    public {}\n\n    function nestedArr4(uint[3][3] memory first,\n        string memory _bundleHash)\n    public {}\n\n    struct Person{\n        string name;\n        uint age;\n        Addr addr;\n    }\n\n    struct Addr{\n        string street;\n        uint number;\n        string town;\n    }\n\n    struct AddressPerson{\n        string name;\n        uint age;\n        Addr[] addrs;\n    }\n\n    function structTest1 (\n        Person[] memory people,\n        bool test_bool\n        )\n    public {}\n\n    function structTest2 (\n        Person memory person,\n        bool test_bool\n        )\n    public {}\n\n    function structTest3 (\n        AddressPerson memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest4 (\n        AddressPerson[] memory persons,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest5 (\n        Person memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function nowT()\n    public {}\n\n    function clientContainer (\n        Person memory person,\n        string memory _bundleHash,\n        string memory _bundlePath\n        )\n    public {}\n\n}",
+			"organisation": "brendan_birch_simbachain_com"
+		},
+		"TestContractVT20": {
+			"design_id": "0b682b08-951b-4e31-810c-46f49f0a98ae",
+			"contract_type": "contract",
+			"source_code": "//SPDX-License-Identifier: Unlicense\npragma solidity ^0.8.0;\n\n\ncontract TestContractVT20 {\n    uint private ourNum;\n    string private ourString;\n\n    constructor(uint _ourNum, string memory _ourString) {\n        ourNum = _ourNum;\n        ourString = _ourString;\n    }\n\n    function getNum() public view returns (uint) {\n        return ourNum;\n    }\n\n    function setNum(uint _ourNum) public {\n        ourNum = _ourNum;\n    }\n\n    function getString() public view returns (string memory) {\n        return ourString;\n    }\n\n    function setString(string memory _ourString) public {\n        ourString = _ourString;\n    }\n\n    function anArr(uint[] memory first)\n    public {}\n\n    function twoArrs(uint[] memory first, uint[] memory second)\n    public {}\n\n    function addressArr(address[] memory first)\n    public {}\n\n    function nestedArr0(uint[][] memory first)\n    public {}\n\n    function nestedArr1(uint[][5] memory first)\n    public {}\n\n    function nestedArr2(uint[4][] memory first)\n    public {}\n\n    function nestedArr3(uint[3][3] memory first)\n    public {}\n\n    function nestedArr4(uint[3][3] memory first,\n        string memory _bundleHash)\n    public {}\n\n    struct Person{\n        string name;\n        uint age;\n        Addr addr;\n    }\n\n    struct Addr{\n        string street;\n        uint number;\n        string town;\n    }\n\n    struct AddressPerson{\n        string name;\n        uint age;\n        Addr[] addrs;\n    }\n\n    function structTest1 (\n        Person[] memory people,\n        bool test_bool\n        )\n    public {}\n\n    function structTest2 (\n        Person memory person,\n        bool test_bool\n        )\n    public {}\n\n    function structTest3 (\n        AddressPerson memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest4 (\n        AddressPerson[] memory persons,\n        string memory _bundleHash\n        )\n    public {}\n\n    function structTest5 (\n        Person memory person,\n        string memory _bundleHash\n        )\n    public {}\n\n    function nowT()\n    public {}\n\n    function clientContainer (\n        Person memory person,\n        string memory _bundleHash,\n        string memory _bundlePath\n        )\n    public {}\n\n}",
+			"organisation": "brendan_birch_simbachain_com"
 		}
 	}
 }

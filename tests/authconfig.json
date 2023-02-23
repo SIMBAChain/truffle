@@ -2,12 +2,22 @@
 	"https://simba-dev-api_platform_simbachain_com/v2/": {},
 	"https://simba-dev-api_platform_simbachain_com/": {
 		"SIMBAAUTH": {
-			"access_token": "IDPOUGA0GVtDPqRRTDRvaqhCvExfH8",
+			"access_token": "sFTbp21Vw8YckXtf5YJxRRaBBrh3Sk",
 			"expires_in": 36000,
 			"token_type": "Bearer",
 			"scope": "openid read write groups",
-			"retrieved_at": "2023-02-21T20:09:10.067Z",
-			"expires_at": "2023-02-22T06:09:10.067Z"
+			"retrieved_at": "2023-02-23T00:11:42.784Z",
+			"expires_at": "2023-02-23T10:11:42.784Z"
+		}
+	},
+	"https://simba-demo-api_platform_simbachain_com/": {
+		"SIMBAAUTH": {
+			"access_token": "6FX3wPgS4l2053jJ16WgBnotDNlrOG",
+			"expires_in": 36000,
+			"token_type": "Bearer",
+			"scope": "openid read write groups",
+			"retrieved_at": "2023-02-23T00:19:34.206Z",
+			"expires_at": "2023-02-23T10:19:34.206Z"
 		}
 	}
 }

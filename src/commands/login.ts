@@ -102,7 +102,10 @@ export async function login(
             if (app) {
                 appData = await chooseApplicationFromName(simbaConfig, app as string);
             }
-            if (orgData.id != appData.organisation.id) {
+
+            // we only check .id here below if !app, because if app, then
+            // the endpoint we hit does not return organisation data
+            if (!app && (orgData.id != appData.organisation.id)) {
                 SimbaConfig.log.error(`${chalk.redBright(`the selected app is not part of the selected organisation. Please login in interactive mode and choose your application, or use the --app <app> flag in your non-interactive login command.`)}`);
                 return;
             }
