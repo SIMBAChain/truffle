@@ -146,6 +146,3 @@ describe('testing pulling all source code and sol files', () => {
 
     }).timeout(200000);
 });
-
-
-
