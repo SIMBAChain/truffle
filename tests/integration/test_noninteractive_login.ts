@@ -36,5 +36,5 @@ describe('tests noninteractive login', () => {
         // now reset simba.json to its original state
         SimbaConfig.ProjectConfigStore.clear();
         SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
-    }).timeout(15000);
+    }).timeout(10000);
 });
