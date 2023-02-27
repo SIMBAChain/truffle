@@ -27,11 +27,11 @@
         "fix": "run-s fix:*",
         "fix:prettier": "prettier \"src/**/*.ts\" --write",
         "fix:eslint": "eslint --fix --ext .ts -c .eslintrc.js \"src/**/*.ts\"",
-        "unit_test": "cd src/tests/ && mocha -r ts-node/register './unit/**/*.ts'",
+        "unit_test": "cd tests/ && mocha -r ts-node/register './unit/**/*.ts'",
         "test": "npm run all_clean_test",
-        "clean_test": "cd src/tests/tests_setup/clean/ && ts-node clean.ts",
+        "clean_test": "cd tests/tests_setup/clean/ && ts-node clean.ts",
         "clean_unit_test": "npm run clean_test && npm run unit_test && npm run clean_test",
-        "integration_test": "cd src/tests/ && env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register './integration/**/*.ts'",
+        "integration_test": "cd tests/ && env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register './integration/**/*.ts'",
         "clean_integration_test": "npm run clean_test && npm run integration_test && npm run clean_test",
         "all_clean_test": "npm run clean_unit_test && npm run clean_integration_test",
         "test:lint": "eslint --ext .ts -c .eslintrc.js \"src/**/*.ts\" && prettier \"src/**/*.ts\" --list-different",
@@ -63,8 +63,12 @@
         "reset": "Delete all untracked files and reset the repo to the last commit",
         "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
     },
+    "overrides": {
+        "@types/express-serve-static-core": "4.17.30",
+        "@types/express": "4.17.13"
+    },
     "dependencies": {
-        "@simbachain/web3-suites": "^2.5.3",
+        "@simbachain/web3-suites": "^2.6.3",
         "@truffle/config": "^1.2.33",
         "@types/configstore": "^4.0.0",
         "@types/crypto-js": "^3.1.44",

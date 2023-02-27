@@ -2,7 +2,7 @@ import {
     SimbaConfig,
     allContracts,
 } from "@simbachain/web3-suites";
-import {pull} from "../../commands/contract/pull";
+import {pull} from "../../src/commands/contract/pull";
 import {
     FileHandler,
 } from "../tests_setup/file_handler"
@@ -15,8 +15,8 @@ import {cwd} from 'process';
 describe('testing pulling .sol file from designID', () => {
     it('should exist in /contracts/simbaimports/ after', async () => {
         let simbaDir = path.join(cwd(), "contracts", "SimbaImports");
-        const contractName = "TestContractVT3";
-        const oldContractID = "cb3ad592-1ca2-43b3-a9d0-cd0d0f127b32";
+        const contractName = "TestContractVT20";
+        const oldContractID = "0b682b08-951b-4e31-810c-46f49f0a98ae";
         const filePath = path.join(simbaDir, `${contractName}.sol`);
         const simbaConfig = new SimbaConfig();
         const authStore = await simbaConfig.authStore();
@@ -33,7 +33,7 @@ describe('testing pulling .sol file from designID', () => {
 
 describe('testing pulling source code to simba.json', () => {
     it('source code should be in simba.json after function calls', async () => {
-        const contractName = "TestContractVT3";
+        const contractName = "TestContractVT20";
         const simbaConfig = new SimbaConfig();
         const authStore = await simbaConfig.authStore();
         await authStore!.performLogin(false);
@@ -144,8 +144,5 @@ describe('testing pulling all source code and sol files', () => {
         SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
         FileHandler.removeDirectory(simbaDir);
 
-    }).timeout(200000);
+    }).timeout(120000);
 });
-
-
-

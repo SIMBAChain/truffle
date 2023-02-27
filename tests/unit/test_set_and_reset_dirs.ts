@@ -1,14 +1,14 @@
 import {
     SimbaConfig,
 } from "@simbachain/web3-suites";
-import { setDir } from "../../commands/setdir";
-import { resetDir } from "../../commands/resetdir";
+import { setDir } from "../../src/commands/setdir";
+import { resetDir } from "../../src/commands/resetdir";
 import { expect } from 'chai';
 import 'mocha';
 
 
 describe('tests setDir, resetDir', () => {
-    it('logLevel in simba.json should be set to level after call', async () => {
+    it('direcoties should be set in simba.json after calls', async () => {
         // grab full simba.json so we can use it to reset after
         const originalSimbaJson = SimbaConfig.ProjectConfigStore.all;
         SimbaConfig.ProjectConfigStore.delete("buildDirectory");
@@ -30,5 +30,5 @@ describe('tests setDir, resetDir', () => {
         // now reset simba.json to its original state
         SimbaConfig.ProjectConfigStore.clear();
         SimbaConfig.ProjectConfigStore.set(originalSimbaJson);
-    }).timeout(10000);
+    }).timeout(5000);
 });

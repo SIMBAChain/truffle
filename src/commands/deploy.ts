@@ -388,10 +388,7 @@ export async function deployContract(primary?: string | unknown, deployInfo?: Re
                 SimbaConfig.log.error(`${chalk.redBright(`simba: EXIT : error checking deployment URL`)}`);
                 return;
             }
-            if (check_resp instanceof Error) {
-                SimbaConfig.log.debug(`:: EXIT : ${check_resp.message}`);
-                throw new Error(check_resp.message);
-            }
+            
             const state: any = check_resp.state;
             SimbaConfig.log.debug(`:: state : ${state}`);
 

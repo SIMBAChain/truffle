@@ -1,8 +1,8 @@
 import {
     SimbaConfig,
 } from "@simbachain/web3-suites";
-import {logout} from "../../commands/logout";
-import {login} from "../../commands/login";
+import {logout} from "../../src/commands/logout";
+import {login} from "../../src/commands/login";
 import { expect } from 'chai';
 import 'mocha';
 

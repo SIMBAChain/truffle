@@ -1,0 +1,23 @@
+{
+	"https://simba-dev-api_platform_simbachain_com/v2/": {},
+	"https://simba-dev-api_platform_simbachain_com/": {
+		"SIMBAAUTH": {
+			"access_token": "sFTbp21Vw8YckXtf5YJxRRaBBrh3Sk",
+			"expires_in": 36000,
+			"token_type": "Bearer",
+			"scope": "openid read write groups",
+			"retrieved_at": "2023-02-23T00:11:42.784Z",
+			"expires_at": "2023-02-23T10:11:42.784Z"
+		}
+	},
+	"https://simba-demo-api_platform_simbachain_com/": {
+		"SIMBAAUTH": {
+			"access_token": "B2ebalG4nYo2NImSlzs9NCQ5MDAPIV",
+			"expires_in": 36000,
+			"token_type": "Bearer",
+			"scope": "openid read write groups",
+			"retrieved_at": "2023-02-27T15:53:56.120Z",
+			"expires_at": "2023-02-28T01:53:56.120Z"
+		}
+	}
+}

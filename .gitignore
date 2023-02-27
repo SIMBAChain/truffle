@@ -12,3 +12,6 @@ coverage
 *.log
 
 yarn.lock
+
+# env files
+**.env
