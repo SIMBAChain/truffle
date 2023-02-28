@@ -70,9 +70,12 @@ export const builder = {
 };
 
 /**
- * for deploying contract to simbachain.com
- * @param args 
- * @returns 
+ * deploy a contract to your organisation and application on blocks
+ * @param args
+ * args:
+ * args.primary name of primary contract if user wants to skip the prompt to choose contract
+ * args.deployInfo used to non-interactively deploy contract
+ * @returns
  */
 export const handler = async (
     args: yargs.Arguments,
@@ -99,6 +102,12 @@ export const handler = async (
     return;
 };
 
+/**
+ * deploy a contract to your organisation and application on blocks
+ * @param primary name of primary contract if user wants to skip the prompt to choose contract
+ * @param deployInfo used to non-interactively deploy contract
+ * @returns
+ */
 export async function deployContract(primary?: string | unknown, deployInfo?: Record<any, any>) {
     const entryParams = {
         primary,

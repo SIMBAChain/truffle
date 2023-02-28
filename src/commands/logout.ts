@@ -19,6 +19,10 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: EXIT :`);
 };
 
+/**
+ * deletes access/auth token from configstore (authconfig.json)
+ * @returns 
+ */
 export async function logout(): Promise<any> {
     SimbaConfig.log.debug(`:: ENTER :`);
     const authStore = await SimbaConfig.authStore();

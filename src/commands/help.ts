@@ -34,19 +34,24 @@ export const builder = {
     },
 };
 
+/**
+ * get help on a given topic
+ * @param args 
+ * args:
+ * args.topic
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    await help(args);
+    await help(args.topic);
     Promise.resolve(null);
 };
 
 /**
  * retrieve help on a topic
- * @param args
- * args can contain optional param of "topic", which specifies the help topic
+ * @param topic - choose from prompts if not specified
  * @returns 
  */
-export async function help(args: yargs.Arguments) {
+export async function help(topic?: string | unknown) {
     let helpTopic: string;
 
     const paramInputChoices = [
@@ -69,7 +74,7 @@ export async function help(args: yargs.Arguments) {
         HelpCommands.DELETECONTRACT,
     ];
 
-    if (!args.topic) {
+    if (!topic) {
         const paramChoices = [];
         for (let i = 0; i < paramInputChoices.length; i++) {
             const entry = paramInputChoices[i];
@@ -92,7 +97,7 @@ export async function help(args: yargs.Arguments) {
     
         helpTopic = helpTopicPrompt.help_topic;
     } else {
-        helpTopic = args.topic as string;
+        helpTopic = topic as string;
     }
 
     switch(helpTopic) {

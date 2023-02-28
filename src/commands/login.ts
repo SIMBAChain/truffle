@@ -32,9 +32,12 @@ export const builder = {
 };
 
 /**
- * get auth token and choose both organisation and application
- * to deploy contract(s) to on simbachain.com
+ * command for user to login (acquire auth token, and choose org and app from blocks)
  * @param args 
+ * args:
+ * args.interactive
+ * args.org
+ * args.app
  * @returns 
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -46,6 +49,17 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: EXIT :`);
 };
 
+/**
+ * command for user to login (acquire auth token, and choose org and app from blocks)
+ * @param interactive - if true, then choose org and app from prompts
+ * Also, if true, auth token will be generated through device login flow
+ * If false, auth token will be generated through client creds flow,
+ * so SIMBA_AUTH_CLIENT_ID and SIMBA_AUTH_CLIENT_SECRET need to be present
+ * in .simbachain.env, simbachain.env, or .env in project root or SIMBA_HOME
+ * @param org - if !interactive, org must be specified, or be present in simba.json
+ * @param app - if !interactive, app must be specified or be present in simba.json
+ * @returns 
+ */
 export async function login(
     interactive: boolean | unknown = true,
     org?: string | unknown,

@@ -16,6 +16,13 @@ export const builder = {
     },
 };
 
+/**
+ * reset directory to default directory (contracts/, buid/, etc.)
+ * @param args 
+ * args:
+ * args.dirname
+ * @returns 
+ */
 export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     let dirName = args.dirname;
@@ -29,6 +36,11 @@ export const handler = (args: yargs.Arguments): any => {
     return;
 };
 
+/**
+ * reset directory to default directory (contracts/, buid/, etc.)
+ * @param dirName 
+ * @returns 
+ */
 export function resetDir(dirName: string | unknown): void {
     SimbaConfig.log.debug(`:: ENTER : ${dirName}`);
     if (dirName === "contracts" || dirName === "contract") {
