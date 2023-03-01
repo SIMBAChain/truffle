@@ -34,16 +34,28 @@ export const builder = {
     },
 };
 
+export const handler = (args: yargs.Arguments): void => {
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
+    getSimbaInfo(args.contract, args.field);
+    Promise.resolve(null);
+};
+
 /**
- * choose minimum logging level, such as "debug", "info", etc.
- * @param args 
- * args can contain optional param args.level
+ * meant to be used to print pretty info from simba.json, so that
+ * users do not have to directly interact with/view their simba.json
+ * @param contract
+ * @param field 
  * @returns 
  */
-export function getSimbaInfo(args: yargs.Arguments) {
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    const contract = args.contract;
-    const field = args.field;
+export function getSimbaInfo(
+    contract?: string | unknown,
+    field?: string | unknown,
+) {
+    const params = {
+        contract,
+        field,
+    }
+    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(params)}`);
     if (!contract && !field) {
         SimbaInfo.printAllSimbaJson();
         SimbaConfig.log.debug(`:: EXIT :`);
@@ -115,11 +127,5 @@ export function getSimbaInfo(args: yargs.Arguments) {
         return;
     }
 }
-
-export const handler = (args: yargs.Arguments): void => {
-    SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
-    getSimbaInfo(args);
-    Promise.resolve(null);
-};
 
 

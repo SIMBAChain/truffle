@@ -21,6 +21,17 @@ export const builder = {
     },
 };
 
+/**
+ * used for setting/overriding default directories
+ * 
+ * THIS FUNCTION SHOULD NOT BE USED UNLESS SOMEONE KNOWS EXACTLY
+ * WHAT THEY ARE DOING!
+ * @param args 
+ * args:
+ * args.dirname
+ * args.dirpath
+ * @returns 
+ */
 export const handler = (args: yargs.Arguments): any => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const dirName = args.dirname;
@@ -35,6 +46,15 @@ export const handler = (args: yargs.Arguments): any => {
     return;
 };
 
+/**
+ * used for setting/overriding default directories
+ * 
+ * THIS FUNCTION SHOULD NOT BE USED UNLESS SOMEONE KNOWS EXACTLY
+ * WHAT THEY ARE DOING!
+ * @param dirName 
+ * @param dirPath 
+ * @returns 
+ */
 export function setDir(dirName: string, dirPath: string): void {
     const entryParams = {
         dirName,

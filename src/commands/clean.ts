@@ -9,7 +9,7 @@ export const command = 'clean';
 export const describe = 'clean artifacts by removing build directory';
 
 /**
- * clean artifact directory
+ * cleans artifact / build directory
  * @returns
  */
 export const handler = async (): Promise<any> => {
@@ -19,6 +19,9 @@ export const handler = async (): Promise<any> => {
     return Promise.resolve(null);
 }
 
+/**
+ * cleans artifact / build directory
+ */
 export async function clean_builds() {
     const filePath = SimbaConfig.artifactDirectory;
     SimbaConfig.log.debug(`:: ENTER :`);

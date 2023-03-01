@@ -10,8 +10,10 @@ export const describe = 'view information for all contracts saved to your organi
 export const builder = {};
 
 /**
- * view contract name, version, and design_id for all contracts in your simbachain.com org
- * @param args 
+ * print contract design info for your org
+ * @param args
+ * args:
+ * none
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
@@ -19,6 +21,9 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: EXIT :`);
 };
 
+/**
+ * print contract design info for your org
+ */
 async function viewContracts(): Promise<any> {
     SimbaConfig.log.debug(`:: ENTER :`);
     await printAllContracts();

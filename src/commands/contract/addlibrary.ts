@@ -20,8 +20,11 @@ export const builder = {
 };
 
 /**
- * 
+ * add an external library to your project
  * @param args 
+ * args:
+ * args.linbname
+ * args.libaddr
  * @returns 
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -32,6 +35,11 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: EXIT :`);
 };
 
+/**
+ * add an external library to your project
+ * @param libName 
+ * @param libAddress 
+ */
 export async function addLibrary(libName: string | undefined, libAddress: string | undefined): Promise<void> {
     const entryParams = {
         libName,

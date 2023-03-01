@@ -21,6 +21,12 @@ export const builder = {
     },
 };
 
+/**
+ * set loglevel for debugging purposes
+ * @param args 
+ * args:
+ * args.level
+ */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
     SimbaConfig.log.debug(`:: ENTER : ${JSON.stringify(args)}`);
     const level = args.level;
@@ -29,9 +35,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
 };
 
 /**
- * choose minimum logging level, such as "debug", "info", etc.
- * @param args 
- * args can contain optional param args.level
+ * set loglevel for debugging purposes
+ * @param level 
  * @returns 
  */
 export async function logLevel(level?: string | unknown) {

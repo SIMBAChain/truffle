@@ -50,6 +50,10 @@ interface Request {
 /**
  * for exporting contract to simbachain.com (can also think of this as "importing" it to simbachain.com)
  * @param args 
+ * args:
+ * args.interactive - export from prompts if true
+ * args.primary - optional param specifying which contract to export. if not present, contract is selected from prompts
+ * args.savemode - if 'new' we do a post request for new contract design; if 'update' we do a put request and update contract design
  * @returns 
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -58,7 +62,13 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     return Promise.resolve(null);
 };
 
-
+/**
+ * export contract to simbachain.com (can also be thought of as "importing" contract to simbachain.com)
+ * @param interactive - export from prompts if true
+ * @param primary - optional param specifying which contract to export. if not present, contract is selected from prompts
+ * @param savemode - if 'new' we do a post request for new contract design; if 'update' we do a put request and update contract design
+ * @returns 
+ */
 export async function exportContracts(primary?: string | unknown, interactive?: boolean | unknown, savemode?: string | unknown): Promise<any> {
     clean_builds()
     const buildDir = SimbaConfig.buildDirectory;

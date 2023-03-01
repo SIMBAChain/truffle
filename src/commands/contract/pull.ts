@@ -52,6 +52,13 @@ export const builder = {
 /**
  * for syncing contractX from your org in simbachain.com with contractX in your project
  * @param args 
+ * args:
+ * args.designID 
+ * args.contractName 
+ * args.pullSourceCode
+ * args.pullSolFiles
+ * args.interactive 
+ * args.useSimbaPath
  * @returns 
  */
 export const handler = async (args: yargs.Arguments): Promise<any> => {
@@ -75,6 +82,21 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
     return;
 };
 
+/**
+ * when pulling your contracts from your blocks organisation, you can "pull" them
+ * into two locations: your local contracts folder (or contracts/simbaimports), and/or
+ * your simba.json
+ * 
+ * pulling makes sure that, when working with teams, everyone is working
+ * with the most recent versions of contracts that have been exported to blocks
+ * @param designID 
+ * @param contractName 
+ * @param pullSourceCode - pull source code to your simba.json
+ * @param pullSolFiles - pull .sol files to your contracts or contracts/simbaimports directory
+ * @param interactive 
+ * @param useSimbaPath - pull to contracts/simbaimports
+ * @returns 
+ */
 export async function pull(
     designID?: string | unknown,
     contractName?: string | unknown,
