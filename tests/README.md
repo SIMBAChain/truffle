@@ -22,7 +22,7 @@ And that's it! That's all you need for setup.
 ## Running Tests
 You'll see references to "clean" a lot in the test script names. You should always run the "clean" version of tests. What the clean command does is set / reset the simba.json file for tests, based on the simba.json file that exists in tests/tests_setup/backup_files.
 
-For the actual scripts / commands to run, you can peruse package.json, under "scripts". To run any given test, from the root of this project, run from the terminal:
+For the actual scripts / commands to run, you can read through package.json, under "scripts". To run any given test, from the root of this project, run from the terminal:
 
 ```
 npm run <name of test>
