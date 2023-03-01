@@ -56,8 +56,8 @@ export const handler = async (args: yargs.Arguments): Promise<any> => {
  * If false, auth token will be generated through client creds flow,
  * so SIMBA_AUTH_CLIENT_ID and SIMBA_AUTH_CLIENT_SECRET need to be present
  * in .simbachain.env, simbachain.env, or .env in project root or SIMBA_HOME
- * @param org - if !interactive, org must be specified, or be present in simba.json
- * @param app - if !interactive, app must be specified or be present in simba.json
+ * @param org - if interactive is false, org must be specified, or be present in simba.json
+ * @param app - if interactive is false, app must be specified or be present in simba.json
  * @returns 
  */
 export async function login(

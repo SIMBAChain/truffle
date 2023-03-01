@@ -17,7 +17,7 @@ export const builder = {
 };
 
 /**
- * reset directory to default directory (contracts/, buid/, etc.)
+ * reset directory to default directory (contracts/, build/, etc.)
  * @param args 
  * args:
  * args.dirname
@@ -37,7 +37,7 @@ export const handler = (args: yargs.Arguments): any => {
 };
 
 /**
- * reset directory to default directory (contracts/, buid/, etc.)
+ * reset directory to default directory (contracts/, build/, etc.)
  * @param dirName 
  * @returns 
  */
