@@ -74,7 +74,7 @@
         "@types/express": "4.17.13"
     },
     "dependencies": {
-        "@simbachain/web3-suites": "^2.6.3",
+        "@simbachain/web3-suites": "^3.6.4",
         "@truffle/config": "^1.2.33",
         "@types/configstore": "^4.0.0",
         "@types/crypto-js": "^3.1.44",
