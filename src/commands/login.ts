@@ -132,11 +132,6 @@ export async function login(
             SimbaConfig.log.debug(`:: EXIT :`);
             return;
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
-                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error.response.data)}`)}`)
-            } else {
-                SimbaConfig.log.error(`${chalk.redBright(`\nsimba: EXIT : ${JSON.stringify(error)}`)}`);
-            }
             return;
         }
     }
