@@ -6,7 +6,8 @@
 3. [Installation Overview](#installation-overview)
 3. [Installation](#installation)
 4. [Project Settings](#project-settings)
-5. [Usage](#usage)
+5. [Discovery of Environment Variables](#discovery-of-environment-variables)
+6. [Usage](#usage)
     - [Contract Compliation](#contract-compilation)
     - [Login](#login)
     - [Export](#export)
@@ -15,37 +16,38 @@
     - [Sync](#sync)
     - [ViewContracts](#view-contracts)
     - [Help](#help)
-6. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
-7. [CI/CD](#continuous-integration-continuous-deployment)
-8. [Retrieving information from simba.json and authconfig.json](#simbainfo)
-9. [Viewing current directory paths for your project](#getdirs)
-10. [Setting a directory path](#setdir)
-11. [Resetting directory paths to default settings](#resetdir)
-12. [Deleting contracts from your organisation](#deletecontract)
+7. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
+8. [CI/CD](#continuous-integration-continuous-deployment)
+9. [Retrieving information from simba.json and authconfig.json](#simbainfo)
+10. [Viewing current directory paths for your project](#getdirs)
+11. [Setting a directory path](#setdir)
+12. [Resetting directory paths to default settings](#resetdir)
+13. [Deleting contracts from your organisation](#deletecontract)
 
 ## Summary
 
-The SIMBA Truffle plugin enables interaction with your SIMBA Blocks Instance from inside your VS Code development environment.
+The SIMBA Truffle plugin enables interaction with your SIMBA Blocks Instance from the command line, using the Truffle environment that you love using for writing and testing smart contracts.
 
-The SIMBA Truffle plugin, as a member of SIMBA's web3 plugin family, allows Solidity contracts to be developed locally using state of the art blockchain development tools. The flow for the developer fits in with their typical development pipeline. Contracts can be developed, compiled and tested using Truffle tooling from within VS Code. Then they can be deployed directly to a SIMBA Blocks instance. SIMBA receives and handles the Truffle metadata for sets of compiled contracts and deploys them to the blockchains that the Blocks deployment is linked to. 
+The SIMBA Truffle plugin, as a member of SIMBA's web3 plugin family, allows Solidity contracts to be developed locally using state of the art blockchain development tools. The flow for the developer fits in with their typical development pipeline. Contracts can be developed, compiled and tested using Truffle tooling. Then they can be deployed directly to a SIMBA Blocks instance. SIMBA receives and handles the Truffle metadata for sets of compiled contracts and deploys them to the blockchains that the Blocks deployment is linked to. 
 
-The developer can now enjoy all the goodness of SIMBA’s custom auto generated REST API for the contracts, enterprise infrastructure and scalability and advanced search capabilities!
+The developer can now enjoy all the goodness of SIMBA’s custom auto generated REST API for the contracts, combined with the easy-to-use Truffle development environment!
 
 ## Installation Overview
 The following are the general steps to get going with the SIMBA Chain Truffle plugin. The rest of the documentation provides details on these and other steps.
 
-1. install truffle globally on your computer
-2. create a directory for your Truffle project.
+1. Install truffle globally on your computer
+2. Create a directory for your Truffle project.
 3. cd into that directory and start an npm project.
-4. Then in that directory, start a Truffle project. This directory, where your package.json will live, is where you will run your Truffle commands from.
+4. Then in that directory, start a Truffle project. This directory (the root of your project, where your package.json will live), is where you will run your Truffle commands from.
 5. install the SIMBA Chain Truffle plugin
 6. declare your @simbachain/truffle plugin in your truffle-config.js file
-7. create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
-8. run `truffle run simba help` to make sure the plugin is installed
+7. (optional) create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
+8. (Necessary if using client credentials) Create an env file (.simbachain.env, simbachain.env, or .env) in your project root, and specify client credentials as well as your SIMBA Chain base API URL.
+9. run `truffle run simba help` to make sure the plugin is installed
 
 ## Prerequisites
 
-You should have a SIMBA Blocks Instance to communicate with. Additionally you must have at least one contract application created in the instance. To create an application, open your browser, navigate to your instance and log in using your SIMBA user account. Click on your organization -> Applications and then click on the "Add" button. Follow the on screen instructions to create your application.
+You should have a SIMBA Blocks Instance to communicate with. Additionally you must have a least one contract application created in the instance (though the plugins will direct you to create one if you do not yet have one). To create an application, open your browser, navigate to your instance and log in using your SIMBA user account. Click on your organization -> Applications and then click on the "Add" button. Follow the on screen instructions to create your application.
 
 ## Installation
 
@@ -61,7 +63,7 @@ And then cd into that directory:
 $ cd my_truffle_project
 ```
 
-**NOTE: It is this level of your project, where your package.json will live, where you will run your Truffle CLI commands**
+**NOTE: It is this level (the root) of your project, where your package.json will live, where you will run your Truffle CLI commands**
 
 To start an npm project, from that same directory run:
 
@@ -88,11 +90,13 @@ Now you're ready to focus on installling the SIMBA Chain Truffle plugin.
 
 To install the truffle plugin follow these steps.
 
-Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle).
+Install the plugin from [NPM](https://www.npmjs.com/package/@simbachain/truffle):
 
-`$ npm install --save-dev @simbachain/truffle`
+```
+$ npm install --save-dev @simbachain/truffle
+```
 
-Add the SIMBA plugin to your module.exports object in your truffle-config.js file:
+Then add the SIMBA plugin to your module.exports object in your truffle-config.js file:
 
 ```javascript
 module.exports = {
@@ -106,16 +110,22 @@ module.exports = {
 
 ## Project Settings
 
-To use the SIMBA Chain truffle plugin, you will need to create and configure a simba.json file. Your simba.json file should live in the top level of your Truffle project, where your package.json file lives, and should contain values for baseURL and web3Suite:
+The most important file in your SIMBA Chain Truffle project is your simba.json file. You DO NOT need to create and configure a simba.json file. However, the one thing that does absolutely have to be configured is a value for SIMBA_API_BASE_URL, which you can configure in either your simba.json file, or in your project's env file (.simbachain.env, simbachain.env, or .env).
+
+If you want to configure SIMBA_API_BASE_URL (you can also use the key of baseURL instead) in your simba.json, you will need to create and configure a simba.json file. Your simba.json file should live in the root of your Truffle project, where your package.json file lives, and should contain a value for SIMBA_API_BASE_URL (or baseURL):
 
 NOTE: the following baseURL is an example, and will likely be different for your environment
 
 ```json
 {
-  "baseURL": "https://simba-demo-api.platform.simbachain.com/v2",
-  "web3Suite": "truffle"
+  "baseURL": "https://simba-demo-api.platform.simbachain.com/",
 }
 ```
+or
+```json
+{
+  "SIMBA_API_BASE_URL": "https://simba-demo-api.platform.simbachain.com/",
+}
 
 **NOTE: some notes/hints regarding simba.json in your Truffle project:**
 
@@ -128,8 +138,7 @@ is that you do so in either a new directory or new branch, where your new `simba
 ​
 ```json
     {
-    "baseURL": "https://{your-new-environment-domain}/{version}/",
-    "web3Suite": "truffle"
+    "baseURL": "https://{your-new-environment-domain}/",
     }
 ```
 
@@ -144,13 +153,15 @@ In addition to these base configs, you can also specify a different contracts di
 
 ```json
 ...
-"buildDirectory": "custom build directory location",
-"contractDirectory": "custom contract directory location"
+"buildDirectory": "<your custom build directory location>",
+"contractDirectory": "<your custom contract directory location>"
 ```
 
 Run the following command to ensure the plugin installed correctly.
 
-`$ truffle run simba help`
+```
+$ truffle run simba help
+```
 
 You should see a message similar to the below output:
 
@@ -168,13 +179,60 @@ You should see a message similar to the below output:
     viewcontracts
 ```
 
+# Discovery of Environment Variables
+When it comes to setting and discovering environment variables for you project, we try to make it as simple as possible, while also allowing flexibility for users. Towards this goal, there are two main locations you can set environment variables in an env file for your project, and three different file names you can you use for your env file. 
+
+## env file names
+You can name your env file any one of the following:
+1. .simbachain.env
+2. simbachain.env
+3. .env
+
+## env file locations
+1. The first location you can place your env file is in the root of your project. This is where your package.json lives.
+2. The second place you can place your env file is in the location that you've set as SIMBA_HOME, in your system environment variables. So if in your system environment variables, you've set:
+
+```bash
+export SIMBA_HOME=/Users/johnsmith/somedirectory
+```
+
+then you can place your env file inside that directory, and the plugins will discover it.
+
+## Order of discovery
+The plugins will first look inside the root of your local project for an env file, then they will look inside SIMBA_HOME.
+
+## Keys and values
+There are only three keys and values you need to know about
+
+1. SIMBA_API_BASE_URL
+  - you can also set this in your simba.json, if you'd like
+  - the value will look something like:
+  ```
+  https://simba-dev-api.platform.simbachain.com/
+  ```
+2. SIMBA_AUTH_CLIENT_ID
+  - This is used for non-interactive commands, which use client credential flow for auth
+3. SIMBA_AUTH_CLIENT_SECRET
+  - This is used for non-interactive commands, which use client credential flow for auth
+
+For (2) and (3) above, you can obtain your client ID and client secret by navigating to your organisation and application in the UI, and then creating an ID and secret pair.
+
+So as an example, in the root of your project, you would create a file called ".simbachain.env", and it would look like:
+
+```
+SIMBA_API_BASE_URL=https://simba-dev-api.platform.simbachain.com/
+SIBMA_AUTH_CLIENT_ID=<insert your SIMBA client ID>
+SIMBA_AUTH_CLIENT_SECRET=<insert your SIMBA client secret>
+```
+
 # Usage
 
 ## Contract Compilation
+You do NOT need to manually compile your contracts. The SIMBA Chain Truffle plugin will automatically compile your contracts when you export them to the SIMBA Blocks platform. However, if you want to manually compile, you can. Please see the truffle documentation to get a full explanation on how truffle compiles smart contracts. Briefly, you will need to write your smart contracts and save them in the `<project folder>/contracts/` folder and then run the following command to compile your smart contract:
 
-Most of the work is done by the base truffle CLI. Please see the truffle documentation to get a full explanation on how truffle compiles smart contracts. Briefly, you will need to write your smart contracts and save them in the `<project folder>/contracts/` folder and then run the following command to compile your smart contract:
-
-`$ truffle compile`
+```
+$ truffle compile
+```
 
 You should see a message similar to the output:
 
@@ -189,7 +247,7 @@ Compiling your contracts...
 
 ## login
 
-*NOTE* : you need to have at least one app present in the SIMBA Chain org that you try to log into, otherwise the plugin will return an error during login. This is because, to deploy a contract, SIMBA needs to know which app you are deploying to. You can create an empty app, which is sufficient, by going to the UI, logging into your org, and creating an app there.
+*NOTE* : you need to have at least one app present in the SIMBA Chain org that you try to log into. This is because, to deploy a contract, SIMBA needs to know which app you are deploying to. You can create an empty app, which is sufficient, by going to the UI, logging into your org, and creating an app there. If you try to login without an app present, then the plugin will allow you to create an app from the terminal.
 
 Once you have configured your simba.json file, you will be able to login. the Truffle plugin uses keycloack device login, so you will be given a URL that you can navigate to, to grant permission to your device. You will then be prompted to select the organization and application from SIMBA Chain that you wish to log into. To log in, simply run
 
@@ -226,10 +284,10 @@ You will then be prompted to select your application, with something like:
 There is also a non-interactive login mode. This mode is mainly for CI/CD, but you can run this login mode like a normal login command if you have a few environment variables set, and it will use a client credentials flow for login. You will need to set
 
 1. SIMBA_AUTH_CLIENT_ID for your client ID
-2. SIMBA_AUTH_CLIENT_SECRET for your client secret, and 
-3. SIMBA_AUTH_CLIENT_ENDPOINT for your auth endpoint. 
+2. SIMBA_AUTH_CLIENT_SECRET for your client secret
 
-NOTE: SIMBA_AUTH_CLIENT_ENDPOINT defaults to '/o/' if not set.
+(please see [Discovery of Environment Variables](#discovery-of-environment-variables) for directions on setting those variables)
+
 
 To run login in non-interactive mode, you can run with org and app flag:
 
@@ -266,7 +324,7 @@ $ truffle run simba export
 You will then be prompted to select all contracts you want to export to Blocks:
 
 ```
-? Please select all contracts you want to export. Please note that if you're exporting contract X, and contract X depends on library Y, then you need to export Library Y along with Contract X. SIMBA Chain will handle the library linking for you. ›  
+? Please select all contracts you want to export. Use the Space Bar to select or un-select a contract (You can also use -> to select a contract, and <- to un-select a contract). Hit Return/Enter when you are ready to export. If you have questions on exporting libraries, then please run 'truffle run simba help --topic libraries' . › 
 Instructions:
     ↑/↓: Highlight option
     ←/→/[space]: Toggle selection
@@ -530,11 +588,10 @@ To use SIMBA’s plugins' CI/CD functionality, you will need to be working with 
 
 1.Acquire a client ID and secret from SIMBA Chain for step 4 (below). You can acquire a client ID and secret from the SIMBA Chain UI, by navigating to your org, then application, and then selecting “secrets” in the upper right hand corner of the page.
 2. You will need to be working with a git project that supports CI/CD. The setup for different providers varies, but the directions for getting started with CI/CD in Gitlab are here: https://docs.gitlab.com/ee/ci/quick_start/
-3. You will need to configure three protected environment variables in your git service environment:
+3. You will need to configure two protected environment variables in your git service environment:
 
-    a. SIMBA_PLUGIN_ID
-    b. SIMBA_PLUGIN_SECRET
-    c. SIMBA_PLUGIN_AUTH_ENDPOINT (if you don’t set this last variable, it defaults to “/o/”)
+    a. SIMBA_AUTH_CLIENT_ID
+    b. SIMBA_AUTH_CLIENT_SECRET
 
 4. Since these are protected variables, you will probably need to be pushing from a protected branch, regardless of your git service.
 5. You will then need to create your pipeline. In Gitlab, that means creating a .gitlab-ci.yml file. Your pipeline will look different, depending on which plugin you’re using. Here is what a pipeline for gitlab would look like:
@@ -655,7 +712,7 @@ This command allows the user to delete contract designs from their organisation.
 $ truffle run simba deletecontract --id <your contract design_id>
 ```
 
-To run without parameters:
+To run without parameters, and choose from prompts:
 
 ```
 $ truffle run simba deletecontract
