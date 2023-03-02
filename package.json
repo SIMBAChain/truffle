@@ -9,6 +9,12 @@
     "repository": "https://github.com/simbachain/truffle",
     "author": "SIMBA Chain",
     "license": "MIT",
+    "files": [
+        "src",
+        "build",
+        "LICENSE",
+        "README.md"
+    ],
     "keywords": [
         "simbachain",
         "truffle",
