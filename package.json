@@ -1,6 +1,6 @@
 {
     "name": "@simbachain/truffle",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "description": "Truffle Plugin for SIMBAChain",
     "main": "build/main/index.js",
     "typings": "build/main/index.d.ts",
