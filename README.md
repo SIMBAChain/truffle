@@ -110,7 +110,7 @@ module.exports = {
 
 ## Project Settings
 
-Once you have Hardhat installed locally, you will need to create an env file in the root of your project (or you can creat it in your SIMBA_HOME directory; please see [Discovery of Environment Variables](#discovery-of-environment-variables), but we suggest you create your env file in the root of your project, where your package.json file lives). This file can be titled any of:
+Once you have Hardhat installed locally, you will need to create an env file in the root of your project (or you can create it in your SIMBA_HOME directory; please see [Discovery of Environment Variables](#discovery-of-environment-variables), but we suggest you create your env file in the root of your project, where your package.json file lives). This file can be titled any of:
 
 1. .simbachain.env
 2. simbachain.env
@@ -122,7 +122,7 @@ If you do not want to use client credentials / non interactive commands, then th
 SIMBA_API_BASE_URL=https://simba-dev-api.platform.simbachain.com/
 ```
 
-If you want to use client credentials / non interactive commands, then you should also set SIMBA_AUTH_CLIENT_ID and SIMBA_AUTH_CLIENT_SECRET. So then your env file would look somethign like:
+If you want to use client credentials / non interactive commands, then you should also set SIMBA_AUTH_CLIENT_ID and SIMBA_AUTH_CLIENT_SECRET. So then your env file would look something like:
 
 ```
 SIMBA_API_BASE_URL=https://simba-dev-api.platform.simbachain.com/
@@ -136,7 +136,7 @@ The most important file in your SIMBA Chain Hardhat project is your simba.json f
 
 It may be tempting to just try and start a Truffle project in the same directory as a Hardhat project. ***Do not do this.*** Hardhat projects and Truffle projects should have their own `simba.json` files, and should live in separate directories.
 
-Morover, you should NOT directly manipulate your simba.json file in most cases. Any manipulation you may need to do can be done from the terminal.
+Moreover, you should NOT directly manipulate your simba.json file in most cases. Any manipulation you may need to do can be done from the terminal.
 
 
 Finally, run the following command to make sure everything is installed correctly:
