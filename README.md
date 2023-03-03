@@ -110,54 +110,36 @@ module.exports = {
 
 ## Project Settings
 
-The most important file in your SIMBA Chain Truffle project is your simba.json file. You DO NOT need to create and configure a simba.json file. However, the one thing that does absolutely have to be configured is a value for SIMBA_API_BASE_URL, which you can configure in either your simba.json file, or in your project's env file (.simbachain.env, simbachain.env, or .env).
+Once you have Hardhat installed locally, you will need to create an env file in the root of your project (or you can creat it in your SIMBA_HOME directory; please see [Discovery of Environment Variables](#discovery-of-environment-variables), but we suggest you create your env file in the root of your project, where your package.json file lives). This file can be titled any of:
 
-If you want to configure SIMBA_API_BASE_URL (you can also use the key of baseURL instead, if configuring in simba.json instead of an env file) in your simba.json, you will need to create and configure a simba.json file. Your simba.json file should live in the root of your Truffle project, where your package.json file lives, and should contain a value for SIMBA_API_BASE_URL (or baseURL):
+1. .simbachain.env
+2. simbachain.env
+3. .env
 
-NOTE: the following baseURL is an example, and will likely be different for your environment
+If you do not want to use client credentials / non interactive commands, then the only value you need to set is your SIMBA_API_BASE_URL, which would look something like the following, but would vary, based on your environment:
 
-```json
-{
-  "baseURL": "https://simba-demo-api.platform.simbachain.com/",
-}
 ```
-or
-```json
-{
-  "SIMBA_API_BASE_URL": "https://simba-demo-api.platform.simbachain.com/",
-}
-
-**NOTE: some notes/hints regarding simba.json in your Truffle project:**
-
-It may be tempting to just try and start a Truffle project in the same directory as a Hardhat project. ***Do not do this.*** Hardhat projects and Truffle projects should have their own `simba.json` files. Thus, best practice for switching:
-
-* between hardhat and truffle **plugins**, and/or
-* between **hosted environments**
-    
-is that you do so in either a new directory or new branch, where your new `simba.json` file takes the format:
-​
-```json
-    {
-    "baseURL": "https://{your-new-environment-domain}/",
-    }
+SIMBA_API_BASE_URL=https://simba-dev-api.platform.simbachain.com/
 ```
 
-**HINT 1:** if you *need* to change the value for `baseURL` in your `simba.json` file, then it is likely because you are targeting a new environment. In this scenario, many of the previous artifacts written to `simba.json` will no longer make sense in the context of your new environment. A distinct `simba.json` solves this problem.
+If you want to use client credentials / non interactive commands, then you should also set SIMBA_AUTH_CLIENT_ID and SIMBA_AUTH_CLIENT_SECRET. So then your env file would look somethign like:
 
-**HINT 2:** if you *want* to change the value for `baseURL` in your `simba.json` file but keep working in the same project/directory, then please make sure to:
-
-1. run `truffle run simba logout` prior to executing any operations in the new environment. This ensures that the prior `authProviderInfo` is removed from `simba.json`. Following this,
-2. run `truffle run simba login`. This ensures that the correct `authProviderInfo` context is loaded. You are now ready to execute operations against the new environment.
-
-In addition to these base configs, you can also specify a different contracts directory and build directory in simba.json, in case these directories are not located in the default location for your web3 project, **BUT YOU SHOULD NOT CONFIGURE THE FOLLOWING FIELDS UNLESS THE LOCATION OF YOUR CONTRACTS OR BUILD ARTIFACTS HAS BEEN CHANGED FROM THEIR DEFAULT LOCATION FOR SOME REASON.** These additional configurations would look like:
-
-```json
-...
-"buildDirectory": "<your custom build directory location>",
-"contractDirectory": "<your custom contract directory location>"
+```
+SIMBA_API_BASE_URL=https://simba-dev-api.platform.simbachain.com/
+SIMBA_AUTH_CLIENT_ID=<your client ID for your environment>
+SIMBA_AUTH_CLIENT_SECRET=<your client secret for your environment>
 ```
 
-Run the following command to ensure the plugin installed correctly.
+The most important file in your SIMBA Chain Hardhat project is your simba.json file. You DO NOT need to create and configure a simba.json file, though you will see references to simba.json in this documentation, and you will notice that this file populates in your project after you run simba commands.
+
+**NOTE regarding simba.json in your Truffle project:**
+
+It may be tempting to just try and start a Truffle project in the same directory as a Hardhat project. ***Do not do this.*** Hardhat projects and Truffle projects should have their own `simba.json` files, and should live in separate directories.
+
+Morover, you should NOT directly manipulate your simba.json file in most cases. Any manipulation you may need to do can be done from the terminal.
+
+
+Finally, run the following command to make sure everything is installed correctly:
 
 ```
 $ truffle run simba help
