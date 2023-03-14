@@ -8,6 +8,7 @@
 4. [Project Settings](#project-settings)
 5. [Discovery of Environment Variables](#discovery-of-environment-variables)
 6. [Usage](#usage)
+    - [Running Commands From The Terminal](#running-commands-from-the-terminal)
     - [Contract Compliation](#contract-compilation)
     - [Login](#login)
     - [Export](#export)
@@ -208,6 +209,9 @@ SIMBA_AUTH_CLIENT_SECRET=<insert your SIMBA client secret>
 ```
 
 # Usage
+
+## Running Commands From the Terminal
+Please note that when running commands, you must be in the root of your project. This is where your package.json lives. If you try to run commands in a different directory, you will likely see unhandled error messages. 
 
 ## Contract Compilation
 You do NOT need to manually compile your contracts. The SIMBA Chain Truffle plugin will automatically compile your contracts when you export them to the SIMBA Blocks platform. However, if you want to manually compile, you can. Please see the truffle documentation to get a full explanation on how truffle compiles smart contracts. Briefly, you will need to write your smart contracts and save them in the `<project folder>/contracts/` folder and then run the following command to compile your smart contract:
