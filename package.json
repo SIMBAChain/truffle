@@ -96,7 +96,7 @@
         "@typescript-eslint/eslint-plugin": "^2.25.0",
         "@typescript-eslint/eslint-plugin-tslint": "^2.25.0",
         "@typescript-eslint/parser": "^2.25.0",
-        "ava": "^3.13.0",
+        "ava": "^5.2.0",
         "chai": "^4.3.6",
         "codecov": "^3.5.0",
         "cz-conventional-changelog": "^2.1.0",
