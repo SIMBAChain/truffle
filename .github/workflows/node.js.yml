@@ -1,0 +1,42 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: "./"
+
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: touch ./tests/.simbachain.env 
+    - run: echo SIMBA_API_BASE_URL=https://simba-demo-api.platform.simbachain.com/ >> ./tests/.simbachain.env
+    - run: echo SIMBA_AUTH_CLIENT_SECRET=${{ secrets.DEMO_CLIENT_SECRET }} >> ./tests/.simbachain.env
+    - run: echo SIMBA_AUTH_CLIENT_ID=${{ secrets.DEMO_CLIENT_ID }} >> ./tests/.simbachain.env
+    - run: npm install
+    - run: npm run all_clean_test
