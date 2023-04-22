@@ -4,10 +4,11 @@
 1. [Summary](#summary)
 2. [Prerequisites](#prerequisites)
 3. [Installation Overview](#installation-overview)
-3. [Installation](#installation)
-4. [Project Settings](#project-settings)
-5. [Discovery of Environment Variables](#discovery-of-environment-variables)
-6. [Usage](#usage)
+4. [Project Boilerplate / Template](#project-boilerplate)
+5. [Installation](#installation)
+6. [Project Settings](#project-settings)
+7. [Discovery of Environment Variables](#discovery-of-environment-variables)
+8. [Usage](#usage)
     - [Running Commands From The Terminal](#running-commands-from-the-terminal)
     - [Contract Compliation](#contract-compilation)
     - [Login](#login)
@@ -17,13 +18,13 @@
     - [Sync](#sync)
     - [ViewContracts](#view-contracts)
     - [Help](#help)
-7. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
-8. [CI/CD](#continuous-integration-continuous-deployment)
-9. [Retrieving information from simba.json and authconfig.json](#simbainfo)
-10. [Viewing current directory paths for your project](#getdirs)
-11. [Setting a directory path](#setdir)
-12. [Resetting directory paths to default settings](#resetdir)
-13. [Deleting contracts from your organisation](#deletecontract)
+9. [Deploying and Linking Libraries](#deploying-and-linking-libraries)
+10. [CI/CD](#continuous-integration-continuous-deployment)
+11. [Retrieving information from simba.json and authconfig.json](#simbainfo)
+12. [Viewing current directory paths for your project](#getdirs)
+13. [Setting a directory path](#setdir)
+14. [Resetting directory paths to default settings](#resetdir)
+15. [Deleting contracts from your organisation](#deletecontract)
 
 ## Summary
 
@@ -45,6 +46,11 @@ The following are the general steps to get going with the SIMBA Chain Truffle pl
 7. (optional) Create a simba.json file in the top level of your project, and populate that file with 'baseURL' and 'web3Suite' fields.
 8. (Necessary if using client credentials) Create an env file (.simbachain.env, simbachain.env, or .env) in your project root, and specify client credentials as well as your SIMBA Chain base API URL.
 9. Run `truffle run simba help` to make sure the plugin is installed
+
+## Project Boilerplate
+If users want to view and/or use a boilerplate for the SIMBA Chain Truffle plugin, they can navigate to https://github.com/SIMBAChain/truffle-plugin-template
+
+From that URL, users can click the "Use this template" tab
 
 ## Prerequisites
 
