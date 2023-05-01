@@ -6,6 +6,7 @@ import {
     pullMostRecentFromContractName,
     pullContractFromDesignId,
     SimbaConfig,
+    pullSourceCodeForSimbaJson,
 } from '@simbachain/web3-suites';
 import yargs from 'yargs';
 import {default as chalk} from 'chalk';
@@ -130,7 +131,10 @@ export async function pull(
         return;
     }
     if (designID) {
-        await pullContractFromDesignId(designID as string, useSimbaPath as boolean);
+        const contractDesign = await pullContractFromDesignId(designID as string, useSimbaPath as boolean);
+        if (pullSourceCode && contractDesign) {
+            pullSourceCodeForSimbaJson(contractDesign)
+        }
         SimbaConfig.log.debug(`:: EXIT :`);
         return;
     }
